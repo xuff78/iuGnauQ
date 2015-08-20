@@ -1,6 +1,7 @@
 package com.xj.guanquan.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xj.guanquan.R;
 
@@ -83,13 +85,6 @@ public abstract class QBaseActivity extends AppCompatActivity {
 
     protected static final int Menu_ItemId_Exit = 0x80000000;
 
-    /**
-     * <p/>
-     * 设置最顶部“吉林银行”图片上的文字.
-     * <p/>
-     * <p/>
-     * 注意：方法名以“_”之目的是为了与其它的set方法区分，即以下划线开头的set方法是为了设置当前应用界面的.
-     */
     protected void _setHeaderTitle(String title) {
         TextView tv = (TextView) findViewById(R.id.of_header_title_tv);
         tv.setVisibility(View.VISIBLE);
@@ -224,5 +219,45 @@ public abstract class QBaseActivity extends AppCompatActivity {
             }
         }
         super.onPause();
+    }
+
+    /**
+     * 跳转到某一界面
+     *
+     * @param cls
+     */
+    public void toActivity(Class cls) {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
+    }
+
+    /**
+     * 带参数跳转到某一个页面
+     *
+     * @param cls
+     * @param bundle
+     */
+    public void toAcitivity(Class cls, Bundle bundle) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    /**
+     * 短时间toast显示
+     *
+     * @param message
+     */
+    public void showToastShort(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 长时间toast显示
+     *
+     * @param message
+     */
+    public void showToastLong(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

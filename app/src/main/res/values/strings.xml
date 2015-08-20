@@ -23,11 +23,14 @@
     <string name="login_name">请输入手机号码或邮箱</string>
     <string name="login_password">输入登录密码</string>
     <string name="fraget_password">忘记密码？</string>
-    <string name="login_login">登录</string>
+    <string name="login_login">登        录</string>
     <string name="register_register">注册</string>
     <string name="phone_register">手机号注册</string>
     <string name="register_phone">手机号</string>
     <string name="register_password">密 码</string>
+    <string name="new_password">新密码</string>
+    <string name="modify_password">修改密码</string>
+    <string name="password_confirm">密码确认</string>
     <string name="register_code">验证码</string>
     <string name="login_register">注册新的账号</string>
     <string name="login_buttom">北京贵圈科技有限公司</string>
@@ -58,4 +61,6 @@
     <string name="zhaopian_attestation">选择照片认证</string>
     <string name="comitie_btn">提交审核</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_qfind_pwd">找回密码</string>
+    <string name="title_activity_qregist_info">填写信息</string>
 </resources>

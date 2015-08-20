@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context=".Login_activity">
+
+    <ImageView
+        android:id="@+id/title_login"
+        android:layout_width="125dp"
+        android:layout_height="124dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:src="@mipmap/logo" />
+
+    <View
+        android:id="@+id/viewone"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/title_login"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="98dp"
+        android:background="@color/view_color" />
+
+    <ImageView
+        android:id="@+id/title_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/viewone"
+        android:layout_below="@+id/viewone"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="23dp"
+        android:src="@mipmap/icon_password" />
+
+    <View
+        android:id="@+id/viewtwo"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/title_pass"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/view_color" />
+
+    <TextView
+        android:id="@+id/forget_password"
+        style="@style/text_11_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/viewtwo"
+        android:layout_below="@+id/viewtwo"
+        android:layout_marginTop="16dp"
+        android:padding="5dp"
+        android:text="@string/fraget_password" />
+
+    <EditText
+        android:id="@+id/editext_password"
+        style="@style/text_13_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/viewtwo"
+        android:layout_alignLeft="@+id/edittext_name"
+        android:background="@null"
+        android:ems="10"
+        android:hint="@string/login_password"
+        android:inputType="textPassword">
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/login_btn"
+        style="@style/text_16_white"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/forget_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/login_button_seletor"
+        android:text="@string/login_login"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/register"
+        style="@style/text_11_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:padding="5dp"
+        android:text="@string/login_register" />
+
+    <TextView
+        android:id="@+id/login_buttom"
+        style="@style/text_9_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:text="@string/login_buttom" />
+
+    <EditText
+        android:id="@+id/edittext_name"
+        style="@style/text_13_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/viewone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="11dp"
+        android:background="@null"
+        android:ems="10"
+        android:hint="@string/login_name">
+
+        <requestFocus />
+    </EditText>
+
+    <ImageView
+        android:id="@+id/title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/edittext_name"
+        android:layout_alignLeft="@+id/viewone"
+        android:layout_marginLeft="11dp"
+        android:src="@mipmap/icon_username" />
+
+</RelativeLayout>
