@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/replaceFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomButton"
+        android:background="@color/black_deep"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_title"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/homeGroup"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioBtn_find"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:checked="true"
+                android:drawableTop="@drawable/rediobtn_find_selector"
+                android:gravity="center"
+                android:text="发现"
+                android:textColor="@drawable/rediobtn_text_selector"
+                android:textSize="10sp" />
+
+            <RadioButton
+                android:id="@+id/raidoBtn_shits"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawableTop="@drawable/rediobtn_shits_selector"
+                android:gravity="center"
+                android:text="吐槽"
+                android:textColor="@drawable/rediobtn_text_selector"
+                android:textSize="10sp" />
+
+            <RadioButton
+                android:id="@+id/radioBtn_message"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawableTop="@drawable/rediobtn_message_selector"
+                android:gravity="center"
+                android:text="消息"
+                android:textColor="@drawable/rediobtn_text_selector"
+                android:textSize="10sp" />
+
+            <RadioButton
+                android:id="@+id/radioBtn_contact"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawableTop="@drawable/rediobtn_contact_selector"
+                android:gravity="center"
+                android:text="联系人"
+                android:textColor="@drawable/rediobtn_text_selector"
+                android:textSize="10sp" />
+
+            <RadioButton
+                android:id="@+id/radioBtn_me"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawableTop="@drawable/rediobtn_me_selector"
+                android:gravity="center"
+                android:text="我的"
+                android:textColor="@drawable/rediobtn_text_selector"
+                android:textSize="10sp" />
+        </RadioGroup>
+
+    </LinearLayout>
+</RelativeLayout>

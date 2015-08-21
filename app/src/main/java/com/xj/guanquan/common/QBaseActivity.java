@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.home.QHomeActivity;
+import com.xj.guanquan.activity.user.QLoginActivity;
 
 
 /**
@@ -88,6 +90,16 @@ public abstract class QBaseActivity extends AppCompatActivity {
     protected void _setHeaderTitle(String title) {
         TextView tv = (TextView) findViewById(R.id.of_header_title_tv);
         tv.setVisibility(View.VISIBLE);
+        tv.setText(title);
+    }
+
+    /**
+     * 显示导航栏文字标题
+     */
+    protected void _setHeaderTitle(String title, int color) {
+        TextView tv = (TextView) findViewById(R.id.of_header_title_tv);
+        tv.setVisibility(View.VISIBLE);
+        tv.setTextColor(getResources().getColor(color));
         tv.setText(title);
     }
 
@@ -165,6 +177,7 @@ public abstract class QBaseActivity extends AppCompatActivity {
         flag = false;
     }
 
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyEvent.KEYCODE_BACK == keyCode && flag) {
@@ -230,6 +243,25 @@ public abstract class QBaseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
+
+    /**
+     * 跳转到首页
+     */
+    public void showHome() {
+        Intent intent = new Intent(this, QHomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 加入此标志后，intent中的参数被清空。
+        startActivity(intent);
+    }
+
+    /**
+     * 跳转到登录页面
+     */
+    public void showLogin() {
+        Intent intent = new Intent(this, QLoginActivity.class);
+        intent.putExtra("fromCode", true);
+        startActivityForResult(intent, 999);//为返回是否登录的状态
+    }
+
 
     /**
      * 带参数跳转到某一个页面

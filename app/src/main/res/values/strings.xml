@@ -63,4 +63,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_qfind_pwd">找回密码</string>
     <string name="title_activity_qregist_info">填写信息</string>
+    <string name="title_activity_qhome">首页</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">发现</string>
+    <string name="hello_roast_fragment">吐槽</string>
+    <string name="hello_message_fragment">消息</string>
+    <string name="hello_contact_fragment">联系人</string>
+    <string name="hello_me_fragment">我的</string>
 </resources>

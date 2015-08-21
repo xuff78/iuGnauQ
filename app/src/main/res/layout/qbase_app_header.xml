@@ -3,6 +3,7 @@
     android:id="@+id/app_header_layout_value"
     android:layout_width="fill_parent"
     android:layout_height="45dip"
+    android:background="@color/black_title"
     android:orientation="vertical">
 
     <RelativeLayout
