@@ -22,5 +22,4 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile group: 'common.eric.com.ebaselibrary', name: 'ebaselibrary', version: '0.0.2-SNAPSHOT', changing: true
-    compile 'com.android.support:support-v4:22.2.0'
 }

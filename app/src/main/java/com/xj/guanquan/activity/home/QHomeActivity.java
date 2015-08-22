@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.fragment.contact.QContactFragment;
@@ -30,6 +31,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Fresco.initialize(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qhome);
     }
