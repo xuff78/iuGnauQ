@@ -47,19 +47,14 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == radioBtnfind.getId()) {
                     initFragment(QFindUserFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_blank_fragment));
                 } else if (checkedId == radioBtncontact.getId()) {
                     initFragment(QContactFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_contact_fragment));
                 } else if (checkedId == radioBtnme.getId()) {
                     initFragment(QMeFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_me_fragment));
                 } else if (checkedId == radioBtnmessage.getId()) {
                     initFragment(QMessageFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_message_fragment));
                 } else if (checkedId == raidoBtnshits.getId()) {
                     initFragment(QRoastFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_roast_fragment));
                 }
             }
         });

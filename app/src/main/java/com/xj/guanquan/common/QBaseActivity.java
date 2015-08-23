@@ -87,6 +87,8 @@ public abstract class QBaseActivity extends AppCompatActivity {
     protected static final int Menu_ItemId_Exit = 0x80000000;
 
     protected void _setHeaderTitle(String title) {
+        LinearLayout rl = (LinearLayout) findViewById(R.id.app_heder_layout);
+        rl.setVisibility(View.VISIBLE);
         TextView tv = (TextView) findViewById(R.id.of_header_title_tv);
         tv.setVisibility(View.VISIBLE);
         tv.setText(title);
