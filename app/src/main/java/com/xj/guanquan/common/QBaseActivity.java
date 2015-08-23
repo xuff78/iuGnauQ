@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -129,6 +128,13 @@ public abstract class QBaseActivity extends AppCompatActivity {
         btn.setOnClickListener(listener);
     }
 
+    protected void _setLeftBackListener(int backImage, OnClickListener listener) {
+        ImageButton btn = (ImageButton) findViewById(R.id.of_back_imagebtn);
+        btn.setVisibility(View.VISIBLE);
+        btn.setImageResource(backImage);
+        btn.setOnClickListener(listener);
+    }
+
     protected void _setRightHomeListener(OnClickListener listener) {
         ImageButton btn = (ImageButton) findViewById(R.id.of_back_home_imagebtn);
         btn.setOnClickListener(listener);
@@ -177,14 +183,6 @@ public abstract class QBaseActivity extends AppCompatActivity {
         flag = false;
     }
 
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_BACK == keyCode && flag) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -269,7 +267,7 @@ public abstract class QBaseActivity extends AppCompatActivity {
      * @param cls
      * @param bundle
      */
-    public void toAcitivity(Class cls, Bundle bundle) {
+    public void toActivity(Class cls, Bundle bundle) {
         Intent intent = new Intent(this, cls);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -292,4 +290,10 @@ public abstract class QBaseActivity extends AppCompatActivity {
     public void showToastLong(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
 }

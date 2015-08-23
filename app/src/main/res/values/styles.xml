@@ -45,6 +45,10 @@
         <item name="android:textColor">@color/red</item>
     </style>
 
+    <style name="text_12_7f">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/title_text_color</item>
+    </style>
 
     <style name="text_13_red">
         <item name="android:textSize">13sp</item>
@@ -76,6 +80,11 @@
         <item name="android:textColor">@color/red</item>
     </style>
 
+    <style name="text_14_7f">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/title_text_color</item>
+    </style>
+
 
     <style name="text_14_white_with_shadow">
         <item name="android:textSize">14sp</item>
@@ -94,6 +103,11 @@
     <style name="text_15_white">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="text_15_7f">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/title_text_color</item>
     </style>
 
     <style name="text_15_red">

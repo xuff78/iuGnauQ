@@ -30,7 +30,7 @@ public class QRoastFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment QFindFragment.
+     * @return A new instance of fragment QFindUserFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static QRoastFragment newInstance(String param1, String param2) {

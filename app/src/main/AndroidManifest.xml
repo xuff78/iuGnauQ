@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xj.guanquan">
+    package="com.xj.guanquan" >
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -12,10 +12,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.home.QHomeActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,13 +24,17 @@
         </activity>
         <activity
             android:name=".activity.user.QLoginActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible"></activity>
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".activity.user.QFindPwdActivity"
             android:label="@string/title_activity_qfind_pwd" />
         <activity
             android:name=".activity.user.QRegistInfoActivity"
-            android:label="@string/title_activity_qregist_info"></activity>
+            android:label="@string/title_activity_qregist_info" />
+        <activity
+            android:name=".activity.home.QScreenActivity"
+            android:label="@string/title_activity_qscreen" >
+        </activity>
     </application>
 
 </manifest>

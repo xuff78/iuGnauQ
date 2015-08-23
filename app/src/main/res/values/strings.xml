@@ -66,9 +66,10 @@
     <string name="title_activity_qhome">首页</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">发现</string>
+    <string name="hello_blank_fragment">附近用户</string>
     <string name="hello_roast_fragment">吐槽</string>
     <string name="hello_message_fragment">消息</string>
     <string name="hello_contact_fragment">联系人</string>
     <string name="hello_me_fragment">我的</string>
+    <string name="title_activity_qscreen">筛选</string>
 </resources>

@@ -25,10 +25,10 @@ import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * Use the {@link QFindFragment#newInstance} factory method to
+ * Use the {@link QFindUserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QFindFragment extends Fragment {
+public class QFindUserFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -48,11 +48,11 @@ public class QFindFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment QFindFragment.
+     * @return A new instance of fragment QFindUserFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static QFindFragment newInstance(String param1, String param2) {
-        QFindFragment fragment = new QFindFragment();
+    public static QFindUserFragment newInstance(String param1, String param2) {
+        QFindUserFragment fragment = new QFindUserFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,7 +60,7 @@ public class QFindFragment extends Fragment {
         return fragment;
     }
 
-    public QFindFragment() {
+    public QFindUserFragment() {
         // Required empty public constructor
     }
 
@@ -77,12 +77,14 @@ public class QFindFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_qfind, container, false);
+        return inflater.inflate(R.layout.fragment_qfind_user, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         findRecyclerView = (RecyclerView) view.findViewById(R.id.findRecyclerView);
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
 
@@ -96,7 +98,7 @@ public class QFindFragment extends Fragment {
 
         initData();
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"name", "age", "sex", "headImage", "height", "weight", "carDescript", "dateDescript"}, R.layout.list_find_item, userInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"name", "age", "sex", "headImage", "height", "weight", "carDescript", "dateDescript"}, R.layout.list_find_user_item, userInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {

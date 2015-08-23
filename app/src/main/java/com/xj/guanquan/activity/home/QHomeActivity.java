@@ -1,5 +1,6 @@
 package com.xj.guanquan.activity.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -12,7 +13,8 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.fragment.contact.QContactFragment;
-import com.xj.guanquan.fragment.found.QFindFragment;
+import com.xj.guanquan.fragment.found.QFindCircleFragment;
+import com.xj.guanquan.fragment.found.QFindUserFragment;
 import com.xj.guanquan.fragment.message.QMessageFragment;
 import com.xj.guanquan.fragment.roast.QRoastFragment;
 import com.xj.guanquan.fragment.user.QMeFragment;
@@ -39,35 +41,25 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
     @Override
     protected void initView() {
         initialize();
-        _setHeaderTitle(getString(R.string.hello_blank_fragment), R.color.yellow);
-        _setLeftBackGone();
-        _setRightHomeGone();
-        _setRightHomeText(getString(R.string.Filter), new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLogin();
-            }
-        });
-        initFragment(QFindFragment.newInstance(null, null));
-
+        initFragment(QFindUserFragment.newInstance(null, null));
         homeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == radioBtnfind.getId()) {
-                    initFragment(QFindFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_blank_fragment), R.color.yellow);
+                    initFragment(QFindUserFragment.newInstance(null, null));
+                    _setHeaderTitle(getString(R.string.hello_blank_fragment));
                 } else if (checkedId == radioBtncontact.getId()) {
                     initFragment(QContactFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_contact_fragment), R.color.yellow);
+                    _setHeaderTitle(getString(R.string.hello_contact_fragment));
                 } else if (checkedId == radioBtnme.getId()) {
                     initFragment(QMeFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_me_fragment), R.color.yellow);
+                    _setHeaderTitle(getString(R.string.hello_me_fragment));
                 } else if (checkedId == radioBtnmessage.getId()) {
                     initFragment(QMessageFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_message_fragment), R.color.yellow);
+                    _setHeaderTitle(getString(R.string.hello_message_fragment));
                 } else if (checkedId == raidoBtnshits.getId()) {
                     initFragment(QRoastFragment.newInstance(null, null));
-                    _setHeaderTitle(getString(R.string.hello_roast_fragment), R.color.yellow);
+                    _setHeaderTitle(getString(R.string.hello_roast_fragment));
                 }
             }
         });
@@ -85,6 +77,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
     }
 
     private void initFragment(Fragment fragment) {
+        initTitle(fragment);
         FragmentManagerUtil.newInstance().replaceFragment(getSupportFragmentManager(), fragment, R.id.replaceFragment);
     }
 
@@ -99,9 +92,42 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
         homeGroup = (RadioGroup) findViewById(R.id.homeGroup);
     }
 
+    public void initTitle(Fragment fragment) {
+        if (fragment instanceof QFindUserFragment) {
+            _setHeaderTitle(getString(R.string.hello_blank_fragment));
+            _setRightHomeGone();
+            _setLeftBackListener(R.mipmap.icon_screen, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(QHomeActivity.this, QScreenActivity.class);
+                    startActivityForResult(intent, 111);
+                }
+            });
+            _setRightHomeText("发现圈子", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initFragment(QFindCircleFragment.newInstance(null, null));
+                }
+            });
+        } else if (fragment instanceof QFindCircleFragment) {
+            _setLeftBackGone();
+            _setHeaderTitle("附近圈子");
+            _setRightHomeText("发现用户", new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initFragment(QFindUserFragment.newInstance(null, null));
+                }
+            });
+        } else {
+            //因为具体每个界面的导航栏都不一样，所以就隐藏掉activity的导航，直接在fragment
+            //定义导航栏 add by jixiangxiang
+            _setHeaderGone();
+
+        }
+    }
+
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         this.finish();
     }
 }
