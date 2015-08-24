@@ -40,6 +40,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
 
     @Override
     protected void initView() {
+
         initialize();
         initFragment(QFindUserFragment.newInstance(null, null));
         homeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
