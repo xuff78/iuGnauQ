@@ -35,6 +35,10 @@
             android:name=".activity.home.QScreenActivity"
             android:label="@string/title_activity_qscreen" >
         </activity>
+        <activity
+            android:name=".activity.found.QUserDetailActivity"
+            android:label="@string/title_activity_quser_detail" >
+        </activity>
     </application>
 
 </manifest>

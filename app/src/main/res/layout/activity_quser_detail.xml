@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_title"
+    android:orientation="vertical">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="-100dp"
+        android:scaleType="fitXY"
+        app:placeholderImageScaleType="fitXY"
+        fresco:placeholderImage="@mipmap/scrollview_header">
+
+    </com.facebook.drawee.view.SimpleDraweeView>
+
+    <com.xj.guanquan.views.pullscrollview.PullScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/attentionArea"
+        android:fillViewport="true"
+        app:headerHeight="300dp"
+        app:headerVisibleHeight="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/userPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:orientation="horizontal"
+                android:scrollbars="horizontal">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@color/black_title"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <LinearLayout
+                    android:id="@+id/sexAgeArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/age_sex_border_conner"
+                    android:orientation="horizontal"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2dp">
+
+                    <TextView
+                        android:id="@+id/sex"
+                        style="@style/text_11_white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="♀"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/age"
+                        style="@style/text_11_white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="24"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/text_14_7f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/sexAgeArea"
+                    android:text="金牛座" />
+
+                <TextView
+                    android:id="@+id/distance"
+                    style="@style/text_14_7f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="17dp"
+                    android:layout_toLeftOf="@+id/line"
+                    android:text="100m" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_toLeftOf="@+id/distanceTime"
+                    android:background="@color/title_text_color" />
+
+                <TextView
+                    android:id="@+id/distanceTime"
+                    style="@style/text_14_7f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="7dp"
+                    android:text="1分钟前" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_deep" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="@color/black_title"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/text_15_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="我的吐槽" />
+
+                    <TextView
+                        style="@style/text_15_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="right"
+                        android:text="126" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/headImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="7.5dp"
+                        android:scaleType="fitXY"
+                        app:placeholderImageScaleType="fitXY"
+                        fresco:placeholderImage="@mipmap/default_head_img"></com.facebook.drawee.view.SimpleDraweeView>
+
+                    <TextView
+                        android:id="@+id/roastContent"
+                        style="@style/text_14_7f"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/headImage"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toLeftOf="@+id/roastMore"
+                        android:layout_toRightOf="@+id/headImage"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="让女人失望的男人不是好男人" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/headImage"
+                        android:layout_toRightOf="@+id/headImage">
+
+                        <TextView
+                            android:id="@+id/roastDistance"
+                            style="@style/text_14_7f"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="17dp"
+                            android:text="100m" />
+
+                        <View
+                            android:id="@+id/line1"
+                            android:layout_width="1dp"
+                            android:layout_height="16dp"
+                            android:layout_toRightOf="@+id/roastDistance"
+                            android:background="@color/title_text_color" />
+
+                        <TextView
+                            android:id="@+id/roastTime"
+                            style="@style/text_14_7f"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="7dp"
+                            android:layout_toRightOf="@+id/line1"
+                            android:text="昨天15：38" />
+
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/roastMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/icon_gray_arrow" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_deep" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="贵圈号" />
+
+                <TextView
+                    android:id="@+id/circleNum"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="201412" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/circleNum"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="婚姻" />
+
+                <TextView
+                    android:id="@+id/marriage"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="201412" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/marriage"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="职业" />
+
+                <TextView
+                    android:id="@+id/career"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="201412" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/career"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="身高" />
+
+                <TextView
+                    android:id="@+id/height"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="174cm" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/height"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical|right"
+                    android:text="体重" />
+
+                <TextView
+                    android:id="@+id/weight"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="125dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_vertical"
+                    android:text="58kg" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/weight"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="我的座驾" />
+
+                <TextView
+                    android:id="@+id/carOne"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="保时捷911" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/carOne"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title">
+
+                <TextView
+                    android:id="@+id/carTwo"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="125dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_vertical"
+                    android:text="凯迪拉克" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/carTwo"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </com.xj.guanquan.views.pullscrollview.PullScrollView>
+
+    <LinearLayout
+        android:id="@+id/attentionArea"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_title"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/attentionBtn"
+            style="@style/text_16_white"
+            android:layout_width="133dp"
+            android:layout_height="30dp"
+            android:background="@drawable/login_button_seletor"
+            android:text="关注"
+            android:textColor="@color/black_deep" />
+    </LinearLayout>
+</RelativeLayout>

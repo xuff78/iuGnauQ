@@ -72,4 +72,5 @@
     <string name="hello_contact_fragment">联系人</string>
     <string name="hello_me_fragment">我的</string>
     <string name="title_activity_qscreen">筛选</string>
+    <string name="title_activity_quser_detail">用户详情</string>
 </resources>

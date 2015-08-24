@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.found.QUserDetailActivity;
+import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
@@ -162,7 +164,7 @@ public class QFindUserFragment extends Fragment {
 
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView name;
         private TextView sex;
         private SimpleDraweeView headImage;
@@ -175,6 +177,8 @@ public class QFindUserFragment extends Fragment {
         public ItemViewHolder(View itemView) {
             super(itemView);
             initialize(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         public SimpleDraweeView getHeadImage() {
@@ -251,6 +255,19 @@ public class QFindUserFragment extends Fragment {
             weight = (TextView) itemView.findViewById(R.id.weight);
             carDescript = (TextView) itemView.findViewById(R.id.carDescript);
             dateDescript = (TextView) itemView.findViewById(R.id.dateDescript);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userInfo", userInfoList.get(getAdapterPosition()));
+            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class, bundle);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            //todo long click
+            return true;
         }
     }
 
