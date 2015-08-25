@@ -10,7 +10,7 @@
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="340dp"
         android:layout_marginTop="-100dp"
         android:scaleType="fitXY"
         app:placeholderImageScaleType="fitXY"
@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/attentionArea"
         android:fillViewport="true"
-        app:headerHeight="300dp"
+        app:headerHeight="340dp"
         app:headerVisibleHeight="100dp">
 
         <LinearLayout
@@ -32,10 +32,38 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+
+                <Button
+                    android:id="@+id/good"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/find_zan_selector"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/descript"
+                    style="@style/text_14_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:text="这里其实就是来描述我的" />
+            </RelativeLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/userPhotos"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="36dp"
                 android:orientation="horizontal"
                 android:scrollbars="horizontal">
 
@@ -159,8 +187,8 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="7.5dp"
                         android:scaleType="fitXY"
-                        app:placeholderImageScaleType="fitXY"
-                        fresco:placeholderImage="@mipmap/default_head_img"></com.facebook.drawee.view.SimpleDraweeView>
+                        fresco:placeholderImage="@mipmap/default_head_img"
+                        fresco:placeholderImageScaleType="fitXY"></com.facebook.drawee.view.SimpleDraweeView>
 
                     <TextView
                         android:id="@+id/roastContent"
@@ -272,7 +300,7 @@
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|right"
-                    android:text="婚姻" />
+                    android:text="感情状况" />
 
                 <TextView
                     android:id="@+id/marriage"
@@ -436,6 +464,240 @@
                     android:background="@color/black_deep" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="收入状况" />
+
+                <TextView
+                    android:id="@+id/income"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="土豪  (100-1000万)" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/income"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="加入群组" />
+
+                <include
+                    layout="@layout/list_join_group_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/black_title">
+
+                <include
+                    layout="@layout/list_join_group_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="125dp"
+                    android:layout_marginRight="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="兴趣爱好" />
+
+                <TextView
+                    android:id="@+id/interest"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="影视拍摄  逛街购物  交友  旅游  聚会唱歌 " />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/interest"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="社交网络" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/socialImage"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="105dp"
+                    android:padding="4dp"
+                    fresco:placeholderImage="@mipmap/default_head_img"
+                    fresco:placeholderImageScaleType="fitXY">
+
+                </com.facebook.drawee.view.SimpleDraweeView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/socialImage"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="常出没" />
+
+                <TextView
+                    android:id="@+id/haunt"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="不骄不躁，不好不坏，不胖不瘦，就是这么任性。" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/haunt"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="关系" />
+
+                <TextView
+                    android:id="@+id/relation"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="自己/粉丝/关注/好友" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/relation"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="注册时间" />
+
+                <TextView
+                    android:id="@+id/registTime"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="2014-12-28" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/registTime"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
         </LinearLayout>
     </com.xj.guanquan.views.pullscrollview.PullScrollView>
 

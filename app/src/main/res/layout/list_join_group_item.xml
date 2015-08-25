@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/black_title">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="fitXY"
+        fresco:placeholderImage="@mipmap/default_head_img"
+        fresco:placeholderImageScaleType="fitXY">
+
+    </com.facebook.drawee.view.SimpleDraweeView>
+
+    <TextView
+        style="@style/text_14_7f"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:gravity="center_vertical"
+        android:text="影视基地" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/icon_gray_arrow" />
+</RelativeLayout>

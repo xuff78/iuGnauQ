@@ -1,25 +1,39 @@
 package com.xj.guanquan.activity.found;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.model.PictureInfo;
 import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView.OnTurnListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 
 public class QUserDetailActivity extends QBaseActivity implements View.OnClickListener, OnTurnListener {
     private UserInfo userInfo;
     private SimpleDraweeView backgroundImage;
     private RecyclerView userPhotos;
     private PullScrollView scrollview;
-    private LinearLayoutManager mLayoutManager;
+    private GridLayoutManager mGridLayoutManager;
+    private TextView descript;
+    private Button good;
+
+    private RecyclerViewAdapter mAdapter;
+    private List<PictureInfo> pictureInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +62,60 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         // do not change the size of the RecyclerView
         userPhotos.setHasFixedSize(true);
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        userPhotos.setLayoutManager(mLayoutManager);
+        mGridLayoutManager = new GridLayoutManager(this, 2);
+        mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
+        userPhotos.setLayoutManager(mGridLayoutManager);
         userPhotos.setItemAnimator(new DefaultItemAnimator());
 
+        initData();
+        mAdapter = new RecyclerViewAdapter(new String[]{"picture"}, R.layout.list_photos_item, pictureInfoList);
+        mAdapter.setIsShowFooter(false);
+        mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Object o, String s) {
+                if (view instanceof SimpleDraweeView) {
+                    SimpleDraweeView iv = (SimpleDraweeView) view;
+                    Uri uri = Uri.parse((String) o);
+                    iv.setImageURI(uri);
+                    return true;
+                }
+                return false;
+            }
+        });
+        mAdapter.setViewHolderHelper(new RecyclerViewAdapter.ViewHolderHelper() {
+            @Override
+            public RecyclerView.ViewHolder bindItemViewHolder(View view) {
+                return new ItemViewHolder(view);
+            }
+        });
+        userPhotos.setAdapter(mAdapter);
+    }
 
+    private void initData() {
+        pictureInfoList = new ArrayList<PictureInfo>();
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
+        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
     }
 
     @Override
@@ -62,17 +125,52 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-
+        if (v == good) {
+            good.setSelected(!good.isSelected());
+        }
     }
 
     private void initialize() {
         backgroundImage = (SimpleDraweeView) findViewById(R.id.backgroundImage);
         userPhotos = (RecyclerView) findViewById(R.id.userPhotos);
         scrollview = (PullScrollView) findViewById(R.id.scroll_view);
+        descript = (TextView) findViewById(R.id.descript);
+        good = (Button) findViewById(R.id.good);
+        good.setOnClickListener(this);
     }
 
     @Override
     public void onTurn() {
 
+    }
+
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+        private SimpleDraweeView picture;
+
+        public ItemViewHolder(View itemView) {
+            super(itemView);
+            picture = (SimpleDraweeView) itemView.findViewById(R.id.picture);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        public SimpleDraweeView getPicture() {
+            return picture;
+        }
+
+        public void setPicture(SimpleDraweeView picture) {
+            this.picture = picture;
+        }
+
+
+        @Override
+        public void onClick(View v) {
+
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
+        }
     }
 }
