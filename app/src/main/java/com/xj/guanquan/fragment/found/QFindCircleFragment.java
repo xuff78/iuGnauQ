@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.found.QCircleDetailActivity;
+import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.CircleInfo;
 
 import java.util.ArrayList;
@@ -161,7 +163,7 @@ public class QFindCircleFragment extends Fragment {
 
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private SimpleDraweeView headImage;
         private TextView circleName;
         private TextView level;
@@ -220,6 +222,8 @@ public class QFindCircleFragment extends Fragment {
         public ItemViewHolder(View itemView) {
             super(itemView);
             initialize(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         private void initialize(View itemView) {
@@ -229,6 +233,18 @@ public class QFindCircleFragment extends Fragment {
             distance = (TextView) itemView.findViewById(R.id.distance);
             nameArea = (RelativeLayout) itemView.findViewById(R.id.nameArea);
             circleDesc = (TextView) itemView.findViewById(R.id.circleDesc);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("circleInfo", circleInfoList.get(getAdapterPosition()));
+            ((QBaseActivity) getActivity()).toActivity(QCircleDetailActivity.class, bundle);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
         }
     }
 

@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_title"
+    android:orientation="vertical">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="340dp"
+        android:layout_marginTop="-100dp"
+        android:scaleType="fitXY"
+        app:placeholderImageScaleType="fitXY"
+        fresco:placeholderImage="@mipmap/scrollview_header">
+
+    </com.facebook.drawee.view.SimpleDraweeView>
+
+    <com.xj.guanquan.views.pullscrollview.PullScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/attentionArea"
+        android:fillViewport="true"
+        app:headerHeight="340dp"
+        app:headerVisibleHeight="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/userPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="120dp"
+                android:orientation="horizontal"
+                android:scrollbars="horizontal">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/title_text_color" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="贵圈号" />
+
+                <TextView
+                    android:id="@+id/circleNum"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="201412" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/circleNum"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/title_text_color" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="圈子介绍" />
+
+                <TextView
+                    android:id="@+id/circleDesc"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="京城各大名流土豪超级富豪聚集地，欢迎更多人加入！" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/circleDesc"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/title_text_color" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:gravity="center_vertical|right"
+                    android:text="圈主" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/masterImage"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginLeft="105dp"
+                    android:layout_marginTop="18dp"
+                    fresco:placeholderImage="@mipmap/default_head_img">
+
+                </com.facebook.drawee.view.SimpleDraweeView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/masterImage"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/title_text_color" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/black_title"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/text_15_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="圈子成员" />
+
+                    <TextView
+                        style="@style/text_15_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="right"
+                        android:text="75" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/headImageOne"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="7.5dp"
+                        android:scaleType="fitXY"
+                        fresco:placeholderImage="@mipmap/default_head_img"
+                        fresco:placeholderImageScaleType="fitXY"></com.facebook.drawee.view.SimpleDraweeView>
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/headImageTwo"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="7.5dp"
+                        android:layout_toRightOf="@+id/headImageOne"
+                        android:scaleType="fitXY"
+                        fresco:placeholderImage="@mipmap/default_head_img"
+                        fresco:placeholderImageScaleType="fitXY"></com.facebook.drawee.view.SimpleDraweeView>
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/headImageThress"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="7.5dp"
+                        android:layout_toRightOf="@+id/headImageTwo"
+                        android:scaleType="fitXY"
+                        fresco:placeholderImage="@mipmap/default_head_img"
+                        fresco:placeholderImageScaleType="fitXY"></com.facebook.drawee.view.SimpleDraweeView>
+
+
+                    <ImageView
+                        android:id="@+id/roastMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/icon_gray_arrow" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:id="@+id/inviteCircle"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="邀请好友加入圈子" />
+
+                <ImageView
+                    android:id="@+id/toInvite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/icon_gray_arrow" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/title_text_color" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="圈子等级" />
+
+                <TextView
+                    android:id="@+id/circleLevel"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="普通100人圈" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/circleLevel"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/title_text_color" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/black_title"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/text_15_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="圈子相册" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/circlePhotos"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="7.5dp"
+                        android:scaleType="fitXY"
+                        fresco:placeholderImage="@mipmap/default_head_img"
+                        fresco:placeholderImageScaleType="fitXY"></com.facebook.drawee.view.SimpleDraweeView>
+
+                    <TextView
+                        android:id="@+id/photoDesc"
+                        style="@style/text_14_7f"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/circlePhotos"
+                        android:gravity="center_vertical"
+                        android:text="京城各大名流土豪超级富豪聚集地，欢迎更多人加入！" />
+
+                    <ImageView
+                        android:id="@+id/circleMorePhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/icon_gray_arrow" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="15dp"
+                        android:background="@color/title_text_color" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/black_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="注册地点" />
+
+                <TextView
+                    android:id="@+id/address"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="105dp"
+                    android:gravity="center_vertical"
+                    android:text="国贸大厦3期" />
+
+                <TextView
+                    android:id="@+id/distance"
+                    style="@style/text_13_7f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="12.5m" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="105dp"
+                    android:background="@color/title_text_color" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/black_title">
+
+                <TextView
+                    style="@style/text_15_white"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical|right"
+                    android:text="成立时间" />
+
+                <TextView
+                    android:id="@+id/createTiem"
+                    style="@style/text_13_7f"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="125dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_vertical"
+                    android:text="2014-12-28" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/createTiem"
+                    android:background="@color/title_text_color" />
+            </RelativeLayout>
+        </LinearLayout>
+    </com.xj.guanquan.views.pullscrollview.PullScrollView>
+
+    <LinearLayout
+        android:id="@+id/attentionArea"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_title"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/joinCircleBtn"
+            style="@style/text_16_white"
+            android:layout_width="133dp"
+            android:layout_height="30dp"
+            android:background="@drawable/login_button_seletor"
+            android:text="加入圈子"
+            android:textColor="@color/black_deep" />
+    </LinearLayout>
+</RelativeLayout>

@@ -6,15 +6,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.model.CircleInfo;
 import com.xj.guanquan.model.PictureInfo;
-import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView.OnTurnListener;
 
@@ -23,14 +21,12 @@ import java.util.List;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 
-public class QUserDetailActivity extends QBaseActivity implements View.OnClickListener, OnTurnListener {
-    private UserInfo userInfo;
+public class QCircleDetailActivity extends QBaseActivity implements View.OnClickListener, OnTurnListener {
+    private CircleInfo circleInfo;
     private SimpleDraweeView backgroundImage;
     private RecyclerView userPhotos;
     private PullScrollView scrollview;
     private GridLayoutManager mGridLayoutManager;
-    private TextView descript;
-    private Button good;
 
     private RecyclerViewAdapter mAdapter;
     private List<PictureInfo> pictureInfoList;
@@ -39,21 +35,15 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         Fresco.initialize(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quser_detail);
+        setContentView(R.layout.activity_qcircle_detail);
     }
 
     @Override
     protected void initView() {
         initialize();
-        userInfo = (UserInfo) getIntent().getExtras().getSerializable("userInfo");
-        _setHeaderTitle(userInfo.getName());
+        circleInfo = (CircleInfo) getIntent().getExtras().getSerializable("circleInfo");
+        _setHeaderTitle(circleInfo.getCircleName());
         _setRightHomeGone();
-        _setRightHomeText("投诉", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         scrollview.setHeader(backgroundImage);
         scrollview.setOnTurnListener(this);
@@ -125,18 +115,12 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v == good) {
-            good.setSelected(!good.isSelected());
-        }
     }
 
     private void initialize() {
         backgroundImage = (SimpleDraweeView) findViewById(R.id.backgroundImage);
         userPhotos = (RecyclerView) findViewById(R.id.userPhotos);
         scrollview = (PullScrollView) findViewById(R.id.scroll_view);
-        descript = (TextView) findViewById(R.id.descript);
-        good = (Button) findViewById(R.id.good);
-        good.setOnClickListener(this);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
@@ -106,6 +107,9 @@ public class PullScrollView extends ScrollView {
      */
     private State mState = State.NORMAL;
 
+    //add by jixiangxiang
+    private GestureDetector mGestureDetector;
+
     public PullScrollView(Context context) {
         super(context);
         init(context, null);
@@ -122,6 +126,7 @@ public class PullScrollView extends ScrollView {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        mGestureDetector = new GestureDetector(context, new YScrollDetector());
         // set scroll mode
         setOverScrollMode(OVER_SCROLL_NEVER);
 
@@ -173,7 +178,7 @@ public class PullScrollView extends ScrollView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return onTouchEvent(ev) || super.onInterceptTouchEvent(ev);
+        return (onTouchEvent(ev) || super.onInterceptTouchEvent(ev)) && mGestureDetector.onTouchEvent(ev);
     }
 
     @Override
@@ -332,5 +337,17 @@ public class PullScrollView extends ScrollView {
          * 翻转回调方法
          */
         public void onTurn();
+    }
+
+    class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY) {
+            /**
+             * 如果我们滚动更接近水平方向,返回false,让子视图来处理它
+             */
+            return (Math.abs(distanceY) > Math.abs(distanceX));
+        }
     }
 }
