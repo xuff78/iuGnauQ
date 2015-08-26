@@ -7,6 +7,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -25,21 +27,46 @@ import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 
 public class QUserDetailActivity extends QBaseActivity implements View.OnClickListener, OnTurnListener {
     private UserInfo userInfo;
-    private SimpleDraweeView backgroundImage;
-    private RecyclerView userPhotos;
-    private PullScrollView scrollview;
     private GridLayoutManager mGridLayoutManager;
-    private TextView descript;
-    private Button good;
-
     private RecyclerViewAdapter mAdapter;
     private List<PictureInfo> pictureInfoList;
+    private Button good;
+    private TextView distance;
+    private RecyclerView userPhotos;
+    private PullScrollView scrollview;
+    private TextView sex;
+    private LinearLayout sexAgeArea;
+    private TextView circleNum;
+    private TextView income;
+    private TextView carTwo;
+    private LinearLayout attentionArea;
+    private TextView haunt;
+    private TextView carOne;
+    private Button attentionBtn;
+    private TextView registTime;
+    private TextView distanceTime;
+    private TextView interest;
+    private SimpleDraweeView backgroundImage;
+    private TextView age;
+    private TextView marriage;
+    private SimpleDraweeView socialImage;
+    private TextView weight;
+    private TextView roastTime;
+    private TextView career;
+    private SimpleDraweeView headImage;
+    private TextView height;
+    private TextView roastDistance;
+    private TextView relation;
+    private TextView roastContent;
+    private ImageView roastMore;
+    private TextView descript;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Fresco.initialize(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quser_detail);
+        initialize();
     }
 
     @Override
@@ -134,8 +161,36 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         backgroundImage = (SimpleDraweeView) findViewById(R.id.backgroundImage);
         userPhotos = (RecyclerView) findViewById(R.id.userPhotos);
         scrollview = (PullScrollView) findViewById(R.id.scroll_view);
-        descript = (TextView) findViewById(R.id.descript);
         good = (Button) findViewById(R.id.good);
+        sexAgeArea = (LinearLayout) findViewById(R.id.sexAgeArea);
+        distance = (TextView) findViewById(R.id.distance);
+        sex = (TextView) findViewById(R.id.sex);
+        sexAgeArea = (LinearLayout) findViewById(R.id.sexAgeArea);
+        circleNum = (TextView) findViewById(R.id.circleNum);
+        income = (TextView) findViewById(R.id.income);
+        carTwo = (TextView) findViewById(R.id.carTwo);
+        attentionArea = (LinearLayout) findViewById(R.id.attentionArea);
+        haunt = (TextView) findViewById(R.id.haunt);
+        carOne = (TextView) findViewById(R.id.carOne);
+        attentionBtn = (Button) findViewById(R.id.attentionBtn);
+        registTime = (TextView) findViewById(R.id.registTime);
+        distanceTime = (TextView) findViewById(R.id.distanceTime);
+        interest = (TextView) findViewById(R.id.interest);
+        age = (TextView) findViewById(R.id.age);
+        marriage = (TextView) findViewById(R.id.marriage);
+        socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
+        weight = (TextView) findViewById(R.id.weight);
+        roastTime = (TextView) findViewById(R.id.roastTime);
+        socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
+        career = (TextView) findViewById(R.id.career);
+        headImage = (SimpleDraweeView) findViewById(R.id.headImage);
+        height = (TextView) findViewById(R.id.height);
+        roastDistance = (TextView) findViewById(R.id.roastDistance);
+        relation = (TextView) findViewById(R.id.relation);
+        roastContent = (TextView) findViewById(R.id.roastContent);
+        roastMore = (ImageView) findViewById(R.id.roastMore);
+        descript = (TextView) findViewById(R.id.descript);
+
         good.setOnClickListener(this);
     }
 

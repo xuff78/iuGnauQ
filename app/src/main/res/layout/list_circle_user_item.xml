@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="50.5dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:gravity="clip_vertical">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/headImg"
+        fresco:placeholderImageScaleType="fitCenter"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="6dp"
+        fresco:placeholderImage="@mipmap/default_head_img"
+        fresco:roundedCornerRadius="2dp">
+
+    </com.facebook.drawee.view.SimpleDraweeView>
+
+    <TextView
+        android:id="@+id/index"
+        style="@style/text_14_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/headImg"
+        android:layout_marginLeft="13dp"
+        android:layout_toRightOf="@id/headImg"
+        android:text="1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/relationTitle"
+        style="@style/text_10_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/headImg"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/index"
+        android:text="关系:" />
+
+    <TextView
+        android:id="@+id/relation"
+        style="@style/text_10_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/relationTitle"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@+id/relationTitle"
+        android:text="好友" />
+
+    <TextView
+        android:id="@+id/sex"
+        style="@style/text_12_7f"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relationTitle"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/headImg"
+        android:text="男" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="1dp"
+        android:layout_height="13dp"
+        android:layout_alignTop="@id/sex"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/sex"
+        android:background="@color/title_text_color" />
+
+    <TextView
+        android:id="@+id/distance"
+        style="@style/text_12_7f"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/line1"
+        android:layout_marginLeft="13dp"
+        android:layout_toLeftOf="@id/line1"
+        android:text="男" />
+
+    <TextView
+        android:id="@+id/age"
+        style="@style/text_12_7f"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relationTitle"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/line"
+        android:text="26" />
+
+
+    <TextView
+        android:id="@+id/time"
+        style="@style/text_12_7f"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/headImg"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:text="1分钟前" />
+
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="1dp"
+        android:layout_height="13dp"
+        android:layout_alignTop="@id/time"
+        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@id/time"
+        android:background="@color/title_text_color" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/title_text_color" />
+</RelativeLayout>

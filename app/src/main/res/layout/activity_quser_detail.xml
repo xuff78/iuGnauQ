@@ -309,7 +309,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="201412" />
+                    android:text="未婚" />
 
                 <View
                     android:layout_width="match_parent"
@@ -340,7 +340,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="201412" />
+                    android:text="霸道副总裁" />
 
                 <View
                     android:layout_width="match_parent"

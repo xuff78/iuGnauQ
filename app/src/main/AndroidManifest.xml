@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xj.guanquan">
+    package="com.xj.guanquan" >
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -12,10 +12,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.home.QHomeActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,13 +33,17 @@
             android:label="@string/title_activity_qregist_info" />
         <activity
             android:name=".activity.home.QScreenActivity"
-            android:label="@string/title_activity_qscreen"></activity>
+            android:label="@string/title_activity_qscreen" />
         <activity
             android:name=".activity.found.QUserDetailActivity"
-            android:label="@string/title_activity_quser_detail"></activity>
+            android:label="@string/title_activity_quser_detail" />
         <activity
             android:name=".activity.found.QCircleDetailActivity"
-            android:label="@string/title_activity_quser_detail"></activity>
+            android:label="@string/title_activity_quser_detail" />
+        <activity
+            android:name=".activity.found.QCircleMemberActivity"
+            android:label="@string/title_activity_qcircle_member" >
+        </activity>
     </application>
 
 </manifest>

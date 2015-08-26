@@ -261,15 +261,5 @@ public class QFindCircleFragment extends Fragment {
         circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
         circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
         circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
     }
 }

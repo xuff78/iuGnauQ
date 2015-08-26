@@ -6,6 +6,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -23,13 +27,30 @@ import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 
 public class QCircleDetailActivity extends QBaseActivity implements View.OnClickListener, OnTurnListener {
     private CircleInfo circleInfo;
-    private SimpleDraweeView backgroundImage;
-    private RecyclerView userPhotos;
-    private PullScrollView scrollview;
     private GridLayoutManager mGridLayoutManager;
-
     private RecyclerViewAdapter mAdapter;
     private List<PictureInfo> pictureInfoList;
+    private SimpleDraweeView backgroundImage;
+    private RecyclerView userPhotos;
+    private TextView circleNum;
+    private TextView circleDesc;
+    private SimpleDraweeView masterImage;
+    private SimpleDraweeView headImageOne;
+    private SimpleDraweeView headImageTwo;
+    private SimpleDraweeView headImageThress;
+    private ImageView roastMore;
+    private TextView inviteCircle;
+    private ImageView toInvite;
+    private TextView circleLevel;
+    private SimpleDraweeView circlePhotos;
+    private TextView photoDesc;
+    private ImageView circleMorePhoto;
+    private TextView address;
+    private TextView distance;
+    private TextView createTiem;
+    private PullScrollView scrollview;
+    private Button joinCircleBtn;
+    private LinearLayout attentionArea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,29 +99,13 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
                 return new ItemViewHolder(view);
             }
         });
+        mAdapter.isLoadMore(false);
         userPhotos.setAdapter(mAdapter);
+        roastMore.setOnClickListener(this);
     }
 
     private void initData() {
         pictureInfoList = new ArrayList<PictureInfo>();
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
         pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
         pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
         pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
@@ -115,12 +120,33 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        if (v == roastMore) {
+            toActivity(QCircleMemberActivity.class);
+        }
     }
 
     private void initialize() {
         backgroundImage = (SimpleDraweeView) findViewById(R.id.backgroundImage);
         userPhotos = (RecyclerView) findViewById(R.id.userPhotos);
+        circleNum = (TextView) findViewById(R.id.circleNum);
+        circleDesc = (TextView) findViewById(R.id.circleDesc);
+        masterImage = (SimpleDraweeView) findViewById(R.id.masterImage);
+        headImageOne = (SimpleDraweeView) findViewById(R.id.headImageOne);
+        headImageTwo = (SimpleDraweeView) findViewById(R.id.headImageTwo);
+        headImageThress = (SimpleDraweeView) findViewById(R.id.headImageThress);
+        roastMore = (ImageView) findViewById(R.id.roastMore);
+        inviteCircle = (TextView) findViewById(R.id.inviteCircle);
+        toInvite = (ImageView) findViewById(R.id.toInvite);
+        circleLevel = (TextView) findViewById(R.id.circleLevel);
+        circlePhotos = (SimpleDraweeView) findViewById(R.id.circlePhotos);
+        photoDesc = (TextView) findViewById(R.id.photoDesc);
+        circleMorePhoto = (ImageView) findViewById(R.id.circleMorePhoto);
+        address = (TextView) findViewById(R.id.address);
+        distance = (TextView) findViewById(R.id.distance);
+        createTiem = (TextView) findViewById(R.id.createTiem);
         scrollview = (PullScrollView) findViewById(R.id.scroll_view);
+        joinCircleBtn = (Button) findViewById(R.id.joinCircleBtn);
+        attentionArea = (LinearLayout) findViewById(R.id.attentionArea);
     }
 
     @Override
