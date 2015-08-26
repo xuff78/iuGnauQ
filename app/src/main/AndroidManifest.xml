@@ -44,6 +44,14 @@
             android:name=".activity.found.QCircleMemberActivity"
             android:label="@string/title_activity_qcircle_member" >
         </activity>
+        <activity
+            android:name=".activity.me.QProfileActivity"
+            android:label="@string/title_activity_qprofile" >
+        </activity>
+        <activity
+            android:name=".activity.user.QSystemSetActivity"
+            android:label="@string/title_activity_qsystem_set" >
+        </activity>
     </application>
 
 </manifest>

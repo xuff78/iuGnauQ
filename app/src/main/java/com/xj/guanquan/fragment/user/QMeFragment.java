@@ -5,24 +5,38 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.user.QSystemSetActivity;
+import com.xj.guanquan.common.QBaseActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link QMeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link QMeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QMeFragment extends Fragment {
+public class QMeFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private SimpleDraweeView headImage;
+    private TextView name;
+    private TextView circleNum;
+    private RelativeLayout selfDataArea;
+    private RelativeLayout signArea;
+    private RelativeLayout visitorArea;
+    private RelativeLayout vipArea;
+    private RelativeLayout mallArea;
+    private RelativeLayout newerArea;
+    private RelativeLayout systemArea;
 
     /**
      * Use this factory method to create a new instance of
@@ -56,10 +70,47 @@ public class QMeFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initialize(view);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_qme, container, false);
     }
 
+    private void initialize(View view) {
+        headImage = (SimpleDraweeView) view.findViewById(R.id.headImage);
+        name = (TextView) view.findViewById(R.id.name);
+        circleNum = (TextView) view.findViewById(R.id.circleNum);
+        selfDataArea = (RelativeLayout) view.findViewById(R.id.selfDataArea);
+        signArea = (RelativeLayout) view.findViewById(R.id.signArea);
+        visitorArea = (RelativeLayout) view.findViewById(R.id.visitorArea);
+        vipArea = (RelativeLayout) view.findViewById(R.id.vipArea);
+        mallArea = (RelativeLayout) view.findViewById(R.id.mallArea);
+        newerArea = (RelativeLayout) view.findViewById(R.id.newerArea);
+        systemArea = (RelativeLayout) view.findViewById(R.id.systemArea);
+
+
+        newerArea.setOnClickListener(this);
+        vipArea.setOnClickListener(this);
+        visitorArea.setOnClickListener(this);
+        signArea.setOnClickListener(this);
+        selfDataArea.setOnClickListener(this);
+        circleNum.setOnClickListener(this);
+        name.setOnClickListener(this);
+        headImage.setOnClickListener(this);
+        mallArea.setOnClickListener(this);
+        systemArea.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == systemArea) {
+            ((QBaseActivity) getActivity()).toActivity(QSystemSetActivity.class);
+        }
+    }
 }

@@ -135,6 +135,11 @@
         <item name="android:textColor">@color/red</item>
     </style>
 
+    <style name="text_16_7f">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/title_text_color</item>
+    </style>
+
     <style name="text_18_red">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/red</item>
