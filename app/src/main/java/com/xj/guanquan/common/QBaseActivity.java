@@ -3,6 +3,7 @@ package com.xj.guanquan.common;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ import com.xj.guanquan.activity.user.QLoginActivity;
  * @author jixiangxiang@infohold.com.cn
  */
 
-public abstract class QBaseActivity extends AppCompatActivity {
+public abstract class QBaseActivity extends AppCompatActivity implements QBaseFragment.OnFragmentListener {
 
     public ImageButton btnHome, btnBack;
 
@@ -298,4 +299,8 @@ public abstract class QBaseActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void onLoad(Fragment frg) {
+
+    }
 }

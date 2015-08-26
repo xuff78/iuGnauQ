@@ -19,5 +19,12 @@
     <color name="label_background">#4189C4</color>
     <color name="sex_age_backgroud">#EA346D</color>
     <color name="search_view_backgroud">#CAC9CF</color>
+    <color name="pink">#EE30A7</color>
+    <color name="sukura">#EE82EE</color>
+    <color name="normal_blue">#4682B4</color> <!-- 皇家蓝 -->
+    <color name="light_blue">#1C86EE</color>
+    <color name="light_gray">#C0C0C0</color><!--浅灰 -->
+    <color name="normal_gray">#818181</color><!--中灰 -->
+    <color name="hard_gray">#343434</color><!--深灰 -->
     <!-- 黄色 -->
 </resources>

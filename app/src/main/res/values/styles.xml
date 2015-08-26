@@ -30,6 +30,11 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="text_11_gray">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/normal_gray</item>
+    </style>
+
     <style name="text_11_red">
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/red</item>
@@ -53,6 +58,11 @@
     <style name="text_13_red">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="text_13_gray">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/normal_gray</item>
     </style>
 
     <style name="text_13_black">

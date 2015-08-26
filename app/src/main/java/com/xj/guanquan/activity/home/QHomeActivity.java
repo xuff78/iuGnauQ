@@ -17,6 +17,7 @@ import com.xj.guanquan.fragment.found.QFindCircleFragment;
 import com.xj.guanquan.fragment.found.QFindUserFragment;
 import com.xj.guanquan.fragment.message.QMessageFragment;
 import com.xj.guanquan.fragment.roast.QRoastFragment;
+import com.xj.guanquan.fragment.roast.TucaoMianFrg;
 import com.xj.guanquan.fragment.user.QMeFragment;
 
 import common.eric.com.ebaselibrary.util.FragmentManagerUtil;
@@ -55,7 +56,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
                 } else if (checkedId == radioBtnmessage.getId()) {
                     initFragment(QMessageFragment.newInstance(null, null));
                 } else if (checkedId == raidoBtnshits.getId()) {
-                    initFragment(QRoastFragment.newInstance(null, null));
+                    initFragment(TucaoMianFrg.newInstance());
                 }
             }
         });

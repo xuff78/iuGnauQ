@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dip"
+    tools:context="com.xj.guanquan.activity.tucao.TucaoMianFrg">
+    <ImageView
+        android:id="@+id/userImg"
+        android:layout_width="60dip"
+        android:layout_height="60dip" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView android:id="@+id/userName" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" style="@style/text_18_white" />
+            <TextView android:layout_marginLeft="20dp"
+                android:background="@drawable/shape_pink_corners"
+                android:padding="3dip"
+                android:text="♂24"
+                android:id="@+id/userAge" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" style="@style/text_11_white" />
+            <TextView  android:gravity="right"
+                android:id="@+id/createTime" android:layout_width="match_parent"
+                android:layout_height="wrap_content" style="@style/text_16_white" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView android:layout_marginLeft="10dp"
+                android:text="xxx"
+                android:id="@+id/usrComment" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" style="@style/text_13_gray" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:background="@mipmap/ic_launcher"
+                android:layout_width="20dip"
+                android:layout_height="20dip" />
+            <LinearLayout
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView android:layout_marginLeft="10dp"
+                    android:drawableLeft="@mipmap/find_no"
+                    android:text="0"
+                    android:gravity="center"
+                    android:id="@+id/favorBtn" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" style="@style/text_11_gray" />
+                <TextView android:layout_marginLeft="10dp"
+                    android:drawableLeft="@mipmap/find_no"
+                    android:text="0"
+                    android:gravity="center"
+                    android:id="@+id/replyNums" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" style="@style/text_11_gray" />
+                <TextView android:layout_marginLeft="10dp"
+                    android:drawableLeft="@mipmap/find_no"
+                    android:text="分享"
+                    android:gravity="center"
+                    android:id="@+id/shareBtn" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" style="@style/text_11_gray" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

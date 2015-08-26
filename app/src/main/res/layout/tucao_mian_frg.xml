@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip">
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/createNew"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView android:gravity="center" android:layout_weight="1"
+                android:text="吐槽"
+                android:textColor="@color/press_white_to_black"
+                android:id="@+id/leftBtn" android:layout_width="match_parent"
+                android:layout_height="40dip" style="@style/text_16_white" />
+            <TextView
+                android:text="约会"
+                android:textColor="@color/press_white_to_black"
+                android:gravity="center" android:layout_weight="1"
+                android:id="@+id/midBtn" android:layout_width="match_parent"
+                android:layout_height="40dip" style="@style/text_16_white" />
+            <TextView
+                android:text="秘密"
+                android:textColor="@color/press_white_to_black"
+                android:gravity="center" android:layout_weight="1"
+                android:id="@+id/rightBtn" android:layout_width="match_parent"
+                android:layout_height="40dip" style="@style/text_16_white" />
+        </LinearLayout>
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/createNew"
+            android:layout_margin="10dip"
+            android:layout_width="35dip"
+            android:layout_height="35dip" />
+    </RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent" android:layout_height="match_parent"/>
+
+</LinearLayout>

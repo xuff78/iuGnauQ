@@ -20,6 +20,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile group: 'common.eric.com.ebaselibrary', name: 'ebaselibrary', version: '0.0.4-SNAPSHOT', changing: true
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'common.eric.com.ebaselibrary:ebaselibrary:0.0.3-SNAPSHOT'
 }
