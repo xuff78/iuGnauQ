@@ -52,6 +52,10 @@
             android:name=".activity.user.QSystemSetActivity"
             android:label="@string/title_activity_qsystem_set" >
         </activity>
+        <activity
+            android:name=".activity.message.QMsgSetActivity"
+            android:label="@string/title_activity_qmsg_set" >
+        </activity>
     </application>
 
 </manifest>

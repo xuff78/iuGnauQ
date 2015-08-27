@@ -77,4 +77,5 @@
     <string name="title_activity_qcircle_member">圈子成员</string>
     <string name="title_activity_qprofile">我的</string>
     <string name="title_activity_qsystem_set">系统设置</string>
+    <string name="title_activity_qmsg_set">消息设置</string>
 </resources>

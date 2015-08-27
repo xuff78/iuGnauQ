@@ -5,8 +5,9 @@
     android:layout_height="100dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:background="@color/black_title"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/headImage"
