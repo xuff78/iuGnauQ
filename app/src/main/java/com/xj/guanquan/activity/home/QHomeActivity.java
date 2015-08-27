@@ -1,6 +1,5 @@
 package com.xj.guanquan.activity.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -13,10 +12,8 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.fragment.contact.QContactFragment;
-import com.xj.guanquan.fragment.found.QFindCircleFragment;
 import com.xj.guanquan.fragment.found.QFindUserFragment;
 import com.xj.guanquan.fragment.message.QMessageFragment;
-import com.xj.guanquan.fragment.roast.QRoastFragment;
 import com.xj.guanquan.fragment.roast.TucaoMianFrg;
 import com.xj.guanquan.fragment.user.QMeFragment;
 
@@ -73,7 +70,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
 
     }
 
-    private void initFragment(Fragment fragment) {
+    public void initFragment(Fragment fragment) {
         initTitle(fragment);
         FragmentManagerUtil.newInstance().replaceFragment(getSupportFragmentManager(), fragment, R.id.replaceFragment);
     }
@@ -90,37 +87,9 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
     }
 
     public void initTitle(Fragment fragment) {
-        if (fragment instanceof QFindUserFragment) {
-            _setHeaderTitle(getString(R.string.hello_blank_fragment));
-            _setRightHomeGone();
-            _setLeftBackListener(R.mipmap.icon_screen, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(QHomeActivity.this, QScreenActivity.class);
-                    startActivityForResult(intent, 111);
-                }
-            });
-            _setRightHomeText("发现圈子", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initFragment(QFindCircleFragment.newInstance(null, null));
-                }
-            });
-        } else if (fragment instanceof QFindCircleFragment) {
-            _setLeftBackGone();
-            _setHeaderTitle("附近圈子");
-            _setRightHomeText("发现用户", new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initFragment(QFindUserFragment.newInstance(null, null));
-                }
-            });
-        } else {
-            //因为具体每个界面的导航栏都不一样，所以就隐藏掉activity的导航，直接在fragment
-            //定义导航栏 add by jixiangxiang
-            _setHeaderGone();
-
-        }
+        //因为具体每个界面的导航栏都不一样，所以就隐藏掉activity的导航，直接在fragment
+        //定义导航栏 add by jixiangxiang
+        _setHeaderGone();
     }
 
     @Override

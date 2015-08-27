@@ -1,7 +1,6 @@
 package com.xj.guanquan.common;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 
 public class QBaseFragment extends Fragment {

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QCircleDetailActivity;
+import com.xj.guanquan.activity.home.QHomeActivity;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.CircleInfo;
 
@@ -31,7 +33,7 @@ import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
  * Use the {@link QFindCircleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QFindCircleFragment extends Fragment {
+public class QFindCircleFragment extends Fragment implements OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -44,6 +46,7 @@ public class QFindCircleFragment extends Fragment {
     private RecyclerViewAdapter mAdapter;
     private List<CircleInfo> circleInfoList;
     private int lastVisibleItem;
+    private TextView findUser;
 
     /**
      * Use this factory method to create a new instance of
@@ -88,6 +91,7 @@ public class QFindCircleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findRecyclerView = (RecyclerView) view.findViewById(R.id.findRecyclerView);
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        findUser = (TextView) view.findViewById(R.id.findUser);
 
         // improve performance if you know that changes in content
         // do not change the size of the RecyclerView
@@ -161,9 +165,17 @@ public class QFindCircleFragment extends Fragment {
 
         });
 
+        findUser.setOnClickListener(this);
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    @Override
+    public void onClick(View v) {
+        if (v == findUser) {
+            ((QHomeActivity) getActivity()).initFragment(QFindUserFragment.newInstance(null, null));
+        }
+    }
+
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener, View.OnLongClickListener {
         private SimpleDraweeView headImage;
         private TextView circleName;
         private TextView level;

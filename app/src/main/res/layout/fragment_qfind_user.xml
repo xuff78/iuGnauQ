@@ -5,11 +5,43 @@
     android:background="@color/black_title"
     tools:context="com.xj.guanquan.fragment.found.QFindUserFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/text_18_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="附近用户" />
+
+        <TextView
+            android:id="@+id/screen"
+            style="@style/text_15_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:text="筛选" />
+
+
+        <TextView
+            android:id="@+id/findCircle"
+            style="@style/text_15_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:text="发现圈子" />
+    </RelativeLayout>
     <!-- TODO: Update blank fragment layout -->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="45dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/findRecyclerView"
