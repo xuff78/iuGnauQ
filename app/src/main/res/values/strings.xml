@@ -78,4 +78,10 @@
     <string name="title_activity_qprofile">我的</string>
     <string name="title_activity_qsystem_set">系统设置</string>
     <string name="title_activity_qmsg_set">消息设置</string>
+    <string name="title_activity_qpwd_set">密码设置</string>
+    <string name="title_activity_qinvisible_set">隐身设置</string>
+    <string name="title_activity_qblack_list">黑名单</string>
+    <string name="title_activity_qfeedback">意见反馈</string>
+    <string name="title_activity_qvisitor_list">他们来过</string>
+    <string name="exit_app">再按一次返回键将退出贵圈</string>
 </resources>

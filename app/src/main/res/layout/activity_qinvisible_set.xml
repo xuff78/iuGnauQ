@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_deep"
+    android:orientation="vertical"
+    tools:context="com.xj.guanquan.activity.user.QInvisibleSetActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black_title"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/text_14_white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:gravity="center_vertical"
+            android:text="对所有人显示距离" />
+
+        <Button
+            android:id="@+id/showAll"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="19dp"
+            android:background="@drawable/select_button_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="0.4dp"
+        android:background="@color/black_title"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/text_14_white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:gravity="center_vertical"
+            android:text="不出现在附近列表，减少陌生人消息" />
+
+        <Button
+            android:id="@+id/hideSelf"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="19dp"
+            android:background="@drawable/select_button_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/black_title"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/text_14_white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:gravity="center_vertical"
+            android:text="对所有人隐身" />
+
+        <Button
+            android:id="@+id/invisibleAll"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="19dp"
+            android:background="@drawable/select_button_selector" />
+    </RelativeLayout>
+
+</LinearLayout>

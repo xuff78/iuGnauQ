@@ -16,6 +16,9 @@ public class UserInfo extends EBaseModel {
     private String carDescript;
     private String dateDescript;
 
+    private String time;
+    private String distance;
+
     public UserInfo() {
     }
 
@@ -28,6 +31,16 @@ public class UserInfo extends EBaseModel {
         this.weight = weight;
         this.carDescript = carDescript;
         this.dateDescript = dateDescript;
+    }
+
+    public UserInfo(String name, String headImage, String sex, int age, String dateDescript, String time, String distance) {
+        this.name = name;
+        this.headImage = headImage;
+        this.sex = sex;
+        this.age = age;
+        this.dateDescript = dateDescript;
+        this.time = time;
+        this.distance = distance;
     }
 
     public Integer getId() {
@@ -100,5 +113,21 @@ public class UserInfo extends EBaseModel {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 }

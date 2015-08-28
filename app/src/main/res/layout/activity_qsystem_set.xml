@@ -49,6 +49,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/invisibleSet"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -73,6 +74,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/pwdSet"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -97,6 +99,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/blackListSet"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -129,6 +132,7 @@
                 android:text="系统设置" />
 
             <RelativeLayout
+                android:id="@+id/clearCache"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/black_title"
@@ -152,6 +156,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/feedBackSet"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -176,6 +181,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/score"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -200,6 +206,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/userProtocol"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
@@ -238,6 +245,7 @@
         android:paddingTop="5dp">
 
         <Button
+            android:id="@+id/logOut"
             style="@style/text_16_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

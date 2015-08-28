@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xj.guanquan" >
+    package="com.xj.guanquan">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -12,10 +12,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.home.QHomeActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,20 +42,28 @@
             android:label="@string/title_activity_quser_detail" />
         <activity
             android:name=".activity.found.QCircleMemberActivity"
-            android:label="@string/title_activity_qcircle_member" >
-        </activity>
-        <activity
-            android:name=".activity.me.QProfileActivity"
-            android:label="@string/title_activity_qprofile" >
-        </activity>
+            android:label="@string/title_activity_qcircle_member"></activity>
         <activity
             android:name=".activity.user.QSystemSetActivity"
-            android:label="@string/title_activity_qsystem_set" >
-        </activity>
+            android:label="@string/title_activity_qsystem_set"></activity>
         <activity
             android:name=".activity.message.QMsgSetActivity"
-            android:label="@string/title_activity_qmsg_set" >
-        </activity>
+            android:label="@string/title_activity_qmsg_set"></activity>
+        <activity
+            android:name=".activity.user.QPwdSetActivity"
+            android:label="@string/title_activity_qpwd_set"></activity>
+        <activity
+            android:name=".activity.user.QInvisibleSetActivity"
+            android:label="@string/title_activity_qinvisible_set"></activity>
+        <activity
+            android:name=".activity.user.QBlackListActivity"
+            android:label="@string/title_activity_qblack_list"></activity>
+        <activity
+            android:name=".activity.user.QVisitorListActivity"
+            android:label="@string/title_activity_qvisitor_list"></activity>
+        <activity
+            android:name=".activity.user.QFeedbackActivity"
+            android:label="@string/title_activity_qfeedback"></activity>
     </application>
 
 </manifest>

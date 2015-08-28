@@ -28,6 +28,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
     private RadioButton radioBtnmessage;
     private RadioButton radioBtnme;
     private RadioGroup homeGroup;
+    private long mLastExitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +93,14 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
         _setHeaderGone();
     }
 
+
     @Override
     public void onBackPressed() {
-        this.finish();
+        if (System.currentTimeMillis() - mLastExitTime < 2000) {
+            finish();
+        } else {
+            mLastExitTime = System.currentTimeMillis();
+            showToastShort(getString(R.string.exit_app));
+        }
     }
 }

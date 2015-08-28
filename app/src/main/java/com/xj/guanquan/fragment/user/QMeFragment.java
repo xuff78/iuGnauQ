@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.activity.user.QSystemSetActivity;
+import com.xj.guanquan.activity.user.QVisitorListActivity;
 import com.xj.guanquan.common.QBaseActivity;
 
 /**
@@ -111,6 +113,10 @@ public class QMeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v == systemArea) {
             ((QBaseActivity) getActivity()).toActivity(QSystemSetActivity.class);
+        } else if (v == visitorArea) {
+            ((QBaseActivity) getActivity()).toActivity(QVisitorListActivity.class);
+        } else if (v == selfDataArea) {
+            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class);
         }
     }
 }
