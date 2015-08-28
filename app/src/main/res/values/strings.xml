@@ -83,5 +83,6 @@
     <string name="title_activity_qblack_list">黑名单</string>
     <string name="title_activity_qfeedback">意见反馈</string>
     <string name="title_activity_qvisitor_list">他们来过</string>
-    <string name="exit_app">再按一次返回键将退出贵圈</string>
+    <string name="exit_app">确定要退出贵圈</string>
+    <string name="title_activity_qstart">启动页</string>
 </resources>

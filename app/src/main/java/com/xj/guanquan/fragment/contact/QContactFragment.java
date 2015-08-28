@@ -2,64 +2,154 @@ package com.xj.guanquan.fragment.contact;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.xj.guanquan.R;
+import com.xj.guanquan.common.QBaseFragment;
+import com.xj.guanquan.fragment.found.QFindCircleFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link QContactFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link QContactFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class QContactFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class QContactFragment extends QBaseFragment {
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment QFindUserFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static QContactFragment newInstance(String param1, String param2) {
+    public static QContactFragment newInstance() {
         QContactFragment fragment = new QContactFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public QContactFragment() {
-        // Required empty public constructor
-    }
+    private ViewPager vPager;
+    private View selectedView = null;
+    private ArrayList<TextView> menu = new ArrayList<TextView>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_qcontact, container, false);
+        View v = inflater.inflate(R.layout.fragment_qcontact, container, false);
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(View v, Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
+        TextView firend = (TextView) v.findViewById(R.id.firend);
+        selectedView = firend;
+        firend.setOnClickListener(listener);
+        TextView group = (TextView) v.findViewById(R.id.group);
+        group.setOnClickListener(listener);
+        TextView attention = (TextView) v.findViewById(R.id.attention);
+        attention.setOnClickListener(listener);
+        TextView fans = (TextView) v.findViewById(R.id.fans);
+        fans.setOnClickListener(listener);
+        firend.setSelected(true);
+        menu.add(firend);
+        menu.add(group);
+        menu.add(attention);
+        menu.add(fans);
+        vPager = (ViewPager) v.findViewById(R.id.mViewPager);
+        vPager.setAdapter(new TCMainAdapter(getActivity().getSupportFragmentManager()));
+        vPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                selectedView.setSelected(false);
+                selectedView = menu.get(position);
+                menu.get(position).setSelected(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (selectedView.getId() == v.getId())
+                return;
+            selectedView.setSelected(false);
+            selectedView = v;
+            v.setSelected(true);
+            switch (v.getId()) {
+                case R.id.firend:
+                    vPager.setCurrentItem(0);
+                    break;
+                case R.id.group:
+                    vPager.setCurrentItem(1);
+                    break;
+                case R.id.attention:
+                    vPager.setCurrentItem(2);
+                    break;
+                case R.id.fans:
+                    vPager.setCurrentItem(3);
+                    break;
+            }
+        }
+    };
+
+    public static class TCMainAdapter extends FragmentStatePagerAdapter {
+        public TCMainAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+
+        //得到每个item
+        @Override
+        public Fragment getItem(int position) {
+            Fragment frg = null;
+            switch (position) {
+                case 0:
+                    frg = QFriendFragment.newInstance();
+                    break;
+                case 1:
+                    frg = QFindCircleFragment.newInstance("group", null);
+                    break;
+                case 2:
+                    frg = QUserFragment.newInstance();
+                    break;
+                case 3:
+                    frg = QUserFragment.newInstance();
+                    break;
+            }
+            return frg;
+        }
+
+
+        // 初始化每个页卡选项
+        @Override
+        public Object instantiateItem(ViewGroup arg0, int arg1) {
+            // TODO Auto-generated method stub
+            return super.instantiateItem(arg0, arg1);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+        }
+
     }
 
 }

@@ -40,6 +40,7 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private RelativeLayout titleArea;
     private RecyclerView findRecyclerView;
     private SwipeRefreshLayout swipeRefresh;
     private LinearLayoutManager mLayoutManager;
@@ -89,9 +90,14 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        titleArea = (RelativeLayout) view.findViewById(R.id.titleArea);
         findRecyclerView = (RecyclerView) view.findViewById(R.id.findRecyclerView);
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
         findUser = (TextView) view.findViewById(R.id.findUser);
+
+        if (mParam1 != null) {
+            titleArea.setVisibility(View.GONE);
+        }
 
         // improve performance if you know that changes in content
         // do not change the size of the RecyclerView

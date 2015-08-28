@@ -48,7 +48,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
                 if (checkedId == radioBtnfind.getId()) {
                     initFragment(QFindUserFragment.newInstance(null, null));
                 } else if (checkedId == radioBtncontact.getId()) {
-                    initFragment(QContactFragment.newInstance(null, null));
+                    initFragment(QContactFragment.newInstance());
                 } else if (checkedId == radioBtnme.getId()) {
                     initFragment(QMeFragment.newInstance(null, null));
                 } else if (checkedId == radioBtnmessage.getId()) {
@@ -96,11 +96,11 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
 
     @Override
     public void onBackPressed() {
-        if (System.currentTimeMillis() - mLastExitTime < 2000) {
-            finish();
-        } else {
-            mLastExitTime = System.currentTimeMillis();
-            showToastShort(getString(R.string.exit_app));
-        }
+        alertConfirmDialog(getString(R.string.exit_app), new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        }, null);
     }
 }

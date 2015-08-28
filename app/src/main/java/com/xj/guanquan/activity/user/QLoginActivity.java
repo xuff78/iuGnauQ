@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
 
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -40,6 +42,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
 
         forgetpassword.setOnClickListener(this);
         register.setOnClickListener(this);
+        loginbtn.setOnClickListener(this);
     }
 
     @Override
@@ -67,6 +70,9 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
             toActivity(QFindPwdActivity.class);
         } else if (v == register) {
             toActivity(QRegistInfoActivity.class);
+        } else if (v == loginbtn) {
+            PreferencesUtils.putString(this, "session", "test");
+            this.finish();
         }
     }
 }

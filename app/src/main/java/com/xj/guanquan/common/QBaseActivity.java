@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.home.QHomeActivity;
 import com.xj.guanquan.activity.user.QLoginActivity;
@@ -38,6 +40,8 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
     public boolean flag;
 
     private ClickListener listener;
+
+    private NiftyDialogBuilder dialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,6 +305,44 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
 
     @Override
     public void onLoad(Fragment frg) {
+
+    }
+
+    public void alertConfirmDialog(String message, final OnClickListener confirmClickListener, final OnClickListener cancelClickListener) {
+        dialogBuilder = NiftyDialogBuilder.getInstance(this);
+        dialogBuilder
+                .withTitle("温馨提示")
+                .withDialogColor(getResources().getColor(R.color.view_color))
+                .withIcon(R.mipmap.logo)
+                .withButton1Text("是")                                      //def gone
+                .withButton2Text("否")
+                .withDuration(500)
+                .withEffect(Effectstype.Fliph);
+
+        dialogBuilder.withMessage(message).setButton1Click(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmClickListener.onClick(v);
+                dialogBuilder.dismiss();
+            }
+        });
+        if (cancelClickListener != null) {
+            dialogBuilder.setButton2Click(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cancelClickListener.onClick(v);
+                    dialogBuilder.dismiss();
+                }
+            });
+        } else {
+            dialogBuilder.setButton2Click(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogBuilder.dismiss();
+                }
+            });
+        }
+        dialogBuilder.show();
 
     }
 }
