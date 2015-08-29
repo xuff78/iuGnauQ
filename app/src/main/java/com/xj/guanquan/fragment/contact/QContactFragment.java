@@ -8,9 +8,13 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.contact.QAddFriendActivity;
+import com.xj.guanquan.activity.contact.QAddGroupActivity;
+import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.fragment.found.QFindCircleFragment;
 
@@ -28,6 +32,8 @@ public class QContactFragment extends QBaseFragment {
     private ViewPager vPager;
     private View selectedView = null;
     private ArrayList<TextView> menu = new ArrayList<TextView>();
+    private ImageView createNew;
+    private static int selectIndex = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,8 @@ public class QContactFragment extends QBaseFragment {
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
         TextView firend = (TextView) v.findViewById(R.id.firend);
+        createNew = (ImageView) v.findViewById(R.id.createNew);
+        createNew.setOnClickListener(listener);
         selectedView = firend;
         firend.setOnClickListener(listener);
         TextView group = (TextView) v.findViewById(R.id.group);
@@ -72,6 +80,19 @@ public class QContactFragment extends QBaseFragment {
                 selectedView.setSelected(false);
                 selectedView = menu.get(position);
                 menu.get(position).setSelected(true);
+                selectIndex = position;
+                switch (position) {
+                    case 0:
+                        createNew.setVisibility(View.VISIBLE);
+                        break;
+                    case 1:
+                        createNew.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        createNew.setVisibility(View.GONE);
+                        break;
+                }
+
             }
 
             @Override
@@ -86,22 +107,32 @@ public class QContactFragment extends QBaseFragment {
         public void onClick(View v) {
             if (selectedView.getId() == v.getId())
                 return;
-            selectedView.setSelected(false);
-            selectedView = v;
-            v.setSelected(true);
-            switch (v.getId()) {
-                case R.id.firend:
-                    vPager.setCurrentItem(0);
-                    break;
-                case R.id.group:
-                    vPager.setCurrentItem(1);
-                    break;
-                case R.id.attention:
-                    vPager.setCurrentItem(2);
-                    break;
-                case R.id.fans:
-                    vPager.setCurrentItem(3);
-                    break;
+            if (v == createNew) {
+                if (selectIndex == 0) {
+                    ((QBaseActivity) getActivity()).toActivity(QAddFriendActivity.class);
+                } else if (selectIndex == 1) {
+                    ((QBaseActivity) getActivity()).toActivity(QAddGroupActivity.class);
+                }
+            } else {
+                selectedView.setSelected(false);
+                selectedView = v;
+                v.setSelected(true);
+                switch (v.getId()) {
+                    case R.id.firend:
+                        vPager.setCurrentItem(0);
+                        createNew.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.group:
+                        vPager.setCurrentItem(1);
+                        createNew.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.attention:
+                        vPager.setCurrentItem(2);
+                        break;
+                    case R.id.fans:
+                        vPager.setCurrentItem(3);
+                        break;
+                }
             }
         }
     };

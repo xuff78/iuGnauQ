@@ -76,6 +76,21 @@
             android:name=".activity.message.QMsgDetailActivity"
             android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden"
             android:label="@string/title_activity_qmsg_detail" />
+        <activity
+            android:name=".activity.contact.QAddFriendActivity"
+            android:label="@string/title_activity_qadd_friend" />
+        <activity
+            android:name=".activity.contact.QAddGroupActivity"
+            android:label="@string/title_activity_qadd_friend" />
+        <activity
+            android:name=".activity.contact.QCreateGroupActivity"
+            android:label="@string/title_activity_qcreate_group"></activity>
+        <activity
+            android:name=".activity.contact.QCreateGroupTwoActivity"
+            android:label="@string/title_activity_qcreate_group"></activity>
+        <activity
+            android:name=".activity.contact.QCreateGroupThreeActivity"
+            android:label="@string/title_activity_qcreate_group"></activity>
     </application>
 
 </manifest>

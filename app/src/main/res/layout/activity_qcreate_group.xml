@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_select"
+    android:orientation="vertical"
+    tools:context="com.xj.guanquan.activity.contact.QCreateGroupActivity">
+
+    <LinearLayout
+        android:id="@+id/addGroupIcon"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/black_title"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@drawable/addpicture_button_seletor" />
+
+        <TextView
+            style="@style/text_15_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="添加群头像" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/text_15_7f"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="添加群名称" />
+
+    <EditText
+        android:id="@+id/groupName"
+        style="@style/text_15_white"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/black_title"
+        android:gravity="center"
+        android:hint="请输入群名称"
+        android:textColorHint="@color/title_text_color" />
+
+</LinearLayout>
