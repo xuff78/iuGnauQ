@@ -28,4 +28,6 @@
     <color name="hard_gray">#343434</color><!--深灰 -->
     <color name="trans_white">#99ffffff</color>
     <color name="trans_white_light">#33ffffff</color>
+    <color name="black_light">#33ffffff</color>
+
 </resources>

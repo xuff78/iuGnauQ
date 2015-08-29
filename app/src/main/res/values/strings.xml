@@ -89,4 +89,5 @@
     <string name="title_activity_qadd_friend">添加好友</string>
     <string name="title_activity_qadd_group">加入群组</string>
     <string name="title_activity_qcreate_group">创建群组</string>
+    <string name="title_activity_qmsg_detail">消息页</string>
 </resources>
