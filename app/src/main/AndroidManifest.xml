@@ -68,6 +68,14 @@
         <activity
             android:name=".activity.user.QFeedbackActivity"
             android:label="@string/title_activity_qfeedback" />
+        <activity
+            android:name=".activity.roast.QPublishAct"
+            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden"
+            android:label="@string/title_activity_publish" />
+        <activity
+            android:name=".activity.message.QMsgDetailActivity"
+            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden"
+            android:label="@string/title_activity_qmsg_detail" />
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xj.guanquan.R;
+import com.xj.guanquan.adapter.TuCaoAdapter;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.model.NoteInfo;
 
@@ -89,7 +90,7 @@ public class TucaoListFrg extends QBaseFragment {
                         swipeRefresh.setRefreshing(false);
                         mAdapter.isLoadMore(true);
                     }
-                }, 2000);
+                }, 1500);
             }
         });
 

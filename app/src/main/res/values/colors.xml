@@ -26,5 +26,8 @@
     <color name="light_gray">#C0C0C0</color><!--浅灰 -->
     <color name="normal_gray">#818181</color><!--中灰 -->
     <color name="hard_gray">#343434</color><!--深灰 -->
+    <color name="trans_white">#99ffffff</color>
+
+    <color name="trans_white_light">#33ffffff</color>
     <!-- 黄色 -->
 </resources>

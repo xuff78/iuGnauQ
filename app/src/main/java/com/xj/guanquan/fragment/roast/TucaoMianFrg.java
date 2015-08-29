@@ -1,5 +1,6 @@
 package com.xj.guanquan.fragment.roast;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.xj.guanquan.R;
 
+import com.xj.guanquan.activity.roast.QPublishAct;
 import com.xj.guanquan.common.QBaseFragment;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 
 public class TucaoMianFrg extends QBaseFragment {
+
+    int PageType=0;
 
     public static TucaoMianFrg newInstance() {
         TucaoMianFrg fragment = new TucaoMianFrg();
@@ -66,14 +70,23 @@ public class TucaoMianFrg extends QBaseFragment {
 
             @Override
             public void onPageSelected(int position) {
+                PageType=position;
                 selectedView.setSelected(false);
-                selectedView=menu.get(position);
+                selectedView = menu.get(position);
                 menu.get(position).setSelected(true);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+        v.findViewById(R.id.createNew).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), QPublishAct.class);
+                intent.putExtra("PageType", PageType);
+                startActivity(intent);
             }
         });
         return v;

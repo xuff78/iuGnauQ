@@ -1,6 +1,7 @@
-package com.xj.guanquan.fragment.roast;
+package com.xj.guanquan.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.Gravity;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.roast.QPublishAct;
+import com.xj.guanquan.fragment.roast.Photo9Layout;
 import com.xj.guanquan.model.NoteInfo;
 
 import java.util.ArrayList;
@@ -84,8 +87,16 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 				list.add(R.mipmap.testphoto);
 			}
 			vh.photoLayout.removeAllViews();
-			vh.photoLayout.addView(new Photo9Layout(act, (int) (width- ScreenUtils.dpToPxInt(act, 90)), list));
+			vh.photoLayout.addView(new Photo9Layout(act, (int) (width - ScreenUtils.dpToPxInt(act, 90)), list));
+			vh.bookBtn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
 
+					Intent intent=new Intent(act, QPublishAct.class);
+					intent.putExtra("PageType", QPublishAct.TypeJoin);
+					act.startActivity(intent);
+				}
+			});
 		}
 	}
 
@@ -106,6 +117,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	public class NoteHolder extends RecyclerView.ViewHolder {
 		ImageView userImg;
 		LinearLayout photoLayout;
+		View bookBtn;
 		TextView userName, userAge, createTime, usrComment, favorBtn, replyNums, shareBtn;
 
 		public NoteHolder(View itemView) {
@@ -119,6 +131,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			replyNums = (TextView) itemView.findViewById(R.id.replyNums);
 			shareBtn = (TextView) itemView.findViewById(R.id.shareBtn);
 			photoLayout = (LinearLayout) itemView.findViewById(R.id.photoLayout);
+			bookBtn = itemView.findViewById(R.id.bookBtn);
 		}
 	}
 

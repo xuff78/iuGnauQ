@@ -1,5 +1,6 @@
 package com.xj.guanquan.fragment.message;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.model.MessageInfo;
 
@@ -253,6 +255,7 @@ public class QMessageFragment extends QBaseFragment {
         @Override
         public void onClick(View v) {
             //处理RecyclerView的点击事件
+            startActivity(new Intent(getActivity(),QMsgDetailActivity.class));
         }
     }
 }
