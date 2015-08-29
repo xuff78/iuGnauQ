@@ -130,13 +130,13 @@ public class TucaoMianFrg extends QBaseFragment {
             Fragment frg=null;
             switch (position){
                 case 0:
-                    frg=TucaoListFrg.newInstance();
+                    frg=TucaoListFrg.newInstance(position);
                     break;
                 case 1:
-                    frg=TucaoListFrg.newInstance();
+                    frg=TucaoListFrg.newInstance(position);
                     break;
                 case 2:
-                    frg=TucaoListFrg.newInstance();
+                    frg=TucaoListFrg.newInstance(position);
                     break;
             }
             return frg;

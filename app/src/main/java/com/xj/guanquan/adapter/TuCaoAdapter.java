@@ -30,6 +30,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	ArrayList<NoteInfo> datalist = new ArrayList<NoteInfo>();
 	int width = 0;
 	TextView footer;
+	int PageType=0;
 
 	public int getItemCount() {
 		return datalist.size() + 1;
@@ -41,8 +42,9 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 	LayoutInflater listInflater;
 
-	public TuCaoAdapter(Activity act, ArrayList<NoteInfo> datalist) {
+	public TuCaoAdapter(Activity act, ArrayList<NoteInfo> datalist, int PageType) {
 		this.act = act;
+		this.PageType=PageType;
 		listInflater = LayoutInflater.from(act);
 		this.datalist = datalist;
 
@@ -117,7 +119,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	public class NoteHolder extends RecyclerView.ViewHolder {
 		ImageView userImg;
 		LinearLayout photoLayout;
-		View bookBtn;
+		View bookBtn, dateExtraLayout;
 		TextView userName, userAge, createTime, usrComment, favorBtn, replyNums, shareBtn;
 
 		public NoteHolder(View itemView) {
@@ -132,6 +134,8 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			shareBtn = (TextView) itemView.findViewById(R.id.shareBtn);
 			photoLayout = (LinearLayout) itemView.findViewById(R.id.photoLayout);
 			bookBtn = itemView.findViewById(R.id.bookBtn);
+			if(PageType==1)
+				itemView.findViewById(R.id.dateExtraLayout).setVisibility(View.VISIBLE);
 		}
 	}
 

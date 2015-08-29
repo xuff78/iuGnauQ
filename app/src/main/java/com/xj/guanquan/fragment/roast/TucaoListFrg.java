@@ -34,10 +34,12 @@ public class TucaoListFrg extends QBaseFragment {
     private ArrayList<NoteInfo> notes;
     private RelativeLayout menuLayout;
     private MoveLineView moveHighlight;
+    private int PageType =0;
 
-    public static TucaoListFrg newInstance() {
+    public static TucaoListFrg newInstance(int PageType) {
         TucaoListFrg fragment = new TucaoListFrg();
         Bundle args = new Bundle();
+        args.putInt("PageType", PageType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,6 +53,8 @@ public class TucaoListFrg extends QBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        PageType=getArguments().getInt("PageType", 0);
         View v = inflater.inflate(R.layout.tucao_item_frg, container, false);
 
         leftBtn = (TextView) v.findViewById(R.id.leftBtnSub);
@@ -77,7 +81,7 @@ public class TucaoListFrg extends QBaseFragment {
         notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
         notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
         notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-        mAdapter = new TuCaoAdapter(getActivity(), notes);
+        mAdapter = new TuCaoAdapter(getActivity(), notes, PageType);
 
 
         mRecyclerView.setAdapter(mAdapter);
