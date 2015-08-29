@@ -13,7 +13,6 @@
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".activity.home.QStartActivity"
             android:label="@string/app_name">
@@ -25,7 +24,7 @@
         </activity>
         <activity
             android:name=".activity.home.QHomeActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".activity.user.QLoginActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" />
@@ -68,6 +67,21 @@
         <activity
             android:name=".activity.user.QFeedbackActivity"
             android:label="@string/title_activity_qfeedback" />
+        <activity
+            android:name=".activity.contact.QAddFriendActivity"
+            android:label="@string/title_activity_qadd_friend" />
+        <activity
+            android:name=".activity.contact.QAddGroupActivity"
+            android:label="@string/title_activity_qadd_friend" />
+        <activity
+            android:name=".activity.contact.QCreateGroupActivity"
+            android:label="@string/title_activity_qcreate_group"></activity>
+        <activity
+            android:name=".activity.contact.QCreateGroupTwoActivity"
+            android:label="@string/title_activity_qcreate_group"></activity>
+        <activity
+            android:name=".activity.contact.QCreateGroupThreeActivity"
+            android:label="@string/title_activity_qcreate_group"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,92 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_select">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.xj.guanquan.activity.contact.QAddFriendActivity">
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/black_light"
+            android:queryHint="搜索用户ID"></SearchView>
+
+        <TextView
+            style="@style/text_15_7f"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="搜索历史" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/searchHidstoryView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            .</android.support.v7.widget.RecyclerView>
+
+        <TextView
+            style="@style/text_15_7f"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="搜索结果" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/searchResultView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            .</android.support.v7.widget.RecyclerView>
+
+        <TextView
+            style="@style/text_15_7f"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="创建群组" />
+
+        <RelativeLayout
+            android:id="@+id/createGroup"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/black_title"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/addGroupIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_add" />
+
+            <TextView
+                style="@style/text_15_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/addGroupIcon"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="创建新群组" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/addGroupIcon"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@mipmap/icon_enter" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

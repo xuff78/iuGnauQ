@@ -85,4 +85,7 @@
     <string name="title_activity_qvisitor_list">他们来过</string>
     <string name="exit_app">确定要退出贵圈</string>
     <string name="title_activity_qstart">启动页</string>
+    <string name="title_activity_qadd_friend">添加好友</string>
+    <string name="title_activity_qadd_group">加入群组</string>
+    <string name="title_activity_qcreate_group">创建群组</string>
 </resources>

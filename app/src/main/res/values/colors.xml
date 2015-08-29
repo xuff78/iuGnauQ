@@ -4,6 +4,7 @@
     <color name="orange">#EE9A00</color>
     <color name="black_deep">#000000</color>
     <color name="black_title">#28292D</color>
+    <color name="black_light">#2B2C30</color>
     <color name="black_select">#1C1D21</color>
     <color name="msg_item_tvnameColor">#FFFFFF</color>
     <color name="listvierw_item_divider">#000000</color>
@@ -21,10 +22,14 @@
     <color name="search_view_backgroud">#CAC9CF</color>
     <color name="pink">#EE30A7</color>
     <color name="sukura">#EE82EE</color>
-    <color name="normal_blue">#4682B4</color> <!-- 皇家蓝 -->
+    <color name="normal_blue">#4682B4</color>
+    <!-- 皇家蓝 -->
     <color name="light_blue">#1C86EE</color>
-    <color name="light_gray">#C0C0C0</color><!--浅灰 -->
-    <color name="normal_gray">#818181</color><!--中灰 -->
-    <color name="hard_gray">#343434</color><!--深灰 -->
+    <color name="light_gray">#C0C0C0</color>
+    <!--浅灰 -->
+    <color name="normal_gray">#818181</color>
+    <!--中灰 -->
+    <color name="hard_gray">#343434</color>
+    <!--深灰 -->
     <!-- 黄色 -->
 </resources>
