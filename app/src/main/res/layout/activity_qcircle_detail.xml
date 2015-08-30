@@ -328,16 +328,6 @@
                         fresco:placeholderImage="@mipmap/default_head_img"
                         fresco:placeholderImageScaleType="fitXY"></com.facebook.drawee.view.SimpleDraweeView>
 
-                    <TextView
-                        android:id="@+id/photoDesc"
-                        style="@style/text_14_7f"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toRightOf="@+id/circlePhotos"
-                        android:gravity="center_vertical"
-                        android:text="京城各大名流土豪超级富豪聚集地，欢迎更多人加入！" />
-
                     <ImageView
                         android:id="@+id/circleMorePhoto"
                         android:layout_width="wrap_content"
@@ -348,6 +338,18 @@
                         android:paddingRight="10dp"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/icon_gray_arrow" />
+
+                    <TextView
+                        android:id="@+id/photoDesc"
+                        style="@style/text_14_7f"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toLeftOf="@id/circleMorePhoto"
+                        android:layout_toRightOf="@+id/circlePhotos"
+                        android:gravity="center_vertical"
+                        android:text="京城各大名流土豪超级富豪聚集地，欢迎更多人加入！" />
+
 
                     <View
                         android:layout_width="match_parent"

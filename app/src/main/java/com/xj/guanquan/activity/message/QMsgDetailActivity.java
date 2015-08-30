@@ -1,26 +1,23 @@
 package com.xj.guanquan.activity.message;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.adapter.MessageAdapter;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.MessageInfo;
+import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
 
@@ -50,7 +47,8 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         datalist.add(new MessageInfo("你", "", 0, "", "跟你说个事"));
         datalist.add(new MessageInfo("你", "", 0, "", "我就想问一下你是不是我最好的朋友"));
         datalist.add(new MessageInfo("我", "", 0, "", "不借"));
-        datalist.add(new MessageInfo("你", "", 0, "", "我又不是找你借钱，姐又不穷，你就回答是或者不是"));;
+        datalist.add(new MessageInfo("你", "", 0, "", "我又不是找你借钱，姐又不穷，你就回答是或者不是"));
+        ;
         datalist.add(new MessageInfo("我", "", 0, "", "是"));
         datalist.add(new MessageInfo("你", "", 0, "", "刚吃看了部非常感人的电视剧，电视上说狗才是人类最好的朋友，所以我想确认一下"));
         datalist.add(new MessageInfo("我", "", 0, "", "晕倒"));
@@ -96,16 +94,19 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         _setRightHomeText("个人资料", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Bundle bundle = new Bundle();
+                UserInfo userInfo = new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会");
+                bundle.putSerializable("userInfo", userInfo);
+                toActivity(QUserDetailActivity.class, bundle);
             }
         });
-        mRecyclerView=(RecyclerView)findViewById(R.id.messageList);
-        mLayoutManager=new LinearLayoutManager(this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.messageList);
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 //        mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-        msgEdt=(EditText)findViewById(R.id.msgEdt);
+        msgEdt = (EditText) findViewById(R.id.msgEdt);
 
     }
 

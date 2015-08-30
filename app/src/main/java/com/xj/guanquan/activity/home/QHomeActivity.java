@@ -99,7 +99,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener {
         alertConfirmDialog(getString(R.string.exit_app), new OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                System.exit(0);
             }
         }, null);
     }

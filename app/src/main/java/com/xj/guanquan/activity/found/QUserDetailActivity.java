@@ -154,6 +154,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     public void onClick(View v) {
         if (v == good) {
             good.setSelected(!good.isSelected());
+        } else if (v == attentionBtn) {
+            attentionBtn.setSelected(!attentionBtn.isSelected());
+            attentionBtn.setText(attentionBtn.isSelected() ? "取消关注" : "关注");
         }
     }
 
@@ -192,6 +195,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         descript = (TextView) findViewById(R.id.descript);
 
         good.setOnClickListener(this);
+        attentionBtn.setOnClickListener(this);
     }
 
     @Override

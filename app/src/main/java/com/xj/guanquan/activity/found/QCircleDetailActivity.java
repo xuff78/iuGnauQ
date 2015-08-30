@@ -102,6 +102,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
         mAdapter.isLoadMore(false);
         userPhotos.setAdapter(mAdapter);
         roastMore.setOnClickListener(this);
+        circleMorePhoto.setOnClickListener(this);
     }
 
     private void initData() {
@@ -122,6 +123,8 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
     public void onClick(View v) {
         if (v == roastMore) {
             toActivity(QCircleMemberActivity.class);
+        } else if (v == circleMorePhoto) {
+            toActivity(QCirclePhotosActivity.class);
         }
     }
 

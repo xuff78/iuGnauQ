@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -46,6 +48,8 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         super.setContentView(R.layout.qbase_activity);
         listener = new ClickListener();
         btnHome = (ImageButton) findViewById(R.id.of_back_home_imagebtn);

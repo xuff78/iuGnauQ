@@ -40,7 +40,7 @@ public class QAddGroupActivity extends QBaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v == createGroup) {
-            toActivity(QAddGroupActivity.class);
+            toActivity(QCreateGroupActivity.class);
         }
     }
 
