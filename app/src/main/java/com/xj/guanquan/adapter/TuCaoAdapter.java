@@ -2,6 +2,8 @@ package com.xj.guanquan.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.Gravity;
@@ -60,9 +62,9 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 		ViewHolder holder = null;
 		if (position == -1) {
 			footer = new TextView(act);
-			footer.setGravity(Gravity.CENTER_HORIZONTAL);
-			footer.setPadding(0, 20, 0, 0);
-//			footer.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ImageUtil.dip2px(act,90)));
+			footer.setTextColor(Color.WHITE);
+			footer.setGravity(Gravity.CENTER);
+			footer.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, (int)(ScreenUtils.dpToPxInt(act, 30))));
 			holder = new FooterViewHolder(footer);
 		} else {
 			View v = listInflater.from(act).inflate(R.layout.tucao_item_detail, null);
@@ -78,18 +80,18 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			return;
 		} else {
 			NoteHolder vh = (NoteHolder) viewHolder;
-			vh.createTime.setText(datalist.get(position).getCreateTime());
-			vh.userAge.setText(datalist.get(position).getUserAge());
-			vh.usrComment.setText(datalist.get(position).getUsrComment());
-			vh.favorBtn.setText(datalist.get(position).getFavorBtn());
-			vh.replyNums.setText(datalist.get(position).getReplyNums());
-			vh.userName.setText(datalist.get(position).getUserName());
-			ArrayList<Integer> list = new ArrayList<Integer>();
-			for (int i = 0; i < position; i++) {
-				list.add(R.mipmap.testphoto);
+			vh.userImg.setImageURI(Uri.parse(datalist.get(position).getAvatar()));
+			vh.createTime.setText(datalist.get(position).getTime());
+			vh.userAge.setText(datalist.get(position).getAge()+"");
+			vh.usrComment.setText(datalist.get(position).getContent());
+			vh.favorBtn.setText(datalist.get(position).getIsLike()+"");
+			vh.replyNums.setText(datalist.get(position).getCommentNum()+"");
+			vh.userName.setText(datalist.get(position).getNickName());
+			if(datalist.get(position).getPicture().length()>0) {
+				String[] urls = datalist.get(position).getPicture().split(",");
+				vh.photoLayout.removeAllViews();
+				vh.photoLayout.addView(new Photo9Layout(act, (int) (width - ScreenUtils.dpToPxInt(act, 90)), urls));
 			}
-			vh.photoLayout.removeAllViews();
-			vh.photoLayout.addView(new Photo9Layout(act, (int) (width - ScreenUtils.dpToPxInt(act, 90)), list));
 			vh.bookBtn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -117,14 +119,15 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	}
 
 	public class NoteHolder extends RecyclerView.ViewHolder {
-		ImageView userImg;
+
+		SimpleDraweeView userImg;
 		LinearLayout photoLayout;
 		View bookBtn, dateExtraLayout;
 		TextView userName, userAge, createTime, usrComment, favorBtn, replyNums, shareBtn;
 
 		public NoteHolder(View itemView) {
 			super(itemView);
-			userImg = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
+			userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
 			userName = (TextView) itemView.findViewById(R.id.userName);
 			userAge = (TextView) itemView.findViewById(R.id.userAge);
 			createTime = (TextView) itemView.findViewById(R.id.createTime);

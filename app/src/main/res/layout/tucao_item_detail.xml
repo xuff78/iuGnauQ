@@ -7,11 +7,10 @@
     android:padding="10dip"
     tools:context="com.xj.guanquan.activity.tucao.TucaoMianFrg">
 
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/userImg"
         android:layout_width="60dip"
-        android:layout_height="60dip"
-        android:src="@mipmap/touxiang" />
+        android:layout_height="60dip"/>
 
     <LinearLayout
         android:layout_width="match_parent"

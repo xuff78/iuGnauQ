@@ -2,6 +2,7 @@ package com.xj.guanquan.common;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -56,6 +57,7 @@ public class QBaseFragment extends Fragment implements Response.Listener, Respon
         VolleyLog.d("onResponse", response.toString());
         if (getProgressDialog().isShowing())
             getProgressDialog().dismiss();
+        Log.i("Net", response.toString());
     }
 
     private CustomProgressDialog getProgressDialog() {

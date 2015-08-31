@@ -17,4 +17,13 @@ public class ApiList {
     public static String ACCOUNT_AUTO_LOGIN = BASE_API + "/1/autoLogin";
     public static String ACCOUNT_FIND_PWD = BASE_API + "1/findPassword";
     public static String FIND_USER_LIST = BASE_API + "/1/find/userList";
+
+    //吐槽
+    public static String TUCAO_Friend = BASE_API + "1/tucao/friend";
+    public static String TUCAO_Nearby = BASE_API + "1/tucao/nearby";
+    public static String TUCAO_Detail = BASE_API + "1/tucao/detail";
+    public static String TUCAO_Delete = BASE_API + "1/tucao/delete";
+    public static String TUCAO_AddComment = BASE_API + "1/tucao/addComment";
+    public static String TUCAO_AddComplain = BASE_API + "1/tucao/addComplain";
+    public static String TUCAO_AddLike = BASE_API + "1/tucao/addLike";
 }

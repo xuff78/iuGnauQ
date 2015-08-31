@@ -10,77 +10,103 @@ import common.eric.com.ebaselibrary.model.EBaseModel;
  */
 public class NoteInfo extends EBaseModel {
 
-    private String userImg="";
-    private String userName="";
-    private String userAge="";
-    private String createTime="";
-    private String usrComment="";
-    private String favorBtn="";
-    private String replyNums="";
+    private Integer id=-1;
+    private String avatar="";
+    private String nickName="";
+    private Integer age=-1;
+    private String time="";
+    private String commentNum="";
+    private Integer userId=-1;
+    private Integer isLike=-1;
+    private String content="";
+    private Integer sex=-1;
+    private String picture="";
 
-    public NoteInfo(String userImg,String userName, String userAge, String createTime, String usrComment, String favorBtn, String replyNums) {
-        this.userImg = userImg;
-        this.userAge = userAge;
-        this.createTime = createTime;
-        this.usrComment = usrComment;
-        this.favorBtn = favorBtn;
-        this.replyNums = replyNums;
-        this.userName = userName;
+    public Integer getId() {
+        return id;
     }
 
-    public String getUserName() {
-        return userName;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public String getUserImg() {
-        return userImg;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public void setUserImg(String userImg) {
-        this.userImg = userImg;
+    public String getNickName() {
+        return nickName;
     }
 
-    public String getUserAge() {
-        return userAge;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public void setUserAge(String userAge) {
-        this.userAge = userAge;
+    public Integer getAge() {
+        return age;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public String getTime() {
+        return time;
     }
 
-    public String getUsrComment() {
-        return usrComment;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public void setUsrComment(String usrComment) {
-        this.usrComment = usrComment;
+    public String getCommentNum() {
+        return commentNum;
     }
 
-    public String getFavorBtn() {
-        return favorBtn;
+    public void setCommentNum(String commentNum) {
+        this.commentNum = commentNum;
     }
 
-    public void setFavorBtn(String favorBtn) {
-        this.favorBtn = favorBtn;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public String getReplyNums() {
-        return replyNums;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public void setReplyNums(String replyNums) {
-        this.replyNums = replyNums;
+    public Integer getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(Integer isLike) {
+        this.isLike = isLike;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

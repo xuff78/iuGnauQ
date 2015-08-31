@@ -74,14 +74,14 @@ public class QCirclePhotoListFrg extends QBaseFragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         swipeRefresh = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefresh);
 
-        notes = new ArrayList<NoteInfo>();
-        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-        mAdapter = new TuCaoAdapter(getActivity(), notes, PageType);
+//        notes = new ArrayList<NoteInfo>();
+//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
+//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
+//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
+//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
+//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
+//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
+//        mAdapter = new TuCaoAdapter(getActivity(), notes, PageType);
 
 
         mRecyclerView.setAdapter(mAdapter);
