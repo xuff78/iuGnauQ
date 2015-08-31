@@ -139,7 +139,6 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 return false;
             }
         });
-
         //设置通用的Holder
         mAdapter.setViewHolderHelper(new RecyclerViewAdapter.ViewHolderHelper() {
             @Override
@@ -167,6 +166,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItem + 1 == mAdapter.getItemCount()) {
                     if (isLoadMore) {
+                        mAdapter.isLoadMore(true);
                         currentPage++;
                         addToRequestQueue(request, false);
                     } else {
@@ -213,6 +213,8 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                     map.put("finallyTime", String.valueOf(finallyTime));
                 if (!StringUtils.isEmpty(height))
                     map.put("height", height);
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
             }
         };
@@ -225,6 +227,11 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
             ((QHomeActivity) getActivity()).initFragment(QFindCircleFragment.newInstance(null, null));
         } else if (v == screen) {
             Intent intent = new Intent(getActivity(), QScreenActivity.class);
+            intent.putExtra("sex", sex);
+            intent.putExtra("age", age);
+            intent.putExtra("height", height);
+            intent.putExtra("carCert", carCert);
+            intent.putExtra("finallyTime", finallyTime);
             startActivityForResult(intent, 111);
         }
     }
@@ -342,21 +349,21 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
         if (currentPage == 1) {
             swipeRefresh.setRefreshing(false);
             userInfoList = new ArrayList<UserInfo>();
-        } else {
-            mAdapter.isLoadMore(false);
         }
-        PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             if (result.getData().getJSONArray("content") != null) {
                 List<UserInfo> resultData = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), UserInfo.class);
                 userInfoList.addAll(resultData);
-                mAdapter.setData(userInfoList);
-                mAdapter.notifyDataSetChanged();
+                PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
                 if (userInfoList.size() < pageInfo.getTotalCount()) {
                     isLoadMore = true;
-                    mAdapter.isLoadMore(true);
                 }
+            } else {
+                userInfoList = null;
             }
+            mAdapter.setData(userInfoList);
+            mAdapter.notifyDataSetChanged();
+            mAdapter.isLoadMore(false);
         } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
             ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
         } else {
@@ -368,5 +375,17 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
     public void onErrorResponse(VolleyError error) {
         super.onErrorResponse(error);
         swipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 111) {
+            sex = (Integer) data.getSerializableExtra("sex");
+            age = (Integer) data.getSerializableExtra("age");
+            finallyTime = (Integer) data.getSerializableExtra("finallyTime");
+            carCert = (Integer) data.getSerializableExtra("carCert");
+            height = data.getStringExtra("height");
+            addToRequestQueue(request, true);
+        }
     }
 }

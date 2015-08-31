@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.xj.guanquan.views.CustomProgressDialog;
 
 import common.eric.com.ebaselibrary.common.EBaseApplication;
@@ -52,6 +53,7 @@ public class QBaseFragment extends Fragment implements Response.Listener, Respon
 
     @Override
     public void onResponse(Object response) {
+        VolleyLog.d("onResponse", response.toString());
         if (getProgressDialog().isShowing())
             getProgressDialog().dismiss();
     }
