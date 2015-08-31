@@ -6,15 +6,15 @@ import common.eric.com.ebaselibrary.model.EBaseModel;
  * Created by eric on 2015/8/22.
  */
 public class UserInfo extends EBaseModel {
-    private Integer id;
-    private String name;
-    private String headImage;
-    private String sex;
+    private Integer userId;
+    private String nickName;
+    private String avatar;
+    private int sex;
     private int age;
-    private String height;
-    private String weight;
-    private String carDescript;
-    private String dateDescript;
+    private int height;
+    private int weight;
+    private String car;
+    private String dating;
 
     private String time;
     private String distance;
@@ -22,56 +22,35 @@ public class UserInfo extends EBaseModel {
     public UserInfo() {
     }
 
-    public UserInfo(String name, String headImage, String sex, int age, String height, String weight, String carDescript, String dateDescript) {
-        this.name = name;
-        this.headImage = headImage;
-        this.sex = sex;
-        this.age = age;
-        this.height = height;
-        this.weight = weight;
-        this.carDescript = carDescript;
-        this.dateDescript = dateDescript;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public UserInfo(String name, String headImage, String sex, int age, String dateDescript, String time, String distance) {
-        this.name = name;
-        this.headImage = headImage;
-        this.sex = sex;
-        this.age = age;
-        this.dateDescript = dateDescript;
-        this.time = time;
-        this.distance = distance;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getId() {
-        return id;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public String getName() {
-        return name;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getHeadImage() {
-        return headImage;
-    }
-
-    public void setHeadImage(String headImage) {
-        this.headImage = headImage;
-    }
-
-    public String getSex() {
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(int sex) {
         this.sex = sex;
     }
 
@@ -83,36 +62,36 @@ public class UserInfo extends EBaseModel {
         this.age = age;
     }
 
-    public String getCarDescript() {
-        return carDescript;
-    }
-
-    public void setCarDescript(String carDescript) {
-        this.carDescript = carDescript;
-    }
-
-    public String getDateDescript() {
-        return dateDescript;
-    }
-
-    public void setDateDescript(String dateDescript) {
-        this.dateDescript = dateDescript;
-    }
-
-    public String getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
-    public String getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public String getCar() {
+        return car;
+    }
+
+    public void setCar(String car) {
+        this.car = car;
+    }
+
+    public String getDating() {
+        return dating;
+    }
+
+    public void setDating(String dating) {
+        this.dating = dating;
     }
 
     public String getTime() {

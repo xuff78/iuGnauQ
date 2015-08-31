@@ -29,5 +29,6 @@
     <color name="trans_white">#99ffffff</color>
     <color name="trans_white_light">#33ffffff</color>
     <color name="black_light">#33ffffff</color>
+    <color name="imgtransparent">#00ffffff</color>
 
 </resources>

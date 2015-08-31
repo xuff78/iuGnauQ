@@ -31,7 +31,7 @@
         android:paddingRight="20dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/headImage"
+            android:id="@+id/avatar"
             android:layout_width="42dp"
             android:layout_height="42dp"
             fresco:placeholderImage="@mipmap/default_head_img"
@@ -43,10 +43,10 @@
             style="@style/text_14_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/headImage"
+            android:layout_alignTop="@id/avatar"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
-            android:layout_toRightOf="@id/headImage"
+            android:layout_toRightOf="@id/avatar"
             android:text="袁飞飞" />
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_below="@id/name"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
-            android:layout_toRightOf="@id/headImage"
+            android:layout_toRightOf="@id/avatar"
             android:text="贵圈号:0152623" />
 
         <ImageView

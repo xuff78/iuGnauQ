@@ -61,7 +61,7 @@ public class QRegistInfoActivity extends QBaseActivity implements View.OnClickLi
 
     private void initialize() {
 
-        headImage = (SimpleDraweeView) findViewById(R.id.headImage);
+        headImage = (SimpleDraweeView) findViewById(R.id.avatar);
         nickNameText = (EditText) findViewById(R.id.nickNameText);
         maleButton = (Button) findViewById(R.id.maleButton);
         femaleButton = (Button) findViewById(R.id.femaleButton);

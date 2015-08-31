@@ -182,7 +182,7 @@
                     android:layout_marginLeft="20dp">
 
                     <com.facebook.drawee.view.SimpleDraweeView
-                        android:id="@+id/headImage"
+                        android:id="@+id/avatar"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginTop="7.5dp"
@@ -195,11 +195,11 @@
                         style="@style/text_14_7f"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/headImage"
+                        android:layout_alignTop="@+id/avatar"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_toLeftOf="@+id/roastMore"
-                        android:layout_toRightOf="@+id/headImage"
+                        android:layout_toRightOf="@+id/avatar"
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="让女人失望的男人不是好男人" />
@@ -207,8 +207,8 @@
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/headImage"
-                        android:layout_toRightOf="@+id/headImage">
+                        android:layout_alignBottom="@+id/avatar"
+                        android:layout_toRightOf="@+id/avatar">
 
                         <TextView
                             android:id="@+id/roastDistance"

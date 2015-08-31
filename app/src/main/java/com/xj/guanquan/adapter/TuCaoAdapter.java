@@ -124,7 +124,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		public NoteHolder(View itemView) {
 			super(itemView);
-			userImg = (SimpleDraweeView) itemView.findViewById(R.id.headImage);
+			userImg = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
 			userName = (TextView) itemView.findViewById(R.id.userName);
 			userAge = (TextView) itemView.findViewById(R.id.userAge);
 			createTime = (TextView) itemView.findViewById(R.id.createTime);

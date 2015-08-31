@@ -19,7 +19,6 @@ import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.model.CircleUserInfo;
-import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -236,7 +235,7 @@ public class QUserFragment extends QBaseFragment {
         public void onClick(View v) {
             Bundle bundle = new Bundle();
             circleUserInfoList.get(getAdapterPosition());
-            bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
+//            bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
             ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class, bundle);
         }
     }

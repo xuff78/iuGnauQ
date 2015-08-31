@@ -18,11 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.home.QHomeActivity;
 import com.xj.guanquan.activity.user.QLoginActivity;
+import com.xj.guanquan.views.CustomProgressDialog;
+
+import common.eric.com.ebaselibrary.common.EBaseApplication;
 
 
 /**
@@ -31,7 +37,7 @@ import com.xj.guanquan.activity.user.QLoginActivity;
  * @author jixiangxiang@infohold.com.cn
  */
 
-public abstract class QBaseActivity extends AppCompatActivity implements QBaseFragment.OnFragmentListener {
+public abstract class QBaseActivity extends AppCompatActivity implements QBaseFragment.OnFragmentListener, Response.Listener, Response.ErrorListener {
 
     public ImageButton btnHome, btnBack;
 
@@ -44,6 +50,8 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
     private ClickListener listener;
 
     private NiftyDialogBuilder dialogBuilder;
+
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -312,6 +320,13 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
 
     }
 
+    /**
+     * 弹出确认提示框
+     *
+     * @param message
+     * @param confirmClickListener
+     * @param cancelClickListener
+     */
     public void alertConfirmDialog(String message, final OnClickListener confirmClickListener, final OnClickListener cancelClickListener) {
         dialogBuilder = NiftyDialogBuilder.getInstance(this);
         dialogBuilder
@@ -348,5 +363,57 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
         }
         dialogBuilder.show();
 
+    }
+
+    /**
+     * 弹出信息提示框
+     *
+     * @param message
+     * @param okClickListener
+     */
+    public void alertDialog(String message, final OnClickListener okClickListener) {
+        dialogBuilder = NiftyDialogBuilder.getInstance(this);
+        dialogBuilder
+                .withTitle("温馨提示")
+                .withDialogColor(getResources().getColor(R.color.view_color))
+                .withIcon(R.mipmap.logo)
+                .withButton1Text("确定")                                      //def gone
+                .withDuration(500)
+                .withEffect(Effectstype.RotateBottom);
+
+        dialogBuilder.withMessage(message).setButton1Click(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (okClickListener != null)
+                    okClickListener.onClick(v);
+                dialogBuilder.dismiss();
+            }
+        });
+        dialogBuilder.show();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        if (getProgressDialog().isShowing())
+            getProgressDialog().dismiss();
+        alertDialog(error.toString(), null);
+    }
+
+    @Override
+    public void onResponse(Object response) {
+        getProgressDialog().dismiss();
+    }
+
+    private CustomProgressDialog getProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = ProgressUtil.getProgressDialog(this);
+        }
+        return progressDialog;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req, Boolean isShowDialog) {
+        if (!getProgressDialog().isShowing() && isShowDialog)
+            getProgressDialog().show();
+        ((EBaseApplication) getApplication()).addToRequestQueue(req);
     }
 }

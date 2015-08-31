@@ -245,7 +245,7 @@ public class QMessageFragment extends QBaseFragment {
         }
 
         private void initialize(View view) {
-            headImage = (SimpleDraweeView) view.findViewById(R.id.headImage);
+            headImage = (SimpleDraweeView) view.findViewById(R.id.avatar);
             name = (TextView) view.findViewById(R.id.name);
             time = (TextView) view.findViewById(R.id.time);
             msgNum = (TextView) view.findViewById(R.id.msgNum);

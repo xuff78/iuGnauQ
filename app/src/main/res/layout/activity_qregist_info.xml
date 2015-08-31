@@ -14,7 +14,7 @@
         tools:context="com.xj.guanquan.activity.user.QFindPwdActivity">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/headImage"
+            android:id="@+id/avatar"
             android:layout_width="95dp"
             android:layout_height="95dp"
             android:layout_gravity="center_horizontal"

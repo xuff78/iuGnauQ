@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/headImage"
+        android:id="@+id/avatar"
         android:layout_width="39dp"
         android:layout_height="39dp"
         android:layout_marginLeft="20dp"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/headImage"
+        android:layout_toRightOf="@+id/avatar"
         android:orientation="horizontal">
 
         <TextView
@@ -58,7 +58,7 @@
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/headImage"
+        android:layout_toRightOf="@+id/avatar"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="[25条]" />

@@ -3,7 +3,6 @@ package com.xj.guanquan.fragment.found;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,18 +14,32 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.activity.home.QHomeActivity;
 import com.xj.guanquan.activity.home.QScreenActivity;
+import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.common.QBaseFragment;
+import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.model.PageInfo;
 import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +47,7 @@ import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
  * Use the {@link QFindUserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QFindUserFragment extends Fragment implements OnClickListener {
+public class QFindUserFragment extends QBaseFragment implements OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -49,6 +62,16 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
     private int lastVisibleItem;
     private TextView findCircle;
     private TextView screen;
+
+    private StringRequest request;
+    private int currentPage = 1;
+    private int numPerPage = 20;
+    private Integer sex;
+    private Integer age;
+    private String height;
+    private Integer carCert;
+    private Integer finallyTime;
+    private Boolean isLoadMore = false;
 
     /**
      * Use this factory method to create a new instance of
@@ -91,13 +114,10 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         findRecyclerView = (RecyclerView) view.findViewById(R.id.findRecyclerView);
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
         findCircle = (TextView) view.findViewById(R.id.findCircle);
         screen = (TextView) view.findViewById(R.id.screen);
-
         // improve performance if you know that changes in content
         // do not change the size of the RecyclerView
         findRecyclerView.setHasFixedSize(true);
@@ -105,10 +125,8 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
         mLayoutManager = new LinearLayoutManager(getActivity());
         findRecyclerView.setLayoutManager(mLayoutManager);
         findRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        initData();
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"name", "age", "sex", "headImage", "height", "weight", "carDescript", "dateDescript"}, R.layout.list_find_user_item, userInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"nickName", "age", "sex", "avatar", "height", "weight", "car", "dating"}, R.layout.list_find_user_item, userInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -134,13 +152,8 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefresh.setRefreshing(false);
-                        mAdapter.isLoadMore(true);
-                    }
-                }, 2000);
+                currentPage = 1;
+                addToRequestQueue(request, false);
             }
         });
 
@@ -153,12 +166,12 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItem + 1 == mAdapter.getItemCount()) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.isLoadMore(false);
-                        }
-                    }, 2000);
+                    if (isLoadMore) {
+                        currentPage++;
+                        addToRequestQueue(request, false);
+                    } else {
+                        mAdapter.isLoadMore(false);
+                    }
                 }
             }
 
@@ -172,6 +185,38 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
 
         findCircle.setOnClickListener(this);
         screen.setOnClickListener(this);
+        initHandler();
+    }
+
+    private void initHandler() {
+        request = new StringRequest(Request.Method.POST, ApiList.FIND_USER_LIST, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("currentPage", String.valueOf(currentPage));
+                map.put("numPerPage", String.valueOf(numPerPage));
+                if (sex != null)
+                    map.put("sex", String.valueOf(sex));
+                if (age != null)
+                    map.put("age", String.valueOf(age));
+                if (carCert != null)
+                    map.put("carCert", String.valueOf(carCert));
+                if (finallyTime != null)
+                    map.put("finallyTime", String.valueOf(finallyTime));
+                if (!StringUtils.isEmpty(height))
+                    map.put("height", height);
+                return map;
+            }
+        };
+        addToRequestQueue(request, true);
     }
 
     @Override
@@ -185,14 +230,14 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener, View.OnLongClickListener {
-        private TextView name;
+        private TextView nickName;
         private TextView sex;
-        private SimpleDraweeView headImage;
+        private SimpleDraweeView avatar;
         private TextView age;
         private TextView height;
         private TextView weight;
-        private TextView carDescript;
-        private TextView dateDescript;
+        private TextView car;
+        private TextView dating;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -201,12 +246,28 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
             itemView.setOnLongClickListener(this);
         }
 
-        public SimpleDraweeView getHeadImage() {
-            return headImage;
+        public TextView getNickName() {
+            return nickName;
         }
 
-        public void setHeadImage(SimpleDraweeView headImage) {
-            this.headImage = headImage;
+        public void setNickName(TextView nickName) {
+            this.nickName = nickName;
+        }
+
+        public TextView getSex() {
+            return sex;
+        }
+
+        public void setSex(TextView sex) {
+            this.sex = sex;
+        }
+
+        public SimpleDraweeView getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(SimpleDraweeView avatar) {
+            this.avatar = avatar;
         }
 
         public TextView getAge() {
@@ -233,48 +294,31 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
             this.weight = weight;
         }
 
-        public TextView getCarDescript() {
-            return carDescript;
+        public TextView getCar() {
+            return car;
         }
 
-        public void setCarDescript(TextView carDescript) {
-            this.carDescript = carDescript;
+        public void setCar(TextView car) {
+            this.car = car;
         }
 
-        public TextView getDateDescript() {
-            return dateDescript;
+        public TextView getDating() {
+            return dating;
         }
 
-        public void setDateDescript(TextView dateDescript) {
-            this.dateDescript = dateDescript;
-        }
-
-        public TextView getSex() {
-            return sex;
-        }
-
-        public void setSex(TextView sex) {
-            this.sex = sex;
-        }
-
-        public TextView getName() {
-            return name;
-        }
-
-        public void setName(TextView name) {
-            this.name = name;
+        public void setDating(TextView dating) {
+            this.dating = dating;
         }
 
         private void initialize(View itemView) {
-            name = (TextView) itemView.findViewById(R.id.name);
-            headImage = (SimpleDraweeView) itemView.findViewById(R.id.headImage);
+            nickName = (TextView) itemView.findViewById(R.id.name);
+            avatar = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
             sex = (TextView) itemView.findViewById(R.id.sex);
-            headImage = (SimpleDraweeView) itemView.findViewById(R.id.headImage);
             age = (TextView) itemView.findViewById(R.id.age);
             height = (TextView) itemView.findViewById(R.id.height);
             weight = (TextView) itemView.findViewById(R.id.weight);
-            carDescript = (TextView) itemView.findViewById(R.id.carDescript);
-            dateDescript = (TextView) itemView.findViewById(R.id.dateDescript);
+            car = (TextView) itemView.findViewById(R.id.carDescript);
+            dating = (TextView) itemView.findViewById(R.id.dateDescript);
         }
 
         @Override
@@ -291,18 +335,38 @@ public class QFindUserFragment extends Fragment implements OnClickListener {
         }
     }
 
-    private void initData() {
-        userInfoList = new ArrayList<UserInfo>();
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
+    @Override
+    public void onResponse(Object response) {
+        super.onResponse(response);
+        ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+        if (currentPage == 1) {
+            swipeRefresh.setRefreshing(false);
+            userInfoList = new ArrayList<UserInfo>();
+        } else {
+            mAdapter.isLoadMore(false);
+        }
+        PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
+        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+            if (result.getData().getJSONArray("content") != null) {
+                List<UserInfo> resultData = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), UserInfo.class);
+                userInfoList.addAll(resultData);
+                mAdapter.setData(userInfoList);
+                mAdapter.notifyDataSetChanged();
+                if (userInfoList.size() < pageInfo.getTotalCount()) {
+                    isLoadMore = true;
+                    mAdapter.isLoadMore(true);
+                }
+            }
+        } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
+            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
+        } else {
+            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        super.onErrorResponse(error);
+        swipeRefresh.setRefreshing(false);
     }
 }

@@ -245,7 +245,7 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
         }
 
         private void initialize(View itemView) {
-            headImage = (SimpleDraweeView) itemView.findViewById(R.id.headImage);
+            headImage = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
             circleName = (TextView) itemView.findViewById(R.id.circleName);
             level = (TextView) itemView.findViewById(R.id.level);
             distance = (TextView) itemView.findViewById(R.id.distance);

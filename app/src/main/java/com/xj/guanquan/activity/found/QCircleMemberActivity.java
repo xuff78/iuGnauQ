@@ -227,7 +227,7 @@ public class QCircleMemberActivity extends QBaseActivity {
         public void onClick(View v) {
             Bundle bundle = new Bundle();
             circleUserInfoList.get(getAdapterPosition());
-            bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
+            //bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
             toActivity(QUserDetailActivity.class, bundle);
         }
     }

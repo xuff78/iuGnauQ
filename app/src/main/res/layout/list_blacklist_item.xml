@@ -10,7 +10,7 @@
     android:paddingRight="20dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/headImage"
+        android:id="@+id/avatar"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginRight="5dp"
@@ -23,9 +23,9 @@
         android:id="@+id/nameArea"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_alignTop="@+id/headImage"
+        android:layout_alignTop="@+id/avatar"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/headImage"
+        android:layout_toRightOf="@+id/avatar"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -105,7 +105,7 @@
         android:layout_below="@+id/nameArea"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/headImage"
+        android:layout_toRightOf="@+id/avatar"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="爱音乐，爱风尚，爱就是一直的追求" />

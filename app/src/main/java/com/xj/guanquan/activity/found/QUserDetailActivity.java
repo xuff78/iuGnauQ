@@ -73,7 +73,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     protected void initView() {
         initialize();
         userInfo = (UserInfo) getIntent().getExtras().getSerializable("userInfo");
-        _setHeaderTitle(userInfo.getName());
+        _setHeaderTitle(userInfo.getNickName());
         _setRightHomeGone();
         _setRightHomeText("投诉", new View.OnClickListener() {
             @Override
@@ -186,7 +186,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         roastTime = (TextView) findViewById(R.id.roastTime);
         socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
         career = (TextView) findViewById(R.id.career);
-        headImage = (SimpleDraweeView) findViewById(R.id.headImage);
+        headImage = (SimpleDraweeView) findViewById(R.id.avatar);
         height = (TextView) findViewById(R.id.height);
         roastDistance = (TextView) findViewById(R.id.roastDistance);
         relation = (TextView) findViewById(R.id.relation);

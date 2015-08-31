@@ -1,21 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xj.guanquan" >
+    package="com.xj.guanquan">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 高德定位权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
     <application
+        android:name="common.eric.com.ebaselibrary.common.EBaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="51e165b40e9be4dd078f2b5672cb39a5" />
+
+        <service
+            android:name=".common.LocationService"
+            android:exported="true" />
+
         <activity
             android:name=".activity.home.QStartActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +46,7 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activity.user.QLoginActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden"  />
         <activity
             android:name=".activity.user.QFindPwdActivity"
             android:label="@string/title_activity_qfind_pwd" />
@@ -92,8 +111,7 @@
             android:label="@string/title_activity_qcreate_group" />
         <activity
             android:name=".activity.found.QCirclePhotosActivity"
-            android:label="@string/title_activity_qcircle_photos" >
-        </activity>
+            android:label="@string/title_activity_qcircle_photos"></activity>
     </application>
 
 </manifest>

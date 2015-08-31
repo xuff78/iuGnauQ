@@ -131,18 +131,18 @@ public class QFriendFragment extends QBaseFragment {
     private void initData() {
         userInfoList = new ArrayList<UserInfo>();
         userInfoList = new ArrayList<UserInfo>();
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
-        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
+//        userInfoList.add(new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "爱音乐，爱疯尚，爱就是一支的追求", "30min", "25mk"));
     }
 
     private void initialize(View view) {
@@ -162,7 +162,7 @@ public class QFriendFragment extends QBaseFragment {
 
         public ItemViewHolder(View view) {
             super(view);
-            headImage = (SimpleDraweeView) view.findViewById(R.id.headImage);
+            headImage = (SimpleDraweeView) view.findViewById(R.id.avatar);
             name = (TextView) view.findViewById(R.id.name);
             age = (TextView) view.findViewById(R.id.age);
             sex = (TextView) view.findViewById(R.id.sex);

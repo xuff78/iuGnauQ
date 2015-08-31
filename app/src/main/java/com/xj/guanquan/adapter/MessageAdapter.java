@@ -1,7 +1,6 @@
 package com.xj.guanquan.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -9,19 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
-import com.xj.guanquan.activity.roast.QPublishAct;
-import com.xj.guanquan.fragment.roast.Photo9Layout;
 import com.xj.guanquan.model.MessageInfo;
-import com.xj.guanquan.model.NoteInfo;
 
 import java.util.ArrayList;
-
-import common.eric.com.ebaselibrary.util.ScreenUtils;
 
 /**
  * Created by 可爱的蘑菇 on 2015/8/29.
@@ -113,7 +106,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public MessageLeftHolder(View itemView) {
             super(itemView);
-            userImg = (SimpleDraweeView) itemView.findViewById(R.id.headImage);
+            userImg = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
             userMsg = (TextView) itemView.findViewById(R.id.userMsg);
         }
     }
@@ -124,7 +117,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public MessageRightHolder(View itemView) {
             super(itemView);
-            userImg = (SimpleDraweeView) itemView.findViewById(R.id.headImage);
+            userImg = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
             userMsg = (TextView) itemView.findViewById(R.id.userMsg);
         }
     }
