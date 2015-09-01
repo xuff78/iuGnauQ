@@ -25,10 +25,10 @@
 
         <EditText
             android:id="@+id/phoneText"
+            style="@style/text_13_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            style="@style/text_13_white"
             android:background="@null" />
     </LinearLayout>
 
@@ -53,12 +53,12 @@
 
         <EditText
             android:id="@+id/newPwdText"
+            style="@style/text_13_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            style="@style/text_13_white"
-            android:inputType="textPassword"
-            android:background="@null" />
+            android:background="@null"
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <View
@@ -82,12 +82,12 @@
 
         <EditText
             android:id="@+id/confirmPwdText"
+            style="@style/text_13_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:inputType="textPassword"
-            style="@style/text_13_white"
-            android:background="@null" />
+            android:background="@null"
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <View
@@ -109,15 +109,32 @@
             android:layout_height="wrap_content"
             android:text="@string/register_code" />
 
-        <EditText
-            android:id="@+id/codeText"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            style="@style/text_13_white"
-            android:background="@null" />
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/sendSms"
+                android:layout_width="81dp"
+                android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/send_msg_button_seletor" />
+
+            <EditText
+                android:id="@+id/codeText"
+                style="@style/text_13_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_toLeftOf="@id/sendSms"
+                android:background="@null" />
 
 
+        </RelativeLayout>
     </LinearLayout>
 
     <View
