@@ -16,7 +16,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.CircleUserInfo;
-import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ public class QCircleMemberActivity extends QBaseActivity {
 
     private List<CircleUserInfo> circleUserInfoList;
     private TextView time;
-    private TextView relationTitle;
     private TextView relation;
     private SimpleDraweeView headImg;
     private TextView sex;
@@ -130,17 +128,6 @@ public class QCircleMemberActivity extends QBaseActivity {
 
     private void initData() {
         circleUserInfoList = new ArrayList<CircleUserInfo>();
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
 
     }
 
@@ -213,7 +200,6 @@ public class QCircleMemberActivity extends QBaseActivity {
         public ItemViewHolder(View view) {
             super(view);
             time = (TextView) view.findViewById(R.id.time);
-            relationTitle = (TextView) view.findViewById(R.id.relationTitle);
             relation = (TextView) view.findViewById(R.id.relation);
             headImg = (SimpleDraweeView) view.findViewById(R.id.headImg);
             sex = (TextView) view.findViewById(R.id.sex);

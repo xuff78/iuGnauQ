@@ -7,6 +7,7 @@
     android:layout_marginRight="5dp"
     android:orientation="vertical"
     android:paddingLeft="20dp"
+    android:background="@color/black_title"
     android:paddingRight="20dp">
 
     <com.facebook.drawee.view.SimpleDraweeView

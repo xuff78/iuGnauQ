@@ -6,33 +6,32 @@ import common.eric.com.ebaselibrary.model.EBaseModel;
  * Created by eric on 2015/8/26.
  */
 public class CircleUserInfo extends EBaseModel {
-    private String name;
+    private Integer userId;
+    private String nickName;
     private String sex;
     private Integer age;
     private String relation;
-    private String headImg;
+    private String avatar;
     private String distance;
     private String time;
 
     public CircleUserInfo() {
     }
 
-    public CircleUserInfo(String name, String sex, Integer age, String relation, String headImg, String distance, String time) {
-        this.name = name;
-        this.sex = sex;
-        this.age = age;
-        this.relation = relation;
-        this.headImg = headImg;
-        this.distance = distance;
-        this.time = time;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public String getName() {
-        return name;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getSex() {
@@ -52,19 +51,21 @@ public class CircleUserInfo extends EBaseModel {
     }
 
     public String getRelation() {
-        return relation;
+        if (relation != null)
+            return "关系 ： " + relation;
+        return null;
     }
 
     public void setRelation(String relation) {
         this.relation = relation;
     }
 
-    public String getHeadImg() {
-        return headImg;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setHeadImg(String headImg) {
-        this.headImg = headImg;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getDistance() {

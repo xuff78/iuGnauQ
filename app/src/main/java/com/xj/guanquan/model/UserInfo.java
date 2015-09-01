@@ -15,6 +15,7 @@ public class UserInfo extends EBaseModel {
     private int weight;
     private String car;
     private String dating;
+    private String signature;
 
     private String time;
     private String distance;
@@ -108,5 +109,13 @@ public class UserInfo extends EBaseModel {
 
     public void setDistance(String distance) {
         this.distance = distance;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }

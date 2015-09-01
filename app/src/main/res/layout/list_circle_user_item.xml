@@ -30,7 +30,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/relationTitle"
+        android:id="@+id/relation"
         style="@style/text_10_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,24 +38,14 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@id/index"
-        android:text="关系:" />
-
-    <TextView
-        android:id="@+id/relation"
-        style="@style/text_10_black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/relationTitle"
-        android:layout_marginRight="10dp"
-        android:layout_toRightOf="@+id/relationTitle"
-        android:text="好友" />
+        android:text="关系:好友" />
 
     <TextView
         android:id="@+id/sex"
         style="@style/text_12_7f"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/relationTitle"
+        android:layout_below="@id/relation"
         android:layout_marginLeft="13dp"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/headImg"
@@ -85,7 +75,7 @@
         style="@style/text_12_7f"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/relationTitle"
+        android:layout_below="@id/relation"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/line"

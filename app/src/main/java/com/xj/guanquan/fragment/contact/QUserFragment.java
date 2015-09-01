@@ -2,7 +2,6 @@ package com.xj.guanquan.fragment.contact;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,27 +12,42 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
+import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
+import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.CircleUserInfo;
+import com.xj.guanquan.model.PageInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QUserFragment extends QBaseFragment {
 
-    public static QUserFragment newInstance() {
+    public static QUserFragment newInstance(Integer userType) {
         QUserFragment fragment = new QUserFragment();
         Bundle args = new Bundle();
+        args.putInt("type", userType);
         fragment.setArguments(args);
         return fragment;
     }
 
+    private Integer userType;
     private SearchView searchView;
     private SwipeRefreshLayout swipeRefresh;
     private RecyclerView circleNumRecycler;
@@ -51,10 +65,17 @@ public class QUserFragment extends QBaseFragment {
     private TextView age;
     private int lastVisibleItem;
 
+    private StringRequest request;
+    private int currentPage = 1;
+    private int numPerPage = 20;
+    private boolean isLoadMore = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (getArguments() != null) {
+            userType = getArguments().getInt("type");
+        }
     }
 
     @Override
@@ -75,9 +96,8 @@ public class QUserFragment extends QBaseFragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         circleNumRecycler.setLayoutManager(mLayoutManager);
         circleNumRecycler.setItemAnimator(new DefaultItemAnimator());
-        initData();
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"relation", "sex", "age", "distance", "time", "headImg"}, R.layout.list_circle_user_item, circleUserInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"relation", "sex", "age", "distance", "time", "avatar", "nickName"}, R.layout.list_circle_user_item, circleUserInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -85,6 +105,15 @@ public class QUserFragment extends QBaseFragment {
                     SimpleDraweeView iv = (SimpleDraweeView) view;
                     Uri uri = Uri.parse((String) data);
                     iv.setImageURI(uri);
+                    return true;
+                } else if (view instanceof TextView && data instanceof Integer) {
+                    TextView tv = (TextView) view;
+                    Integer sex = (Integer) data;
+                    if (sex == 1) {
+                        tv.setText("男");
+                    } else if (sex == 2) {
+                        tv.setText("女");
+                    }
                     return true;
                 }
                 return false;
@@ -103,13 +132,8 @@ public class QUserFragment extends QBaseFragment {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefresh.setRefreshing(false);
-                        mAdapter.isLoadMore(true);
-                    }
-                }, 2000);
+                currentPage = 1;
+                addToRequestQueue(request, false);
             }
         });
 
@@ -122,12 +146,13 @@ public class QUserFragment extends QBaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItem + 1 == mAdapter.getItemCount()) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.isLoadMore(false);
-                        }
-                    }, 2000);
+                    if (isLoadMore) {
+                        mAdapter.isLoadMore(true);
+                        currentPage++;
+                        addToRequestQueue(request, false);
+                    } else {
+                        mAdapter.isLoadMore(false);
+                    }
                 }
             }
 
@@ -138,22 +163,43 @@ public class QUserFragment extends QBaseFragment {
             }
 
         });
+
+        initHandler();
     }
 
-    private void initData() {
-        circleUserInfoList = new ArrayList<CircleUserInfo>();
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
-        circleUserInfoList.add(new CircleUserInfo("孔先生", "男", 23, "好友", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "1km", "1分钟前"));
+    private void initHandler() {
+        String method = null;
+        switch (userType.intValue()) {
+            case 0:
+                method = "";//为圈子成员列表
+                break;
+            case 2:
+                method = ApiList.CONTACT_FOLLOW_LIST;//关注列表
+                break;
+            case 3:
+                method = ApiList.CONTACT_FANS_LIST;//粉丝列表
+                break;
+        }
+        request = new StringRequest(Request.Method.POST, method, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
 
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("currentPage", String.valueOf(currentPage));
+                map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
+                return map;
+            }
+        };
+        addToRequestQueue(request, true);
     }
 
     private void initialize(View view) {
@@ -164,11 +210,12 @@ public class QUserFragment extends QBaseFragment {
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView relation;
+        private TextView nickName;
         private TextView sex;
         private TextView age;
         private TextView distance;
         private TextView time;
-        private SimpleDraweeView headImg;
+        private SimpleDraweeView avatar;
 
         public TextView getRelation() {
             return relation;
@@ -210,22 +257,29 @@ public class QUserFragment extends QBaseFragment {
             this.time = time;
         }
 
-        public SimpleDraweeView getHeadImg() {
-            return headImg;
+        public TextView getNickName() {
+            return nickName;
         }
 
-        public void setHeadImg(SimpleDraweeView headImg) {
-            this.headImg = headImg;
+        public void setNickName(TextView nickName) {
+            this.nickName = nickName;
+        }
+
+        public SimpleDraweeView getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(SimpleDraweeView avatar) {
+            this.avatar = avatar;
         }
 
         public ItemViewHolder(View view) {
             super(view);
             time = (TextView) view.findViewById(R.id.time);
-            relationTitle = (TextView) view.findViewById(R.id.relationTitle);
             relation = (TextView) view.findViewById(R.id.relation);
-            headImg = (SimpleDraweeView) view.findViewById(R.id.headImg);
+            avatar = (SimpleDraweeView) view.findViewById(R.id.headImg);
             sex = (TextView) view.findViewById(R.id.sex);
-            index = (TextView) view.findViewById(R.id.index);
+            nickName = (TextView) view.findViewById(R.id.index);
             distance = (TextView) view.findViewById(R.id.distance);
             age = (TextView) view.findViewById(R.id.age);
             view.setOnClickListener(this);
@@ -238,6 +292,41 @@ public class QUserFragment extends QBaseFragment {
 //            bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
             ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class, bundle);
         }
+    }
+
+    @Override
+    public void onResponse(Object response) {
+        super.onResponse(response);
+        ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+        if (currentPage == 1) {
+            swipeRefresh.setRefreshing(false);
+            circleUserInfoList = new ArrayList<CircleUserInfo>();
+        }
+        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+            if (result.getData().getJSONArray("content") != null) {
+                List<CircleUserInfo> resultData = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), CircleUserInfo.class);
+                circleUserInfoList.addAll(resultData);
+                PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
+                if (circleUserInfoList.size() < pageInfo.getTotalCount()) {
+                    isLoadMore = true;
+                }
+            } else {
+                circleUserInfoList = null;
+            }
+            mAdapter.setData(circleUserInfoList);
+            mAdapter.notifyDataSetChanged();
+            mAdapter.isLoadMore(false);
+        } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
+            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
+        } else {
+            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        super.onErrorResponse(error);
+        swipeRefresh.setRefreshing(false);
     }
 
 }

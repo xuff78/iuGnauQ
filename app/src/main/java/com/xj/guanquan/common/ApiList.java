@@ -16,8 +16,18 @@ public class ApiList {
     public static String ACCOUNT_LOGIN = BASE_API + "1/login";
     public static String ACCOUNT_AUTO_LOGIN = BASE_API + "/1/autoLogin";
     public static String ACCOUNT_FIND_PWD = BASE_API + "1/findPassword";
+    public static String ADD_FOLLOW = BASE_API + "1/relation/addFollow";
+    public static String CANCE_FOLLOW = BASE_API + "1/relation/cancelFollow";
+
+
+    //发现
     public static String FIND_USER_LIST = BASE_API + "1/find/userList";
     public static String FIND_GROUP_LIST = BASE_API + "1/find/groupList";
+
+    //联系人
+    public static String CONTACT_FRIEND_LIST = BASE_API + "1/friend/list";
+    public static String CONTACT_FOLLOW_LIST = BASE_API + "1/relation/followList";
+    public static String CONTACT_FANS_LIST = BASE_API + "1/relation/fansList";
 
     //吐槽
     public static String TUCAO_Friend = BASE_API + "1/tucao/friend";

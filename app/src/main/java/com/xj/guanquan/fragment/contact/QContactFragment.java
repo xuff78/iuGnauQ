@@ -159,10 +159,10 @@ public class QContactFragment extends QBaseFragment {
                     frg = QFindCircleFragment.newInstance("group", null);
                     break;
                 case 2:
-                    frg = QUserFragment.newInstance();
+                    frg = QUserFragment.newInstance(2);
                     break;
                 case 3:
-                    frg = QUserFragment.newInstance();
+                    frg = QUserFragment.newInstance(3);
                     break;
             }
             return frg;
