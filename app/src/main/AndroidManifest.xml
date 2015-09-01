@@ -91,6 +91,11 @@
             android:label="@string/title_activity_publish"
             android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />
         <activity
+            android:name=".activity.roast.TucaoDetailAct"
+            android:label="@string/hello_roast_detail"
+            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />
+
+        <activity
             android:name=".activity.message.QMsgDetailActivity"
             android:label="@string/title_activity_qmsg_detail"
             android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />

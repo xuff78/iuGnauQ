@@ -69,7 +69,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 		} else {
 			View v = listInflater.from(act).inflate(R.layout.tucao_item_detail, null);
 			v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-			holder = new NoteHolder(v);
+			holder = new NoteHolder(v, position);
 		}
 		return holder;
 	}
@@ -108,6 +108,17 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		@Override
 		public void onClick(View v) {
+			int position= (int) v.getTag();
+			switch (v.getId()){
+				case R.id.favorBtn:
+					break;
+				case R.id.replyNums:
+					break;
+				case R.id.shareBtn:
+					break;
+				case R.id.bookBtn:
+					break;
+			}
 
 		}
 	};
@@ -125,7 +136,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 		View bookBtn, dateExtraLayout;
 		TextView userName, userAge, createTime, usrComment, favorBtn, replyNums, shareBtn;
 
-		public NoteHolder(View itemView) {
+		public NoteHolder(View itemView, int positon) {
 			super(itemView);
 			userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
 			userName = (TextView) itemView.findViewById(R.id.userName);
@@ -133,10 +144,18 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			createTime = (TextView) itemView.findViewById(R.id.createTime);
 			usrComment = (TextView) itemView.findViewById(R.id.usrComment);
 			favorBtn = (TextView) itemView.findViewById(R.id.favorBtn);
+			favorBtn.setTag(positon);
+			favorBtn.setOnClickListener(listener);
 			replyNums = (TextView) itemView.findViewById(R.id.replyNums);
+			replyNums.setTag(positon);
+			replyNums.setOnClickListener(listener);
 			shareBtn = (TextView) itemView.findViewById(R.id.shareBtn);
+			shareBtn.setTag(positon);
+			shareBtn.setOnClickListener(listener);
 			photoLayout = (LinearLayout) itemView.findViewById(R.id.photoLayout);
 			bookBtn = itemView.findViewById(R.id.bookBtn);
+			bookBtn.setTag(positon);
+			bookBtn.setOnClickListener(listener);
 			if(PageType==1)
 				itemView.findViewById(R.id.dateExtraLayout).setVisibility(View.VISIBLE);
 		}
