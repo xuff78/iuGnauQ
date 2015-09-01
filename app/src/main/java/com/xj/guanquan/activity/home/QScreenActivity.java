@@ -42,6 +42,12 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     protected void initView() {
         _setRightHomeGone();
         _setHeaderTitle(getString(R.string.title_activity_qscreen));
+        _setLeftBackListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backPressed();
+            }
+        });
         initialize();
 
         sex = (Integer) getIntent().getSerializableExtra("sex");
@@ -106,14 +112,7 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         } else if (v == moreDay) {
             setSelectTimeView(v);
         } else if (v == confirmBtn) {
-            Intent intent = new Intent();
-            intent.putExtra("sex", sex);
-            intent.putExtra("age", age);
-            intent.putExtra("height", height);
-            intent.putExtra("carCert", carCert);
-            intent.putExtra("finallyTime", finallyTime);
-            setResult(111, intent);
-            this.finish();
+            backPressed();
         }
     }
 
@@ -160,5 +159,19 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        backPressed();
+    }
 
+    private void backPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("sex", sex);
+        intent.putExtra("age", age);
+        intent.putExtra("height", height);
+        intent.putExtra("carCert", carCert);
+        intent.putExtra("finallyTime", finallyTime);
+        setResult(111, intent);
+        this.finish();
+    }
 }

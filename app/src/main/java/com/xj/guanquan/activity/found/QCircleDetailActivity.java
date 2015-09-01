@@ -63,7 +63,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
     protected void initView() {
         initialize();
         circleInfo = (CircleInfo) getIntent().getExtras().getSerializable("circleInfo");
-        _setHeaderTitle(circleInfo.getCircleName());
+        _setHeaderTitle(circleInfo.getGroupName());
         _setRightHomeGone();
 
         scrollview.setHeader(backgroundImage);

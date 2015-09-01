@@ -2,7 +2,6 @@ package com.xj.guanquan.fragment.found;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,17 +14,31 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QCircleDetailActivity;
 import com.xj.guanquan.activity.home.QHomeActivity;
+import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.common.QBaseFragment;
+import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.CircleInfo;
+import com.xj.guanquan.model.PageInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +46,7 @@ import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
  * Use the {@link QFindCircleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QFindCircleFragment extends Fragment implements OnClickListener {
+public class QFindCircleFragment extends QBaseFragment implements OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -48,6 +61,11 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
     private List<CircleInfo> circleInfoList;
     private int lastVisibleItem;
     private TextView findUser;
+
+    private StringRequest request;
+    private int currentPage = 1;
+    private int numPerPage = 20;
+    private boolean isLoadMore;
 
     /**
      * Use this factory method to create a new instance of
@@ -98,7 +116,6 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
         if (mParam1 != null) {
             titleArea.setVisibility(View.GONE);
         }
-
         // improve performance if you know that changes in content
         // do not change the size of the RecyclerView
         findRecyclerView.setHasFixedSize(true);
@@ -106,16 +123,14 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
         mLayoutManager = new LinearLayoutManager(getActivity());
         findRecyclerView.setLayoutManager(mLayoutManager);
         findRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        initData();
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"circleName", "level", "circleDesc", "headImage", "distance"}, R.layout.list_find_circle_item, circleInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"groupName", "level", "description", "picture", "distance"}, R.layout.list_find_circle_item, circleInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
                 if (view instanceof SimpleDraweeView) {
                     SimpleDraweeView iv = (SimpleDraweeView) view;
-                    Uri uri = Uri.parse((String) data);
+                    Uri uri = Uri.parse(data == null ? "" : (String) data);
                     iv.setImageURI(uri);
                     return true;
                 }
@@ -135,13 +150,8 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefresh.setRefreshing(false);
-                        mAdapter.isLoadMore(true);
-                    }
-                }, 2000);
+                currentPage = 1;
+                addToRequestQueue(request, false);
             }
         });
 
@@ -154,12 +164,13 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItem + 1 == mAdapter.getItemCount()) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.isLoadMore(false);
-                        }
-                    }, 2000);
+                    if (isLoadMore) {
+                        mAdapter.isLoadMore(true);
+                        currentPage++;
+                        addToRequestQueue(request, false);
+                    } else {
+                        mAdapter.isLoadMore(false);
+                    }
                 }
             }
 
@@ -172,6 +183,30 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
         });
 
         findUser.setOnClickListener(this);
+        initHandler();
+    }
+
+    private void initHandler() {
+        request = new StringRequest(Request.Method.POST, ApiList.FIND_GROUP_LIST, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("currentPage", String.valueOf(currentPage));
+                map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
+                return map;
+            }
+        };
+        addToRequestQueue(request, true);
     }
 
     @Override
@@ -182,27 +217,27 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener, View.OnLongClickListener {
-        private SimpleDraweeView headImage;
-        private TextView circleName;
+        private SimpleDraweeView picture;
+        private TextView groupName;
         private TextView level;
         private TextView distance;
         private RelativeLayout nameArea;
-        private TextView circleDesc;
+        private TextView description;
 
-        public SimpleDraweeView getHeadImage() {
-            return headImage;
+        public SimpleDraweeView getPicture() {
+            return picture;
         }
 
-        public void setHeadImage(SimpleDraweeView headImage) {
-            this.headImage = headImage;
+        public void setPicture(SimpleDraweeView picture) {
+            this.picture = picture;
         }
 
-        public TextView getCircleName() {
-            return circleName;
+        public TextView getGroupName() {
+            return groupName;
         }
 
-        public void setCircleName(TextView circleName) {
-            this.circleName = circleName;
+        public void setGroupName(TextView groupName) {
+            this.groupName = groupName;
         }
 
         public TextView getLevel() {
@@ -229,12 +264,12 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
             this.nameArea = nameArea;
         }
 
-        public TextView getCircleDesc() {
-            return circleDesc;
+        public TextView getDescription() {
+            return description;
         }
 
-        public void setCircleDesc(TextView circleDesc) {
-            this.circleDesc = circleDesc;
+        public void setDescription(TextView description) {
+            this.description = description;
         }
 
         public ItemViewHolder(View itemView) {
@@ -245,12 +280,12 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
         }
 
         private void initialize(View itemView) {
-            headImage = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
-            circleName = (TextView) itemView.findViewById(R.id.circleName);
+            picture = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
+            groupName = (TextView) itemView.findViewById(R.id.circleName);
             level = (TextView) itemView.findViewById(R.id.level);
             distance = (TextView) itemView.findViewById(R.id.distance);
             nameArea = (RelativeLayout) itemView.findViewById(R.id.nameArea);
-            circleDesc = (TextView) itemView.findViewById(R.id.circleDesc);
+            description = (TextView) itemView.findViewById(R.id.circleDesc);
         }
 
         @Override
@@ -266,18 +301,41 @@ public class QFindCircleFragment extends Fragment implements OnClickListener {
         }
     }
 
-    private void initData() {
-        circleInfoList = new ArrayList<CircleInfo>();
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
-        circleInfoList.add(new CircleInfo("爱疯吧", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "LV  3", "25 km", "爱音乐，爱风狂，爱是一直的追求"));
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        super.onErrorResponse(error);
+        swipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onResponse(Object response) {
+        super.onResponse(response);
+        ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+        if (currentPage == 1) {
+            swipeRefresh.setRefreshing(false);
+            circleInfoList = new ArrayList<CircleInfo>();
+        }
+        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+            if (result.getData().getJSONArray("content") != null) {
+                List<CircleInfo> circleInfos = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), CircleInfo.class);
+                circleInfoList.addAll(circleInfos);
+                if (result.getData().getJSONObject("page") != null) {
+                    PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
+                    if (circleInfoList.size() < pageInfo.getTotalCount()) {
+                        isLoadMore = true;
+                    }
+                }
+            } else {
+                circleInfoList = null;
+            }
+            mAdapter.setData(circleInfoList);
+            mAdapter.notifyDataSetChanged();
+            mAdapter.isLoadMore(false);
+
+        } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
+            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
+        } else {
+            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
+        }
     }
 }

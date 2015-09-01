@@ -6,46 +6,38 @@ import common.eric.com.ebaselibrary.model.EBaseModel;
  * Created by eric on 2015/8/23.
  */
 public class CircleInfo extends EBaseModel {
-    private Integer id;
-    private String circleName;
-    private String headImage;
+    private Integer groupId;
+    private String groupName;
+    private String picture;
     private String level;
     private String distance;
-    private String circleDesc;
+    private String description;
 
     public CircleInfo() {
     }
 
-    public CircleInfo(String circleName, String headImage, String level, String distance, String circleDesc) {
-        this.circleName = circleName;
-        this.headImage = headImage;
-        this.level = level;
-        this.distance = distance;
-        this.circleDesc = circleDesc;
+    public Integer getGroupId() {
+        return groupId;
     }
 
-    public Integer getId() {
-        return id;
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public String getHeadImage() {
-        return headImage;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
-    public void setHeadImage(String headImage) {
-        this.headImage = headImage;
+    public String getPicture() {
+        return picture;
     }
 
-    public String getCircleName() {
-        return circleName;
-    }
-
-    public void setCircleName(String circleName) {
-        this.circleName = circleName;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public String getLevel() {
@@ -64,11 +56,11 @@ public class CircleInfo extends EBaseModel {
         this.distance = distance;
     }
 
-    public String getCircleDesc() {
-        return circleDesc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCircleDesc(String circleDesc) {
-        this.circleDesc = circleDesc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

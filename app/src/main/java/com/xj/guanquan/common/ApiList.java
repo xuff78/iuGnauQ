@@ -13,10 +13,11 @@ public class ApiList {
 
     public static String ACCOUNT_CHECK = BASE_API + "1/user/checkAccount";
     public static String ACCOUNT_REGIST = BASE_API + "1/user/save";
-    public static String ACCOUNT_LOGIN = BASE_API + "/1/login";
+    public static String ACCOUNT_LOGIN = BASE_API + "1/login";
     public static String ACCOUNT_AUTO_LOGIN = BASE_API + "/1/autoLogin";
     public static String ACCOUNT_FIND_PWD = BASE_API + "1/findPassword";
-    public static String FIND_USER_LIST = BASE_API + "/1/find/userList";
+    public static String FIND_USER_LIST = BASE_API + "1/find/userList";
+    public static String FIND_GROUP_LIST = BASE_API + "1/find/groupList";
 
     //吐槽
     public static String TUCAO_Friend = BASE_API + "1/tucao/friend";
