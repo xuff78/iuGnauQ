@@ -24,7 +24,7 @@ public class MoveLineView extends LinearLayout{
 		super(context);
 		this.itemNum=itemNum;
 		height= (int) ScreenUtils.dpToPxInt(context, 35);
-		width= (int) ScreenUtils.dpToPxInt(context, 100);
+		width= (int) ScreenUtils.dpToPxInt(context, 150);
 
 		WindowManager wm = context.getWindowManager();
 		this.screenWitdh=wm.getDefaultDisplay().getWidth();;

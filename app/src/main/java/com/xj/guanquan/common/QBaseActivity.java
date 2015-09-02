@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -30,6 +32,7 @@ import com.xj.guanquan.activity.user.QLoginActivity;
 import com.xj.guanquan.views.CustomProgressDialog;
 
 import common.eric.com.ebaselibrary.common.EBaseApplication;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 
 /**
@@ -402,8 +405,17 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
 
     @Override
     public void onResponse(Object response) {
+        Log.i("Net","Response: "+response.toString());
         getProgressDialog().dismiss();
+
+        ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+        if(StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)){
+            doResponse(response);
+        }else
+            alertDialog(result.getMsg(), null);
     }
+
+    protected void doResponse(Object response) {}
 
     private CustomProgressDialog getProgressDialog() {
         if (progressDialog == null) {

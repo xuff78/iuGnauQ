@@ -13,16 +13,33 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.xj.guanquan.R;
+import com.xj.guanquan.adapter.TuCaoAdapter;
+import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.model.NoteInfo;
+import com.xj.guanquan.model.PageInfo;
 import com.xj.guanquan.model.UserInfo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.ScreenUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
+import common.eric.com.ebaselibrary.util.ToastUtils;
 
 /**
  * Created by 可爱的蘑菇 on 2015/8/29.
@@ -40,10 +57,29 @@ public class QPublishAct extends QBaseActivity{
     private int imgItemWidth=0;
     private View addIconView;
     private LayoutInflater inflater;
+//    private NoteInfo note;
+    private StringRequest requestPublish;
 
     @Override
     protected void initHandler() {
+        requestPublish = new StringRequest(Request.Method.POST, ApiList.TUCAO_Publish, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QPublishAct.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
 
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("content", String.valueOf(editText.getText().toString()));
+                map.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
+                return map;
+            }
+        };
     }
 
     @Override
@@ -51,6 +87,7 @@ public class QPublishAct extends QBaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_date);
 
+//        note= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
         PageType=getIntent().getIntExtra("PageType", 0);
 
 
@@ -87,7 +124,19 @@ public class QPublishAct extends QBaseActivity{
         _setRightHomeText("发布", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToastShort("发布...");
+                if (PageType == TypeTucao) {
+                    if (editText.getText().length() > 0) {
+                        addToRequestQueue(requestPublish, ApiList.TUCAO_Publish, true);
+                    } else
+                        ToastUtils.show(getApplicationContext(), "请输入内容");
+                    showToastShort("发布...");
+                } else if (PageType == TypeDate) {
+
+                } else if (PageType == TypeJoin) {
+
+                } else if (PageType == TypeSecret) {
+
+                }
             }
         });
         if(PageType!=TypeJoin){
@@ -104,6 +153,29 @@ public class QPublishAct extends QBaseActivity{
         shareLayout=(RelativeLayout)findViewById(R.id.shareLayout);
         copyLayout=(RelativeLayout)findViewById(R.id.copyLayout);
         roleSelectLayout=(RelativeLayout)findViewById(R.id.roleSelectLayout);
+    }
+
+    View.OnClickListener listener=new View.OnClickListener(){
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.publishTxt:
+
+                    break;
+
+            }
+        }
+    };
+
+    @Override
+    public void doResponse(Object response) {
+        final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+        if (StringUtils.isEquals(requestPublish.getTag().toString(), ApiList.TUCAO_Publish)) {
+            ToastUtils.show(this, "提交成功");
+            finish();
+        }
+
     }
 
     private void setAddView(){

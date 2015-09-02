@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.roast.QPublishAct;
+import com.xj.guanquan.activity.roast.TucaoDetailAct;
 import com.xj.guanquan.fragment.roast.Photo9Layout;
 import com.xj.guanquan.model.NoteInfo;
 
@@ -82,7 +83,11 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			NoteHolder vh = (NoteHolder) viewHolder;
 			vh.userImg.setImageURI(Uri.parse(datalist.get(position).getAvatar()));
 			vh.createTime.setText(datalist.get(position).getTime());
-			vh.userAge.setText(datalist.get(position).getAge()+"");
+			String sex="♂ ";
+			if(datalist.get(position).getSex()!=1){
+				sex="♀ ";
+			}
+			vh.userAge.setText(sex+datalist.get(position).getAge());
 			vh.usrComment.setText(datalist.get(position).getContent());
 			vh.favorBtn.setText(datalist.get(position).getIsLike()+"");
 			vh.replyNums.setText(datalist.get(position).getCommentNum()+"");
@@ -113,6 +118,10 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 				case R.id.favorBtn:
 					break;
 				case R.id.replyNums:
+					Intent intent=new Intent(act, TucaoDetailAct.class);
+					intent.putExtra("PageType", PageType);
+					intent.putExtra("NoteInfo", datalist.get(position));
+					act.startActivity(intent);
 					break;
 				case R.id.shareBtn:
 					break;

@@ -32,9 +32,10 @@ public class ApiList {
     public static String USER_DETAIL = BASE_API + "1/user/detail";
 
     //吐槽
+    public static String TUCAO_Publish = BASE_API + " 1/tucao/publish";
     public static String TUCAO_Friend = BASE_API + "1/tucao/friend";
     public static String TUCAO_Nearby = BASE_API + "1/tucao/nearby";
-    public static String TUCAO_Detail = BASE_API + "1/tucao/detail";
+    public static String TUCAO_Detail = BASE_API + "1/tucao/detail/";
     public static String TUCAO_Delete = BASE_API + "1/tucao/delete";
     public static String TUCAO_AddComment = BASE_API + "1/tucao/addComment";
     public static String TUCAO_AddComplain = BASE_API + "1/tucao/addComplain";
