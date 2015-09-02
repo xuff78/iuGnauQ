@@ -80,7 +80,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline/0.6.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.sd6352051.niftydialogeffects/niftydialogeffects/1.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.lsjwzh/materialloadingprogressbar/0.5.6-RELEASE/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/common.eric.com.ebaselibrary/ebaselibrary/0.0.5-SNAPSHOT/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/common.eric.com.ebaselibrary/ebaselibrary/0.0.7-SNAPSHOT/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaResources" />
@@ -104,7 +104,6 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
-    <orderEntry type="library" exported="" name="ebaselibrary-0.0.5-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="fbcore-0.6.1" level="project" />
     <orderEntry type="library" exported="" name="materialloadingprogressbar-0.5.6-RELEASE" level="project" />
@@ -114,5 +113,6 @@
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="fastjson-1.1.43.android" level="project" />
     <orderEntry type="library" exported="" name="drawee-0.6.1" level="project" />
+    <orderEntry type="library" exported="" name="ebaselibrary-0.0.7-SNAPSHOT" level="project" />
   </component>
 </module>

@@ -219,5 +219,39 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/black_deep" />
         </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/complainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dip">
+
+            <TextView
+                style="@style/text_16_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dip"
+                android:gravity="center_vertical"
+                android:text="联系方式" />
+
+            <EditText
+                style="@style/text_16_white"
+                android:id="@+id/complainEdt"
+                android:textColorHint="@color/normal_gray"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip"
+                android:gravity="center_vertical"
+                android:hint="输入联系方式" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black_deep" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

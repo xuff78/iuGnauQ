@@ -46,13 +46,14 @@ import common.eric.com.ebaselibrary.util.ToastUtils;
  */
 public class QPublishAct extends QBaseActivity{
 
-    private EditText editText;
+    private EditText editText, complainEdt;
     private LinearLayout photoLayout, dateLayout;
-    private RelativeLayout copyLayout, roleSelectLayout, shareLayout;
+    private RelativeLayout copyLayout, roleSelectLayout, shareLayout, complainLayout;
     public static final int TypeTucao=0;
     public static final int TypeDate=1;
     public static final int TypeSecret=2;
     public static final int TypeJoin=3;
+    public static final int TypeComplain=4;
     private int PageType=0;
     private int imgItemWidth=0;
     private View addIconView;
@@ -88,7 +89,7 @@ public class QPublishAct extends QBaseActivity{
         setContentView(R.layout.activity_publish_date);
 
 //        note= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
-        PageType=getIntent().getIntExtra("PageType", 0);
+        PageType=4;//getIntent().getIntExtra("PageType", 0);
 
 
         inflater= LayoutInflater.from(this);
@@ -119,6 +120,11 @@ public class QPublishAct extends QBaseActivity{
             shareLayout.setVisibility(View.VISIBLE);
             roleSelectLayout.setVisibility(View.VISIBLE);
 
+        } else if (PageType == TypeComplain){
+            _setHeaderTitle("投诉");
+            editText.setHint("请输入要投诉的内容");
+            photoLayout.setVisibility(View.VISIBLE);
+            complainLayout.setVisibility(View.VISIBLE);
         }
         _setRightHomeGone();
         _setRightHomeText("发布", new View.OnClickListener() {
@@ -148,11 +154,13 @@ public class QPublishAct extends QBaseActivity{
     @Override
     protected void initView() {
         editText=(EditText)findViewById(R.id.publishTxt);
+        complainEdt=(EditText)findViewById(R.id.complainEdt);
         photoLayout=(LinearLayout)findViewById(R.id.photoLayout);
         dateLayout=(LinearLayout)findViewById(R.id.dateLayout);
         shareLayout=(RelativeLayout)findViewById(R.id.shareLayout);
         copyLayout=(RelativeLayout)findViewById(R.id.copyLayout);
         roleSelectLayout=(RelativeLayout)findViewById(R.id.roleSelectLayout);
+        complainLayout=(RelativeLayout)findViewById(R.id.complainLayout);
     }
 
     View.OnClickListener listener=new View.OnClickListener(){

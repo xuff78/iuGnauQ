@@ -86,7 +86,7 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
                 vh.userImg.setImageURI(Uri.parse(note.getAvatar()));
                 vh.createTime.setText(note.getTime());
                 String sex="♂ ";
-                if(datalist.get(position).getSex()!=1){
+                if(note.getSex()!=1){
                     sex="♀ ";
                 }
                 vh.userAge.setText(sex+note.getAge());
@@ -113,7 +113,11 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
                 NoteHolder vh = (NoteHolder) viewHolder;
                 vh.userImg.setImageURI(Uri.parse(info.getAvatar()));
                 vh.createTime.setText(info.getTime());
-//                vh.userAge.setText(info.getAge() + "");
+                String sex="♂ ";
+                if(info.getSex()!=1){
+                    sex="♀ ";
+                }
+                vh.userAge.setText(sex+info.getAge());
                 vh.usrComment.setText(info.getContent());
                 vh.userName.setText(info.getNickName());
             }
