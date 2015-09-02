@@ -286,8 +286,8 @@ public class QFriendFragment extends QBaseFragment {
                 userInfoList = null;
             }
             mAdapter.setData(userInfoList);
-            mAdapter.notifyDataSetChanged();
             mAdapter.isLoadMore(false);
+            mAdapter.notifyDataSetChanged();
         } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
             ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
         } else {
