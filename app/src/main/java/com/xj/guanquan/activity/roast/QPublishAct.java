@@ -54,34 +54,13 @@ public class QPublishAct extends QBaseActivity{
     public static final int TypeSecret=2;
     public static final int TypeJoin=3;
     public static final int TypeComplain=4;
+    public static final int TypeAddComment=4;
     private int PageType=0;
     private int imgItemWidth=0;
     private View addIconView;
     private LayoutInflater inflater;
 //    private NoteInfo note;
-    private StringRequest requestPublish;
-
-    @Override
-    protected void initHandler() {
-        requestPublish = new StringRequest(Request.Method.POST, ApiList.TUCAO_Publish, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QPublishAct.this, "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("content", String.valueOf(editText.getText().toString()));
-                map.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
-                map.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
-                return map;
-            }
-        };
-    }
+    private StringRequest requestPublish, requestDatePublish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +86,7 @@ public class QPublishAct extends QBaseActivity{
 
         } else if (PageType == TypeDate) {
             _setHeaderTitle("开始约会");
+            editText.setHint("写点什么描述约会内容");
             photoLayout.setVisibility(View.VISIBLE);
             dateLayout.setVisibility(View.VISIBLE);
 
@@ -130,19 +110,22 @@ public class QPublishAct extends QBaseActivity{
         _setRightHomeText("发布", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PageType == TypeTucao) {
-                    if (editText.getText().length() > 0) {
+                if (editText.getText().length() > 0) {
+                    if (PageType == TypeTucao) {
                         addToRequestQueue(requestPublish, ApiList.TUCAO_Publish, true);
-                    } else
-                        ToastUtils.show(getApplicationContext(), "请输入内容");
-                    showToastShort("发布...");
-                } else if (PageType == TypeDate) {
+                    } else if (PageType == TypeDate) {
+                        addToRequestQueue(requestDatePublish, ApiList.DATE_Publish, true);
+                    } else if (PageType == TypeJoin) {
 
-                } else if (PageType == TypeJoin) {
+                    } else if (PageType == TypeSecret) {
 
-                } else if (PageType == TypeSecret) {
+                    } else if (PageType == TypeComplain) {
 
-                }
+                    } else if (PageType == TypeAddComment) {
+
+                    }
+                }else
+                    ToastUtils.show(getApplicationContext(), "请输入内容");
             }
         });
         if(PageType!=TypeJoin){
@@ -179,7 +162,7 @@ public class QPublishAct extends QBaseActivity{
     @Override
     public void doResponse(Object response) {
         final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-        if (StringUtils.isEquals(requestPublish.getTag().toString(), ApiList.TUCAO_Publish)) {
+        if (StringUtils.isEquals(requestMethod, ApiList.TUCAO_Publish)) {
             ToastUtils.show(this, "提交成功");
             finish();
         }
@@ -279,6 +262,48 @@ public class QPublishAct extends QBaseActivity{
                 android.R.anim.decelerate_interpolator));
         anima.setDuration(300);
         anima.start();
+    }
+
+    @Override
+    protected void initHandler() {
+        requestPublish = new StringRequest(Request.Method.POST, ApiList.TUCAO_Publish, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QPublishAct.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("content", String.valueOf(editText.getText().toString()));
+                map.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
+                return map;
+            }
+        };
+        requestDatePublish = new StringRequest(Request.Method.POST, ApiList.DATE_Publish, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QPublishAct.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("content", String.valueOf(editText.getText().toString()));
+                map.put("beginTime", "2015-9-3 12:50");
+                map.put("address", "世界尽头");
+                map.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
+                return map;
+            }
+        };
     }
 
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -12,11 +13,14 @@ import com.android.volley.VolleyLog;
 import com.xj.guanquan.views.CustomProgressDialog;
 
 import common.eric.com.ebaselibrary.common.EBaseApplication;
+import common.eric.com.ebaselibrary.util.StringUtils;
+import common.eric.com.ebaselibrary.util.ToastUtils;
 
 public class QBaseFragment extends Fragment implements Response.Listener, Response.ErrorListener {
     private CustomProgressDialog progressDialog;
 
     private OnFragmentListener mListener;
+    protected String requestMethod="";
 
     // TODO: Rename method, update argument and hook method into UI event
     public void loadFragment(Fragment frg) {
@@ -55,11 +59,18 @@ public class QBaseFragment extends Fragment implements Response.Listener, Respon
 
     @Override
     public void onResponse(Object response) {
-        VolleyLog.d("onResponse", response.toString());
-        if (getProgressDialog().isShowing())
-            getProgressDialog().dismiss();
-        Log.i("Net", response.toString());
+        Log.i("Net", "Response: " + response.toString());
+        getProgressDialog().dismiss();
+
+        ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+        if(StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)){
+            doResponse(response);
+        }else {
+            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
+        }
     }
+
+    protected void doResponse(Object response) {}
 
     private CustomProgressDialog getProgressDialog() {
         if (progressDialog == null) {
@@ -76,6 +87,7 @@ public class QBaseFragment extends Fragment implements Response.Listener, Respon
     }
 
     public <T> void addToRequestQueue(Request<T> req, String tag, Boolean isShowDialog) {
+        requestMethod=tag;
         if (!getProgressDialog().isShowing() && isShowDialog)
             getProgressDialog().show();
         req.setRetryPolicy(new DefaultRetryPolicy(30 * 1000, 1, 1.0f));

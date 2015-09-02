@@ -127,18 +127,18 @@ public class TucaoMianFrg extends QBaseFragment {
         //得到每个item
         @Override
         public Fragment getItem(int position) {
-            Fragment frg=null;
-            switch (position){
-                case 0:
-                    frg=TucaoListFrg.newInstance(position);
-                    break;
-                case 1:
-                    frg=TucaoListFrg.newInstance(position);
-                    break;
-                case 2:
-                    frg=TucaoListFrg.newInstance(position);
-                    break;
-            }
+            Fragment frg=TucaoListFrg.newInstance(position);
+//            switch (position){
+//                case 0:
+//                    frg=TucaoListFrg.newInstance(position);
+//                    break;
+//                case 1:
+//                    frg=TucaoListFrg.newInstance(position);
+//                    break;
+//                case 2:
+//                    frg=TucaoListFrg.newInstance(position);
+//                    break;
+//            }
             return frg;
         }
 

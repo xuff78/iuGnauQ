@@ -23,6 +23,7 @@ import com.xj.guanquan.adapter.TuCaoAdapter;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.model.DateInfo;
 import com.xj.guanquan.model.NoteInfo;
 import com.xj.guanquan.model.PageInfo;
 import com.xj.guanquan.model.UserInfo;
@@ -51,10 +52,10 @@ public class TucaoListFrg extends QBaseFragment {
     private RelativeLayout menuLayout;
     private MoveLineView moveHighlight;
     private int PageType =0;
-    private StringRequest requestLeft, requestRight;
+    private StringRequest requestLeftTucao, requestRightTucao, requestLeftDate, requestRightDate, requestLeftSecret, requestRightSecret;
     private int currentPage = 1;
     private int numPerPage = 20;
-    private boolean isFriend=true;
+    private boolean notNear=true;
 
     public static TucaoListFrg newInstance(int PageType) {
         TucaoListFrg fragment = new TucaoListFrg();
@@ -84,8 +85,20 @@ public class TucaoListFrg extends QBaseFragment {
         menuLayout=(RelativeLayout) v.findViewById(R.id.menuLayout);
         moveHighlight=new MoveLineView(getActivity(), menuLayout, 2);
         moveHighlight.setPos(1);
-        leftBtn.setText("好友吐槽");
-        rightBtn.setText("附近吐槽");
+        switch (PageType){
+            case 0:
+                leftBtn.setText("好友吐槽");
+                rightBtn.setText("附近吐槽");
+                break;
+            case 1:
+                leftBtn.setText("好友约会");
+                rightBtn.setText("附近约会");
+                break;
+            case 2:
+                leftBtn.setText("好友秘密");
+                rightBtn.setText("附近秘密");
+                break;
+        }
         leftBtn.setSelected(true);
         mRecyclerView=(RecyclerView)v.findViewById(R.id.dataList);
         mLayoutManager=new LinearLayoutManager(getActivity());
@@ -94,17 +107,6 @@ public class TucaoListFrg extends QBaseFragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         swipeRefresh = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefresh);
 
-//        notes = new ArrayList<NoteInfo>();
-//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg","小白兔", " ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-//        notes.add(new NoteInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", "小白兔"," ♂ 23", "10:00", "晚上打算去悠唐商场看一步之遥，有兴趣的赶紧报名啊", "293", "100"));
-//        mAdapter = new TuCaoAdapter(getActivity(), notes, PageType);
-
-
-//        mRecyclerView.setAdapter(mAdapter);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -142,10 +144,31 @@ public class TucaoListFrg extends QBaseFragment {
     }
 
     private  void doRequest(boolean showDialog){
-        if(isFriend)
-            addToRequestQueue(requestLeft, showDialog);
-        else
-            addToRequestQueue(requestRight, showDialog);
+        if(notNear) {
+            switch (PageType){
+                case 0:
+                    addToRequestQueue(requestLeftTucao, ApiList.TUCAO_Friend, showDialog);
+                    break;
+                case 1:
+                    addToRequestQueue(requestLeftDate, ApiList.DATE_Friend, showDialog);
+                    break;
+                case 2:
+                    addToRequestQueue(requestLeftSecret, ApiList.SECRET_Friend, showDialog);
+                    break;
+            }
+        }else {
+            switch (PageType){
+                case 0:
+                    addToRequestQueue(requestRightTucao, ApiList.TUCAO_Nearby, showDialog);
+                    break;
+                case 1:
+                    addToRequestQueue(requestRightDate, ApiList.DATE_Nearby, showDialog);
+                    break;
+                case 2:
+                    addToRequestQueue(requestRightSecret, ApiList.SECRET_Nearby, showDialog);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -156,7 +179,18 @@ public class TucaoListFrg extends QBaseFragment {
         PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             if (result.getData().getJSONArray("content") != null) {
-                List<NoteInfo> resultData = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), NoteInfo.class);
+                List<NoteInfo> resultData=new ArrayList<>();
+                if (requestMethod.equals(ApiList.TUCAO_Friend)||requestMethod.equals(ApiList.TUCAO_Nearby)) {
+                    resultData = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), NoteInfo.class);
+                }else if (requestMethod.equals(ApiList.DATE_Friend)||requestMethod.equals(ApiList.DATE_Nearby)) {
+                    JSONArray array=result.getData().getJSONArray("content");
+                    for (int i=0;i<array.size();i++) {
+                        NoteInfo date = JSONObject.parseObject(array.get(i).toString(), DateInfo.class);
+                        resultData.add(date);
+                    }
+                }else if (requestMethod.equals(ApiList.SECRET_Friend)||requestMethod.equals(ApiList.SECRET_Nearby)) {
+                    resultData = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), NoteInfo.class);
+                }
                 if (currentPage == 1) {
                     swipeRefresh.setRefreshing(false);
                     notes = new ArrayList<NoteInfo>();
@@ -174,6 +208,7 @@ public class TucaoListFrg extends QBaseFragment {
             }
         }
 
+
     }
 
     @Override
@@ -182,8 +217,36 @@ public class TucaoListFrg extends QBaseFragment {
         swipeRefresh.setRefreshing(false);
     }
 
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.leftBtnSub:
+                    if(!notNear) {
+                        leftBtn.setSelected(true);
+                        rightBtn.setSelected(false);
+                        moveHighlight.setPos(1);
+                        notNear = true;
+                        currentPage=1;
+                        doRequest(false);
+                    }
+                    break;
+                case R.id.rightBtnSub:
+                    if(notNear) {
+                        leftBtn.setSelected(false);
+                        rightBtn.setSelected(true);
+                        moveHighlight.setPos(2);
+                        notNear = false;
+                        currentPage=1;
+                        doRequest(false);
+                    }
+                    break;
+            }
+        }
+    };
+
     private void initHandler() {
-        requestLeft = new StringRequest(Request.Method.POST, ApiList.TUCAO_Friend, this, this) {
+        requestLeftTucao = new StringRequest(Request.Method.POST, ApiList.TUCAO_Friend, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -201,7 +264,79 @@ public class TucaoListFrg extends QBaseFragment {
             }
         };
 
-        requestRight = new StringRequest(Request.Method.POST, ApiList.TUCAO_Nearby, this, this) {
+        requestRightTucao = new StringRequest(Request.Method.POST, ApiList.TUCAO_Nearby, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("currentPage", String.valueOf(currentPage));
+                map.put("numPerPage", String.valueOf(numPerPage));
+                return map;
+            }
+        };
+
+        requestLeftDate = new StringRequest(Request.Method.POST, ApiList.DATE_Friend, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("currentPage", String.valueOf(currentPage));
+                map.put("numPerPage", String.valueOf(numPerPage));
+                return map;
+            }
+        };
+
+        requestRightDate = new StringRequest(Request.Method.POST, ApiList.DATE_Nearby, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("currentPage", String.valueOf(currentPage));
+                map.put("numPerPage", String.valueOf(numPerPage));
+                return map;
+            }
+        };
+
+        requestLeftSecret = new StringRequest(Request.Method.POST, ApiList.SECRET_Friend, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("currentPage", String.valueOf(currentPage));
+                map.put("numPerPage", String.valueOf(numPerPage));
+                return map;
+            }
+        };
+
+        requestRightSecret = new StringRequest(Request.Method.POST, ApiList.SECRET_Friend, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -219,32 +354,4 @@ public class TucaoListFrg extends QBaseFragment {
             }
         };
     }
-
-    View.OnClickListener listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.leftBtnSub:
-                    if(!isFriend) {
-                        leftBtn.setSelected(true);
-                        rightBtn.setSelected(false);
-                        moveHighlight.setPos(1);
-                        isFriend = true;
-                        currentPage=1;
-                        doRequest(false);
-                    }
-                    break;
-                case R.id.rightBtnSub:
-                    if(isFriend) {
-                        leftBtn.setSelected(false);
-                        rightBtn.setSelected(true);
-                        moveHighlight.setPos(2);
-                        isFriend = false;
-                        currentPage=1;
-                        doRequest(false);
-                    }
-                    break;
-            }
-        }
-    };
 }

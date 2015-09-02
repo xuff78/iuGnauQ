@@ -36,8 +36,28 @@ public class ApiList {
     public static String TUCAO_Friend = BASE_API + "1/tucao/friend";
     public static String TUCAO_Nearby = BASE_API + "1/tucao/nearby";
     public static String TUCAO_Detail = BASE_API + "1/tucao/detail/";
-    public static String TUCAO_Delete = BASE_API + "1/tucao/delete";
+    public static String TUCAO_Delete = BASE_API + "1/tucao/delete/";
     public static String TUCAO_AddComment = BASE_API + "1/tucao/addComment";
     public static String TUCAO_AddComplain = BASE_API + "1/tucao/addComplain";
     public static String TUCAO_AddLike = BASE_API + "1/tucao/addLike";
+
+    //约会
+    public static String DATE_Publish = BASE_API + " 1/dating/publish";
+    public static String DATE_Friend = BASE_API + "1/dating/friend";
+    public static String DATE_Nearby = BASE_API + "1/dating/nearby";
+    public static String DATE_Detail = BASE_API + "1/dating/detail/";
+    public static String DATE_Delete = BASE_API + "1/dating/delete/";
+    public static String DATE_AddComment = BASE_API + "1/dating/addComment";
+    public static String DATE_AddComplain = BASE_API + "1/dating/addComplain";
+    public static String DATE_AddLike = BASE_API + "1/dating/addLike";
+
+    //秘密
+    public static String SECRET_Publish = BASE_API + " 1/secret/publish";
+    public static String SECRET_Friend = BASE_API + "1/secret/friend";
+    public static String SECRET_Nearby = BASE_API + "1/secret/nearby";
+    public static String SECRET_Detail = BASE_API + "1/secret/detail/";
+    public static String SECRET_Delete = BASE_API + "1/secret/delete/";
+    public static String SECRET_AddComment = BASE_API + "1/secret/addComment";
+    public static String SECRET_AddComplain = BASE_API + "1/secret/addComplain";
+    public static String SECRET_AddLike = BASE_API + "1/secret/addLike";
 }

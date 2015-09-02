@@ -21,6 +21,7 @@ import com.xj.guanquan.R;
 import com.xj.guanquan.activity.roast.QPublishAct;
 import com.xj.guanquan.activity.roast.TucaoDetailAct;
 import com.xj.guanquan.fragment.roast.Photo9Layout;
+import com.xj.guanquan.model.DateInfo;
 import com.xj.guanquan.model.NoteInfo;
 
 import java.util.ArrayList;
@@ -97,6 +98,11 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 				vh.photoLayout.removeAllViews();
 				vh.photoLayout.addView(new Photo9Layout(act, (int) (width - ScreenUtils.dpToPxInt(act, 90)), urls));
 			}
+			if(PageType==QPublishAct.TypeDate){
+				DateInfo dateinfo= (DateInfo) datalist.get(position);
+				vh.dateTime.setText(dateinfo.getBeginTime() + "");
+				vh.dateAddr.setText(dateinfo.getAddress());
+			}
 			vh.bookBtn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -143,11 +149,13 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 		SimpleDraweeView userImg;
 		LinearLayout photoLayout;
 		View bookBtn, dateExtraLayout;
-		TextView userName, userAge, createTime, usrComment, favorBtn, replyNums, shareBtn;
+		TextView userName, userAge, createTime, usrComment, favorBtn, replyNums, shareBtn, dateTime, dateAddr;
 
 		public NoteHolder(View itemView, int positon) {
 			super(itemView);
 			userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
+			dateTime = (TextView) itemView.findViewById(R.id.dateTime);
+			dateAddr = (TextView) itemView.findViewById(R.id.dateAddr);
 			userName = (TextView) itemView.findViewById(R.id.userName);
 			userAge = (TextView) itemView.findViewById(R.id.userAge);
 			createTime = (TextView) itemView.findViewById(R.id.createTime);
