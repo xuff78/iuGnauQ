@@ -11,19 +11,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.PictureInfo;
 import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView.OnTurnListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QUserDetailActivity extends QBaseActivity implements View.OnClickListener, OnTurnListener {
     private UserInfo userInfo;
@@ -59,7 +69,12 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private TextView relation;
     private TextView roastContent;
     private ImageView roastMore;
+    private TextView constellation;
     private TextView descript;
+
+    private StringRequest request;
+    private StringRequest requestFollow;
+    private StringRequest requestCancelFollow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,28 +141,65 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
         pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
         pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
     }
 
     @Override
     protected void initHandler() {
+        request = new StringRequest(Request.Method.POST, ApiList.USER_DETAIL, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QUserDetailActivity.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
 
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", String.valueOf(userInfo.getUserId()));
+                map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
+                return map;
+            }
+        };
+        requestFollow = new StringRequest(Request.Method.POST, ApiList.ADD_FOLLOW, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QUserDetailActivity.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", String.valueOf(userInfo.getUserId()));
+                map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
+                return map;
+            }
+        };
+        requestCancelFollow = new StringRequest(Request.Method.POST, ApiList.CANCE_FOLLOW, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QUserDetailActivity.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", String.valueOf(userInfo.getUserId()));
+                map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
+                return map;
+            }
+        };
+        addToRequestQueue(request, ApiList.CANCE_FOLLOW, true);
     }
 
     @Override
@@ -155,8 +207,13 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         if (v == good) {
             good.setSelected(!good.isSelected());
         } else if (v == attentionBtn) {
-            attentionBtn.setSelected(!attentionBtn.isSelected());
-            attentionBtn.setText(attentionBtn.isSelected() ? "取消关注" : "关注");
+            if (attentionBtn.isSelected()) {
+                request = requestCancelFollow;
+                addToRequestQueue(request, ApiList.CANCE_FOLLOW, true);
+            } else {
+                request = requestFollow;
+                addToRequestQueue(request, ApiList.ADD_FOLLOW, true);
+            }
         }
     }
 
@@ -193,6 +250,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         roastContent = (TextView) findViewById(R.id.roastContent);
         roastMore = (ImageView) findViewById(R.id.roastMore);
         descript = (TextView) findViewById(R.id.descript);
+        constellation = (TextView) findViewById(R.id.constellation);
 
         good.setOnClickListener(this);
         attentionBtn.setOnClickListener(this);
@@ -231,5 +289,61 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         public boolean onLongClick(View v) {
             return false;
         }
+    }
+
+    @Override
+    public void onResponse(Object response) {
+        super.onResponse(response);
+        final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+            if (StringUtils.isEquals(request.getTag().toString(), ApiList.USER_DETAIL)) {
+                JSONObject content = result.getData().getJSONObject("content");
+                income.setText(content.getString("income"));
+                distance.setText(content.getString("distance"));
+                constellation.setText(content.getString("constellation"));
+                descript.setText(content.getString("signature"));
+                registTime.setText(content.getString("registerTime"));
+                sex.setText(content.getInteger("sex") == 1 ? "男" : "女");
+                weight.setText(content.getString("weight"));
+                career.setText(content.getString("job"));
+                age.setText(content.getString("age"));
+                height.setText(content.getString("height"));
+                marriage.setText(content.getString("feelingStatus"));
+                String relationTxt = "";
+                switch (content.getInteger("relation")) {
+                    case 0:
+                        relationTxt = "自己";
+                        break;
+                    case 1:
+                        relationTxt = "粉丝";
+                        break;
+                    case 2:
+                        relationTxt = "关注";
+                        break;
+                    case 3:
+                        relationTxt = "好友";
+                        break;
+
+                }
+                relation.setText(relationTxt);
+            } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
+                alertDialog(result.getMsg(), null);
+                attentionBtn.setSelected(true);
+                attentionBtn.setText("取消关注");
+            } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.CANCE_FOLLOW)) {
+                alertDialog(result.getMsg(), null);
+                attentionBtn.setSelected(false);
+                attentionBtn.setText("关注");
+            }
+        } else {
+            alertDialog(result.getMsg(), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS))
+                        QUserDetailActivity.this.finish();
+                }
+            });
+        }
+
     }
 }

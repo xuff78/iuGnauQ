@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -414,6 +415,14 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
     public <T> void addToRequestQueue(Request<T> req, Boolean isShowDialog) {
         if (!getProgressDialog().isShowing() && isShowDialog)
             getProgressDialog().show();
+        req.setRetryPolicy(new DefaultRetryPolicy(30 * 1000, 1, 1.0f));
         ((EBaseApplication) getApplication()).addToRequestQueue(req);
+    }
+
+    public <T> void addToRequestQueue(Request<T> req, String tag, Boolean isShowDialog) {
+        if (!getProgressDialog().isShowing() && isShowDialog)
+            getProgressDialog().show();
+        req.setRetryPolicy(new DefaultRetryPolicy(30 * 1000, 1, 1.0f));
+        ((EBaseApplication) getApplication()).addToRequestQueue(req, tag);
     }
 }

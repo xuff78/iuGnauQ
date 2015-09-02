@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -70,7 +71,15 @@ public class QBaseFragment extends Fragment implements Response.Listener, Respon
     public <T> void addToRequestQueue(Request<T> req, Boolean isShowDialog) {
         if ((!getProgressDialog().isShowing()) && isShowDialog)
             getProgressDialog().show();
+        req.setRetryPolicy(new DefaultRetryPolicy(30 * 1000, 1, 1.0f));
         ((EBaseApplication) getActivity().getApplication()).addToRequestQueue(req);
+    }
+
+    public <T> void addToRequestQueue(Request<T> req, String tag, Boolean isShowDialog) {
+        if (!getProgressDialog().isShowing() && isShowDialog)
+            getProgressDialog().show();
+        req.setRetryPolicy(new DefaultRetryPolicy(30 * 1000, 1, 1.0f));
+        ((EBaseApplication) getActivity().getApplication()).addToRequestQueue(req, tag);
     }
 
 }

@@ -108,6 +108,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/constellation"
                     style="@style/text_14_7f"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
