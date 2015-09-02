@@ -314,8 +314,8 @@ public class QUserFragment extends QBaseFragment {
                 circleUserInfoList = null;
             }
             mAdapter.setData(circleUserInfoList);
-            mAdapter.notifyDataSetChanged();
             mAdapter.isLoadMore(false);
+            mAdapter.notifyDataSetChanged();
         } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
             ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
         } else {

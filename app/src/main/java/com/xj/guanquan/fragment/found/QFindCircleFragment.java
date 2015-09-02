@@ -329,8 +329,8 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
                 circleInfoList = null;
             }
             mAdapter.setData(circleInfoList);
-            mAdapter.notifyDataSetChanged();
             mAdapter.isLoadMore(false);
+            mAdapter.notifyDataSetChanged();
 
         } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
             ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
