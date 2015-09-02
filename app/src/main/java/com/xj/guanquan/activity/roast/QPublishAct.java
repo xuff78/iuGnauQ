@@ -89,7 +89,7 @@ public class QPublishAct extends QBaseActivity{
         setContentView(R.layout.activity_publish_date);
 
 //        note= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
-        PageType=4;//getIntent().getIntExtra("PageType", 0);
+        PageType=getIntent().getIntExtra("PageType", 0);
 
 
         inflater= LayoutInflater.from(this);
