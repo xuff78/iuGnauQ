@@ -251,40 +251,86 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/black_deep" />
         </RelativeLayout>
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:visibility="gone"
             android:id="@+id/complainLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dip">
+            android:layout_height="wrap_content">
+                <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip">
 
+                <TextView
+                    style="@style/text_16_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dip"
+                    android:gravity="center_vertical"
+                    android:text="手机号码" />
+
+                    <EditText
+                        style="@style/text_16_white"
+                        android:id="@+id/complainPhoneEdt"
+                        android:textColorHint="@color/normal_gray"
+                        android:gravity="right"
+                        android:background="@null"
+                        android:layout_width="220dip"
+                        android:paddingRight="15dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:hint="请输入手机号码" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip">
+
+                <TextView
+                    style="@style/text_16_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dip"
+                    android:gravity="center_vertical"
+                    android:text="邮箱" />
+
+                <EditText
+                    style="@style/text_16_white"
+                    android:id="@+id/complainEmailEdt"
+                    android:textColorHint="@color/normal_gray"
+                    android:gravity="right"
+                    android:background="@null"
+                    android:layout_width="220dip"
+                    android:paddingRight="15dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:hint="请输入邮箱" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/black_deep" />
+            </RelativeLayout>
             <TextView
-                style="@style/text_16_white"
+                android:layout_marginTop="20dip"
+                style="@style/text_14_7f"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dip"
                 android:gravity="center_vertical"
-                android:text="联系方式" />
-
-            <EditText
-                style="@style/text_16_white"
-                android:id="@+id/complainEdt"
-                android:textColorHint="@color/normal_gray"
-                android:layout_alignParentRight="true"
-                android:background="@null"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dip"
-                android:gravity="center_vertical"
-                android:hint="输入联系方式" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:layout_alignParentBottom="true"
-                android:background="@color/black_deep" />
-        </RelativeLayout>
+                android:text="*投诉后，请留下您的手机或邮箱等联系方式" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
 </ScrollView>

@@ -52,9 +52,9 @@ import common.eric.com.ebaselibrary.util.ToastUtils;
  */
 public class QPublishAct extends QBaseActivity{
 
-    private EditText editText, complainEdt, titleEdt, AddrEdt;
-    private LinearLayout photoLayout, dateLayout;
-    private RelativeLayout copyLayout, roleSelectLayout, shareLayout, complainLayout, timePickerLayout;
+    private EditText editText, complainPhoneEdt, complainEmailEdt, titleEdt, AddrEdt;
+    private LinearLayout photoLayout, dateLayout, complainLayout;
+    private RelativeLayout copyLayout, roleSelectLayout, shareLayout, timePickerLayout;
 
     private int PageType=0;
     public static final int TypeTucao=0;
@@ -146,13 +146,14 @@ public class QPublishAct extends QBaseActivity{
         AddrEdt=(EditText)findViewById(R.id.AddrEdt);
         titleEdt=(EditText)findViewById(R.id.titleEdt);
         editText=(EditText)findViewById(R.id.publishTxt);
-        complainEdt=(EditText)findViewById(R.id.complainEdt);
+        complainPhoneEdt=(EditText)findViewById(R.id.complainPhoneEdt);
+        complainEmailEdt=(EditText)findViewById(R.id.complainEmailEdt);
         photoLayout=(LinearLayout)findViewById(R.id.photoLayout);
         dateLayout=(LinearLayout)findViewById(R.id.dateLayout);
         shareLayout=(RelativeLayout)findViewById(R.id.shareLayout);
         copyLayout=(RelativeLayout)findViewById(R.id.copyLayout);
         roleSelectLayout=(RelativeLayout)findViewById(R.id.roleSelectLayout);
-        complainLayout=(RelativeLayout)findViewById(R.id.complainLayout);
+        complainLayout=(LinearLayout)findViewById(R.id.complainLayout);
         timePickerLayout=(RelativeLayout)findViewById(R.id.timePickerLayout);
     }
 
@@ -319,11 +320,38 @@ public class QPublishAct extends QBaseActivity{
                     startRequest(ApiList.SECRET_Publish, params);
                 }
             } else if (RequestType == RequestJoin) {
-                addToRequestQueue(requestPublish, ApiList.SECRET_Publish, true);
+//                Map<String, String> params=new HashMap<>();
+//                params.put("id", AddrEdt.getText().toString());
+//                startRequest(ApiList.DA, params);
             } else if (RequestType == RequestComplain) {
-
+                Map<String, String> params=new HashMap<>();
+                String userphone=complainPhoneEdt.getText().toString();
+                String useremail=complainEmailEdt.getText().toString();
+                if(userphone.length()==0&&useremail.length()==0) {
+                    NoteInfo noteinfo= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
+                    params.put("phone", userphone);
+                    params.put("email", useremail);
+                    params.put("id", noteinfo.getId()+"");
+                    if (PageType == TypeTucao) {
+                        startRequest(ApiList.TUCAO_AddComplain, params);
+                    } else if (PageType == TypeDate) {
+                        startRequest(ApiList.DATE_AddComplain, params);
+                    }else if (PageType == TypeSecret) {
+                        startRequest(ApiList.SECRET_AddComplain, params);
+                    }
+                }
             } else if (RequestType == RequestAddComment) {
-
+                NoteInfo noteinfo= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
+                Map<String, String> params=new HashMap<>();
+                params.put("receiveUserId", noteinfo.getUserId()+"");
+                params.put("id", noteinfo.getId()+"");
+                if (PageType == TypeTucao) {
+                    startRequest(ApiList.TUCAO_AddComment, params);
+                } else if (PageType == TypeDate) {
+                    startRequest(ApiList.DATE_AddComment, params);
+                }else if (PageType == TypeSecret) {
+                    startRequest(ApiList.SECRET_AddComment, params);
+                }
             }
 
         }else
@@ -334,7 +362,7 @@ public class QPublishAct extends QBaseActivity{
         requestPublish = new StringRequest(Request.Method.POST, method, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
+                Map<String, String> map = new HashMap<>();
                 JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QPublishAct.this, "loginData"));
                 map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
                 return map;
