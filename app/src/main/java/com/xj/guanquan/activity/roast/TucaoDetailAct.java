@@ -64,6 +64,8 @@ public class TucaoDetailAct extends QBaseActivity {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(TucaoDetailAct.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(TucaoDetailAct.this, "lat"));
                 return map;
             }
         };
