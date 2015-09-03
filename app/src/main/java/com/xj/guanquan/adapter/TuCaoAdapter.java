@@ -12,6 +12,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +40,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	int width = 0;
 	TextView footer;
 	int PageType=0;
+	private View.OnClickListener listener;
 
 	public int getItemCount() {
 		return datalist.size() + 1;
@@ -46,12 +52,12 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 	LayoutInflater listInflater;
 
-	public TuCaoAdapter(Activity act, ArrayList<NoteInfo> datalist, int PageType) {
+	public TuCaoAdapter(Activity act, ArrayList<NoteInfo> datalist, int PageType, View.OnClickListener listener) {
 		this.act = act;
 		this.PageType=PageType;
 		listInflater = LayoutInflater.from(act);
 		this.datalist = datalist;
-
+		this.listener=listener;
 		WindowManager wm = act.getWindowManager();
 
 		width = wm.getDefaultDisplay().getWidth();
@@ -116,29 +122,6 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 		}
 	}
 
-	OnClickListener listener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			int position= (int) v.getTag();
-			switch (v.getId()){
-				case R.id.favorBtn:
-					break;
-				case R.id.replyNums:
-					Intent intent=new Intent(act, TucaoDetailAct.class);
-					intent.putExtra("PageType", PageType);
-					intent.putExtra("NoteInfo", datalist.get(position));
-					act.startActivity(intent);
-					break;
-				case R.id.shareBtn:
-					break;
-				case R.id.bookBtn:
-					break;
-			}
-
-		}
-	};
-
 	public class FooterViewHolder extends RecyclerView.ViewHolder {
 		public FooterViewHolder(View v) {
 			super(v);
@@ -148,12 +131,14 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	public class NoteHolder extends RecyclerView.ViewHolder {
 
 		SimpleDraweeView userImg;
-		LinearLayout photoLayout;
-		View bookBtn, dateExtraLayout;
+		LinearLayout photoLayout, hideMenuLayout;
+		View bookBtn, dateExtraLayout, moreBtn;
 		TextView userName, userAge, createTime, usrComment, favorBtn, replyNums, shareBtn, dateTime, dateAddr;
 
-		public NoteHolder(View itemView, int positon) {
+		public NoteHolder(View itemView, final int position) {
 			super(itemView);
+			moreBtn=itemView.findViewById(R.id.moreBtn);
+			hideMenuLayout = (LinearLayout)itemView.findViewById(R.id.hideMenuLayout);
 			userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
 			dateTime = (TextView) itemView.findViewById(R.id.dateTime);
 			dateAddr = (TextView) itemView.findViewById(R.id.dateAddr);
@@ -162,21 +147,83 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			createTime = (TextView) itemView.findViewById(R.id.createTime);
 			usrComment = (TextView) itemView.findViewById(R.id.usrComment);
 			favorBtn = (TextView) itemView.findViewById(R.id.favorBtn);
-			favorBtn.setTag(positon);
+			favorBtn.setTag(position);
 			favorBtn.setOnClickListener(listener);
 			replyNums = (TextView) itemView.findViewById(R.id.replyNums);
-			replyNums.setTag(positon);
+			replyNums.setTag(position);
 			replyNums.setOnClickListener(listener);
 			shareBtn = (TextView) itemView.findViewById(R.id.shareBtn);
-			shareBtn.setTag(positon);
+			shareBtn.setTag(position);
 			shareBtn.setOnClickListener(listener);
 			photoLayout = (LinearLayout) itemView.findViewById(R.id.photoLayout);
 			bookBtn = itemView.findViewById(R.id.bookBtn);
-			bookBtn.setTag(positon);
+			bookBtn.setTag(position);
 			bookBtn.setOnClickListener(listener);
+			View complainBtn=itemView.findViewById(R.id.complainBtn);
+			complainBtn.setTag(position);
+			complainBtn.setOnClickListener(listener);
+			View deleteBtn=itemView.findViewById(R.id.deleteBtn);
+			deleteBtn.setTag(position);
+			deleteBtn.setOnClickListener(listener);
 			if(PageType==1)
 				itemView.findViewById(R.id.dateExtraLayout).setVisibility(View.VISIBLE);
+			itemView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+
+					Intent intent=new Intent(act, TucaoDetailAct.class);
+					intent.putExtra("PageType", PageType);
+					intent.putExtra("NoteInfo", datalist.get(position));
+					act.startActivity(intent);
+				}
+			});
+			moreBtn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					startAnimation(hideMenuLayout);
+				}
+			});
 		}
+	}
+
+	private void startAnimation(final View view){
+		float fromAlpha=0, toAlpha=1;
+		float fromScaleX=0.1f, toScaleX=1f;
+		final boolean isShown=view.isShown();
+		if(isShown){
+			fromAlpha=1; toAlpha=0;
+			fromScaleX=1f; toScaleX=0.1f;
+		}
+		final AnimationSet anim=new AnimationSet(true);
+		AlphaAnimation alpha=new AlphaAnimation(fromAlpha,toAlpha);
+		ScaleAnimation ra=new ScaleAnimation(fromScaleX, toScaleX, 1, 1, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,0f);
+		anim.addAnimation(alpha);
+		anim.setInterpolator(act, android.R.anim.decelerate_interpolator);
+		anim.addAnimation(ra);
+		anim.setDuration(300);
+		anim.setAnimationListener(new Animation.AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+				if(!isShown){
+					view.setVisibility(View.VISIBLE);
+				}
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if(isShown){
+					view.setVisibility(View.GONE);
+				}
+				view.clearAnimation();
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+
+			}
+		});
+		view.startAnimation(anim);
+		view.invalidate();
 	}
 
 	public void isLoadMore(boolean isMore) {

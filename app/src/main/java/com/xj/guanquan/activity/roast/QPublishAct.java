@@ -92,6 +92,7 @@ public class QPublishAct extends QBaseActivity{
     private void initData() {
         if (PageType == TypeTucao&&RequestType==RequestPublish) {
             _setHeaderTitle("开始发布");
+            editText.setHint("想吐槽点什么");
             photoLayout.setVisibility(View.VISIBLE);
             shareLayout.setVisibility(View.VISIBLE);
             copyLayout.setVisibility(View.VISIBLE);
@@ -111,12 +112,14 @@ public class QPublishAct extends QBaseActivity{
 
         } else if (PageType == TypeSecret&&RequestType==RequestPublish) {
             _setHeaderTitle("秘密发布");
+            editText.setHint("想说点什么秘密");
             photoLayout.setVisibility(View.VISIBLE);
             shareLayout.setVisibility(View.VISIBLE);
             roleSelectLayout.setVisibility(View.VISIBLE);
 
         }else if (RequestType == RequestJoin) {
             _setHeaderTitle("开始报名");
+            editText.setHint("写点什么描述报名内容");
             shareLayout.setVisibility(View.VISIBLE);
 
         }  else if (RequestType == RequestComplain){

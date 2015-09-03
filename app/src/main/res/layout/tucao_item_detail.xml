@@ -105,18 +105,53 @@
             android:id="@+id/actionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dip">
 
+            <LinearLayout
+                android:id="@+id/moreBtn"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:layout_width="100dip"
+                android:layout_height="30dip">
             <ImageView
                 android:layout_width="20dip"
                 android:layout_height="20dip"
-                android:background="@mipmap/gengduo" />
-
+                android:scaleType="fitStart"
+                android:src="@mipmap/gengduo" />
+            </LinearLayout>
+                <LinearLayout
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dip"
+                    android:id="@+id/hideMenuLayout"
+                    android:orientation="horizontal"
+                    android:background="@drawable/shape_menu_hide"
+                    android:layout_width="100dip"
+                    android:layout_height="25dip">
+                    <TextView
+                        android:layout_weight="1"
+                        android:id="@+id/complainBtn"
+                        android:gravity="center"
+                        android:text="投诉"
+                        style="@style/text_11_black"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <!--<View
+                        android:background="@color/black_deep"
+                        android:layout_width="1px"
+                        android:layout_height="match_parent"/>-->
+                    <TextView
+                        android:layout_weight="1"
+                        android:id="@+id/deleteBtn"
+                        android:gravity="center"
+                        android:text="删除"
+                        style="@style/text_11_black"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal">
 
