@@ -172,8 +172,7 @@ public class TucaoListFrg extends QBaseFragment {
     }
 
     @Override
-    public void onResponse(Object response) {
-        super.onResponse(response);
+    public void doResponse(Object response) {
         swipeRefresh.setRefreshing(false);
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
@@ -260,6 +259,8 @@ public class TucaoListFrg extends QBaseFragment {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
             }
         };
@@ -278,6 +279,8 @@ public class TucaoListFrg extends QBaseFragment {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
             }
         };
@@ -296,6 +299,8 @@ public class TucaoListFrg extends QBaseFragment {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
             }
         };
@@ -314,6 +319,8 @@ public class TucaoListFrg extends QBaseFragment {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
             }
         };
@@ -332,6 +339,8 @@ public class TucaoListFrg extends QBaseFragment {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
             }
         };
@@ -350,6 +359,8 @@ public class TucaoListFrg extends QBaseFragment {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
+                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
+                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
             }
         };
