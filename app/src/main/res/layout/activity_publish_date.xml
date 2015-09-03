@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_title"
@@ -51,10 +55,16 @@
                 android:layout_centerVertical="true"
                 android:text="主题" />
 
-            <TextView
+            <EditText
                 style="@style/text_16_white"
-                android:layout_width="wrap_content"
+                android:id="@+id/titleEdt"
+                android:hint="请输入主题"
+                android:background="@null"
+                android:layout_width="220dip"
+                android:paddingRight="15dip"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/normal_gray"
+                android:gravity="right"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:text="亲友滑雪团" />
@@ -66,6 +76,7 @@
             android:background="@color/black_deep" />
 
         <RelativeLayout
+            android:id="@+id/timePickerLayout"
             android:layout_width="match_parent"
             android:layout_height="50dip"
             android:layout_marginLeft="10dip"
@@ -77,8 +88,17 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="时间" />
-
+            <TextView
+                style="@style/text_16_white"
+                android:id="@+id/timeTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dip"
+                android:layout_toLeftOf="@+id/arrowRight"
+                android:text="" />
             <View
+                android:id="@+id/arrowRight"
                 android:layout_width="10dip"
                 android:layout_height="15dip"
                 android:layout_alignParentRight="true"
@@ -104,6 +124,18 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="地点" />
+            <EditText
+                style="@style/text_16_white"
+                android:id="@+id/AddrEdt"
+                android:textColorHint="@color/normal_gray"
+                android:gravity="right"
+                android:background="@null"
+                android:layout_width="220dip"
+                android:paddingRight="15dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:hint="请输入地点" />
         </RelativeLayout>
 
         <View
@@ -255,3 +287,4 @@
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
+</ScrollView>

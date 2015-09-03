@@ -1,5 +1,7 @@
 package com.xj.guanquan.activity.roast;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -31,9 +35,11 @@ import com.xj.guanquan.model.PageInfo;
 import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
@@ -46,15 +52,16 @@ import common.eric.com.ebaselibrary.util.ToastUtils;
  */
 public class QPublishAct extends QBaseActivity{
 
-    private EditText editText, complainEdt;
+    private EditText editText, complainEdt, titleEdt, AddrEdt;
     private LinearLayout photoLayout, dateLayout;
-    private RelativeLayout copyLayout, roleSelectLayout, shareLayout, complainLayout;
+    private RelativeLayout copyLayout, roleSelectLayout, shareLayout, complainLayout, timePickerLayout;
     public static final int TypeTucao=0;
     public static final int TypeDate=1;
     public static final int TypeSecret=2;
     public static final int TypeJoin=3;
     public static final int TypeComplain=4;
     public static final int TypeAddComment=4;
+    private TextView timeTxt;
     private int PageType=0;
     private int imgItemWidth=0;
     private View addIconView;
@@ -74,6 +81,7 @@ public class QPublishAct extends QBaseActivity{
         inflater= LayoutInflater.from(this);
         int scrennWidth = getWindowManager().getDefaultDisplay().getWidth();
         imgItemWidth=(scrennWidth- (int)ScreenUtils.dpToPxInt(this, 20)-6)/4;
+
         initData();
     }
 
@@ -89,6 +97,12 @@ public class QPublishAct extends QBaseActivity{
             editText.setHint("写点什么描述约会内容");
             photoLayout.setVisibility(View.VISIBLE);
             dateLayout.setVisibility(View.VISIBLE);
+            initTimePicker();
+            timePickerLayout.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    dpd.show();
+                }
+            });
 
         } else if (PageType == TypeJoin) {
             _setHeaderTitle("开始报名");
@@ -114,7 +128,14 @@ public class QPublishAct extends QBaseActivity{
                     if (PageType == TypeTucao) {
                         addToRequestQueue(requestPublish, ApiList.TUCAO_Publish, true);
                     } else if (PageType == TypeDate) {
-                        addToRequestQueue(requestDatePublish, ApiList.DATE_Publish, true);
+                        if(timeTxt.getText().length()==0){
+                            ToastUtils.show(getApplicationContext(), "请选择日期");
+                        }else if(titleEdt.getText().length()==0){
+                            ToastUtils.show(getApplicationContext(), "请输入主题");
+                        }else if(AddrEdt.getText().length()==0){
+                            ToastUtils.show(getApplicationContext(), "请输入地址");
+                        }else
+                            addToRequestQueue(requestDatePublish, ApiList.DATE_Publish, true);
                     } else if (PageType == TypeJoin) {
 
                     } else if (PageType == TypeSecret) {
@@ -136,6 +157,9 @@ public class QPublishAct extends QBaseActivity{
 
     @Override
     protected void initView() {
+        timeTxt=(TextView)findViewById(R.id.timeTxt);
+        AddrEdt=(EditText)findViewById(R.id.AddrEdt);
+        titleEdt=(EditText)findViewById(R.id.titleEdt);
         editText=(EditText)findViewById(R.id.publishTxt);
         complainEdt=(EditText)findViewById(R.id.complainEdt);
         photoLayout=(LinearLayout)findViewById(R.id.photoLayout);
@@ -144,6 +168,7 @@ public class QPublishAct extends QBaseActivity{
         copyLayout=(RelativeLayout)findViewById(R.id.copyLayout);
         roleSelectLayout=(RelativeLayout)findViewById(R.id.roleSelectLayout);
         complainLayout=(RelativeLayout)findViewById(R.id.complainLayout);
+        timePickerLayout=(RelativeLayout)findViewById(R.id.timePickerLayout);
     }
 
     View.OnClickListener listener=new View.OnClickListener(){
@@ -162,10 +187,10 @@ public class QPublishAct extends QBaseActivity{
     @Override
     public void doResponse(Object response) {
         final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-        if (StringUtils.isEquals(requestMethod, ApiList.TUCAO_Publish)) {
+//        if (StringUtils.isEquals(requestMethod, ApiList.TUCAO_Publish)) {
             ToastUtils.show(this, "提交成功");
             finish();
-        }
+//        }
 
     }
 
@@ -264,6 +289,21 @@ public class QPublishAct extends QBaseActivity{
         anima.start();
     }
 
+    private DatePickerDialog dpd=null;
+    void initTimePicker(){
+        DatePickerDialog.OnDateSetListener otsl=new DatePickerDialog.OnDateSetListener(){
+            public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
+                timeTxt.setText(+year+"-"+(monthOfYear+1)+"-"+dayOfMonth);
+                dpd.dismiss();
+            }
+        };
+        Calendar calendar=Calendar.getInstance(TimeZone.getDefault());
+        int year=calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int day=calendar.get(Calendar.DAY_OF_MONTH);
+        dpd=new DatePickerDialog(this,otsl,year,month,day);
+    }
+
     @Override
     protected void initHandler() {
         requestPublish = new StringRequest(Request.Method.POST, ApiList.TUCAO_Publish, this, this) {
@@ -297,8 +337,8 @@ public class QPublishAct extends QBaseActivity{
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("content", String.valueOf(editText.getText().toString()));
-                map.put("beginTime", "2015-9-3 12:50");
-                map.put("address", "世界尽头");
+                map.put("beginTime", timeTxt.getText().toString());
+                map.put("address", AddrEdt.getText().toString());
                 map.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
                 map.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
                 return map;
