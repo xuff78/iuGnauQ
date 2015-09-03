@@ -85,6 +85,7 @@ public class TucaoMianFrg extends QBaseFragment {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(getActivity(), QPublishAct.class);
+                intent.putExtra("RequestType", QPublishAct.RequestPublish);
                 intent.putExtra("PageType", PageType);
                 startActivity(intent);
             }

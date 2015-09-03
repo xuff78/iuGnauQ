@@ -104,7 +104,8 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
                     public void onClick(View view) {
 
                         Intent intent = new Intent(act, QPublishAct.class);
-                        intent.putExtra("PageType", QPublishAct.TypeJoin);
+                        intent.putExtra("RequestType", QPublishAct.RequestJoin);
+                        intent.putExtra("PageType", QPublishAct.TypeDate);
                         act.startActivity(intent);
                     }
                 });

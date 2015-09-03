@@ -55,19 +55,23 @@ public class QPublishAct extends QBaseActivity{
     private EditText editText, complainEdt, titleEdt, AddrEdt;
     private LinearLayout photoLayout, dateLayout;
     private RelativeLayout copyLayout, roleSelectLayout, shareLayout, complainLayout, timePickerLayout;
+
+    private int PageType=0;
     public static final int TypeTucao=0;
     public static final int TypeDate=1;
     public static final int TypeSecret=2;
-    public static final int TypeJoin=3;
-    public static final int TypeComplain=4;
-    public static final int TypeAddComment=4;
+
+    private int RequestType=0;
+    public static final int RequestPublish=0;
+    public static final int RequestComplain=1;
+    public static final int RequestAddComment=2;
+    public static final int RequestJoin=3;
     private TextView timeTxt;
-    private int PageType=0;
     private int imgItemWidth=0;
     private View addIconView;
     private LayoutInflater inflater;
 //    private NoteInfo note;
-    private StringRequest requestPublish, requestDatePublish;
+    private StringRequest requestPublish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +80,7 @@ public class QPublishAct extends QBaseActivity{
 
 //        note= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
         PageType=getIntent().getIntExtra("PageType", 0);
-
+        RequestType=getIntent().getIntExtra("RequestType", 0);
 
         inflater= LayoutInflater.from(this);
         int scrennWidth = getWindowManager().getDefaultDisplay().getWidth();
@@ -86,73 +90,54 @@ public class QPublishAct extends QBaseActivity{
     }
 
     private void initData() {
-        if (PageType == TypeTucao) {
+        if (PageType == TypeTucao&&RequestType==RequestPublish) {
             _setHeaderTitle("开始发布");
             photoLayout.setVisibility(View.VISIBLE);
             shareLayout.setVisibility(View.VISIBLE);
             copyLayout.setVisibility(View.VISIBLE);
 
-        } else if (PageType == TypeDate) {
+        } else if (PageType == TypeDate&&RequestType==RequestPublish) {
             _setHeaderTitle("开始约会");
             editText.setHint("写点什么描述约会内容");
             photoLayout.setVisibility(View.VISIBLE);
             dateLayout.setVisibility(View.VISIBLE);
             initTimePicker();
+
             timePickerLayout.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     dpd.show();
                 }
             });
 
-        } else if (PageType == TypeJoin) {
-            _setHeaderTitle("开始报名");
-            shareLayout.setVisibility(View.VISIBLE);
-
-        } else if (PageType == TypeSecret) {
+        } else if (PageType == TypeSecret&&RequestType==RequestPublish) {
             _setHeaderTitle("秘密发布");
             photoLayout.setVisibility(View.VISIBLE);
             shareLayout.setVisibility(View.VISIBLE);
             roleSelectLayout.setVisibility(View.VISIBLE);
 
-        } else if (PageType == TypeComplain){
+        }else if (RequestType == RequestJoin) {
+            _setHeaderTitle("开始报名");
+            shareLayout.setVisibility(View.VISIBLE);
+
+        }  else if (RequestType == RequestComplain){
             _setHeaderTitle("投诉");
             editText.setHint("请输入要投诉的内容");
             photoLayout.setVisibility(View.VISIBLE);
             complainLayout.setVisibility(View.VISIBLE);
+        } else if (RequestType == RequestAddComment){
+
+        }
+        if(RequestType!=RequestJoin){
+            setAddView();
+            seImageView("");
         }
         _setRightHomeGone();
         _setRightHomeText("发布", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editText.getText().length() > 0) {
-                    if (PageType == TypeTucao) {
-                        addToRequestQueue(requestPublish, ApiList.TUCAO_Publish, true);
-                    } else if (PageType == TypeDate) {
-                        if(timeTxt.getText().length()==0){
-                            ToastUtils.show(getApplicationContext(), "请选择日期");
-                        }else if(titleEdt.getText().length()==0){
-                            ToastUtils.show(getApplicationContext(), "请输入主题");
-                        }else if(AddrEdt.getText().length()==0){
-                            ToastUtils.show(getApplicationContext(), "请输入地址");
-                        }else
-                            addToRequestQueue(requestDatePublish, ApiList.DATE_Publish, true);
-                    } else if (PageType == TypeJoin) {
-
-                    } else if (PageType == TypeSecret) {
-
-                    } else if (PageType == TypeComplain) {
-
-                    } else if (PageType == TypeAddComment) {
-
-                    }
-                }else
-                    ToastUtils.show(getApplicationContext(), "请输入内容");
+                createHandler();
             }
         });
-        if(PageType!=TypeJoin){
-            setAddView();
-            seImageView("");
-        }
     }
 
     @Override
@@ -169,6 +154,11 @@ public class QPublishAct extends QBaseActivity{
         roleSelectLayout=(RelativeLayout)findViewById(R.id.roleSelectLayout);
         complainLayout=(RelativeLayout)findViewById(R.id.complainLayout);
         timePickerLayout=(RelativeLayout)findViewById(R.id.timePickerLayout);
+    }
+
+    @Override
+    protected void initHandler() {
+
     }
 
     View.OnClickListener listener=new View.OnClickListener(){
@@ -304,9 +294,44 @@ public class QPublishAct extends QBaseActivity{
         dpd=new DatePickerDialog(this,otsl,year,month,day);
     }
 
-    @Override
-    protected void initHandler() {
-        requestPublish = new StringRequest(Request.Method.POST, ApiList.TUCAO_Publish, this, this) {
+    private void createHandler(){
+        if (editText.getText().length() > 0) {
+            if(RequestType == RequestPublish){
+                if (PageType == TypeTucao) {
+                    Map<String, String> params=new HashMap<>();
+                    startRequest(ApiList.DATE_Publish, params);
+                } else if (PageType == TypeDate) {
+                    if (timeTxt.getText().length() == 0) {
+                        ToastUtils.show(getApplicationContext(), "请选择日期");
+                    } else if (titleEdt.getText().length() == 0) {
+                        ToastUtils.show(getApplicationContext(), "请输入主题");
+                    } else if (AddrEdt.getText().length() == 0) {
+                        ToastUtils.show(getApplicationContext(), "请输入地址");
+                    } else {
+                        Map<String, String> params=new HashMap<>();
+                        params.put("beginTime", timeTxt.getText().toString());
+                        params.put("address", AddrEdt.getText().toString());
+                        startRequest(ApiList.DATE_Publish, params);
+                    }
+                } else if (PageType == TypeSecret) {
+                    Map<String, String> params=new HashMap<>();
+                    params.put("avatar", "http://img0.tuicool.com/IRv6bi.jpg");
+                    startRequest(ApiList.SECRET_Publish, params);
+                }
+            } else if (RequestType == RequestJoin) {
+                addToRequestQueue(requestPublish, ApiList.SECRET_Publish, true);
+            } else if (RequestType == RequestComplain) {
+
+            } else if (RequestType == RequestAddComment) {
+
+            }
+
+        }else
+            ToastUtils.show(getApplicationContext(), "请输入内容");
+    }
+
+    private void startRequest(String method, final Map<String, String> mapparams){
+        requestPublish = new StringRequest(Request.Method.POST, method, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -317,33 +342,14 @@ public class QPublishAct extends QBaseActivity{
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
+                Map<String, String> map = mapparams;
                 map.put("content", String.valueOf(editText.getText().toString()));
                 map.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
                 map.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
                 return map;
             }
         };
-        requestDatePublish = new StringRequest(Request.Method.POST, ApiList.DATE_Publish, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QPublishAct.this, "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("content", String.valueOf(editText.getText().toString()));
-                map.put("beginTime", timeTxt.getText().toString());
-                map.put("address", AddrEdt.getText().toString());
-                map.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
-                map.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
-                return map;
-            }
-        };
+        addToRequestQueue(requestPublish, method, true);
     }
 
 }

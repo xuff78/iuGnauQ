@@ -52,7 +52,8 @@ public class ApiList {
     public static String DATE_AddLike = BASE_API + "1/dating/addLike";
 
     //秘密
-    public static String SECRET_Publish = BASE_API + " 1/secret/publish";
+    public static String SECRET_Avatars = BASE_API + "1/secret/avatarList";
+    public static String SECRET_Publish = BASE_API + "1/secret/publish";
     public static String SECRET_Friend = BASE_API + "1/secret/friend";
     public static String SECRET_Nearby = BASE_API + "1/secret/nearby";
     public static String SECRET_Detail = BASE_API + "1/secret/detail/";
