@@ -30,6 +30,7 @@ import com.xj.guanquan.adapter.TuCaoAdapter;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.fragment.roast.Photo9Layout;
 import com.xj.guanquan.model.NoteInfo;
 import com.xj.guanquan.model.PageInfo;
 import com.xj.guanquan.model.UserInfo;
@@ -72,6 +73,7 @@ public class QPublishAct extends QBaseActivity{
     private LayoutInflater inflater;
 //    private NoteInfo note;
     private StringRequest requestPublish;
+    private String Avatar=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +98,16 @@ public class QPublishAct extends QBaseActivity{
             photoLayout.setVisibility(View.VISIBLE);
             shareLayout.setVisibility(View.VISIBLE);
             copyLayout.setVisibility(View.VISIBLE);
-
+            setAddView();
+            seImageView("");
         } else if (PageType == TypeDate&&RequestType==RequestPublish) {
             _setHeaderTitle("开始约会");
             editText.setHint("写点什么描述约会内容");
             photoLayout.setVisibility(View.VISIBLE);
             dateLayout.setVisibility(View.VISIBLE);
+            setAddView();
+            seImageView("");
             initTimePicker();
-
             timePickerLayout.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     dpd.show();
@@ -116,7 +120,8 @@ public class QPublishAct extends QBaseActivity{
             photoLayout.setVisibility(View.VISIBLE);
             shareLayout.setVisibility(View.VISIBLE);
             roleSelectLayout.setVisibility(View.VISIBLE);
-
+            Map<String, String> params=new HashMap<>();
+            startRequest(ApiList.SECRET_Avatar, params);
         }else if (RequestType == RequestJoin) {
             _setHeaderTitle("开始报名");
             editText.setHint("写点什么描述报名内容");
@@ -129,10 +134,6 @@ public class QPublishAct extends QBaseActivity{
             complainLayout.setVisibility(View.VISIBLE);
         } else if (RequestType == RequestAddComment){
 
-        }
-        if(RequestType!=RequestJoin){
-            setAddView();
-            seImageView("");
         }
         _setRightHomeGone();
         _setRightHomeText("发布", new View.OnClickListener() {
@@ -178,13 +179,36 @@ public class QPublishAct extends QBaseActivity{
         }
     };
 
+    String[] avatarImgs=null;
+
     @Override
     public void doResponse(Object response) {
         final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-//        if (StringUtils.isEquals(requestMethod, ApiList.TUCAO_Publish)) {
+        if (StringUtils.isEquals(requestMethod, ApiList.SECRET_Avatar)){
+            JSONObject data=new JSONObject(result.getData());
+            JSONArray array=data.getJSONArray("content");
+            avatarImgs=new String[array.size()];
+            for(int i=0;i<array.size();i++){
+                avatarImgs[i]=array.getString(i);
+            }
+            int width=(int)ScreenUtils.dpToPx(this,200);
+            RelativeLayout.LayoutParams rlp =new  RelativeLayout.LayoutParams(width, -2);
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            Photo9Layout roles=new Photo9Layout(this,width, avatarImgs);
+            roles.setLayoutParams(rlp);
+            roleSelectLayout.addView(roles);
+            roles.setImgCallback(new Photo9Layout.ClickListener(){
+
+                @Override
+                public void onClick(View v, int position) {
+                    Avatar=avatarImgs[position];
+                }
+            });
+
+        }else{
             ToastUtils.show(this, "提交成功");
             finish();
-//        }
+        }
 
     }
 
@@ -303,7 +327,7 @@ public class QPublishAct extends QBaseActivity{
             if(RequestType == RequestPublish){
                 if (PageType == TypeTucao) {
                     Map<String, String> params=new HashMap<>();
-                    startRequest(ApiList.DATE_Publish, params);
+                    startRequest(ApiList.TUCAO_Publish, params);
                 } else if (PageType == TypeDate) {
                     if (timeTxt.getText().length() == 0) {
                         ToastUtils.show(getApplicationContext(), "请选择日期");
@@ -318,9 +342,13 @@ public class QPublishAct extends QBaseActivity{
                         startRequest(ApiList.DATE_Publish, params);
                     }
                 } else if (PageType == TypeSecret) {
-                    Map<String, String> params=new HashMap<>();
-                    params.put("avatar", "http://img0.tuicool.com/IRv6bi.jpg");
-                    startRequest(ApiList.SECRET_Publish, params);
+                    if(Avatar!=null&&Avatar.length()>0) {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("avatar", Avatar);
+                        startRequest(ApiList.SECRET_Publish, params);
+                    }else{
+                        ToastUtils.show(getApplicationContext(), "请选择角色");
+                    }
                 }
             } else if (RequestType == RequestJoin) {
 //                Map<String, String> params=new HashMap<>();

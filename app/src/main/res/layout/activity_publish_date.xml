@@ -162,7 +162,8 @@
         <RelativeLayout
             android:id="@+id/roleSelectLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dip"
+            android:layout_height="wrap_content"
+            android:minHeight="50dip"
             android:visibility="gone">
 
             <TextView
@@ -172,15 +173,14 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dip"
                 android:text="角色选择" />
-
-            <View
+            <!--<View
                 android:id="@+id/roleImg"
                 android:layout_width="45dip"
                 android:layout_height="45dip"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dip"
-                android:background="@mipmap/xiaotouxiang2" />
+                android:background="@mipmap/xiaotouxiang2" />-->
 
             <View
                 android:layout_width="wrap_content"

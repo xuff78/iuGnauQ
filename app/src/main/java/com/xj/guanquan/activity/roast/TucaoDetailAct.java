@@ -83,7 +83,15 @@ public class TucaoDetailAct extends QBaseActivity {
 
         int scrennWidth = getWindowManager().getDefaultDisplay().getWidth();
         initData();
-        addToRequestQueue(request, true);
+        NoteInfo noteinfo= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
+        Map<String, String> params=new HashMap<>();
+        if (PageType == QPublishAct.TypeTucao) {
+            startRequest(ApiList.TUCAO_Detail+noteinfo.getId(), params);
+        } else if (PageType == QPublishAct.TypeDate) {
+            startRequest(ApiList.DATE_Detail+noteinfo.getId(), params);
+        }else if (PageType == QPublishAct.TypeSecret) {
+            startRequest(ApiList.SECRET_Detail+noteinfo.getId(), params);
+        }
     }
 
     private void initData() {
@@ -157,5 +165,26 @@ public class TucaoDetailAct extends QBaseActivity {
     public void onErrorResponse(VolleyError error) {
         super.onErrorResponse(error);
         swipeRefresh.setRefreshing(false);
+    }
+
+    private void startRequest(String method, final Map<String, String> mapparams){
+        StringRequest requestForList = new StringRequest(Request.Method.POST, method, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(TucaoDetailAct.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = mapparams;
+                map.put("lng", PreferencesUtils.getString(TucaoDetailAct.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(TucaoDetailAct.this, "lat"));
+                return map;
+            }
+        };
+        addToRequestQueue(requestForList, method, true);
     }
 }

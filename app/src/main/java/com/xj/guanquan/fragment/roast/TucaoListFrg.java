@@ -57,10 +57,10 @@ public class TucaoListFrg extends QBaseFragment {
     private RelativeLayout menuLayout;
     private MoveLineView moveHighlight;
     private int PageType =0;
-    private StringRequest requestLeftTucao, requestRightTucao, requestLeftDate, requestRightDate, requestLeftSecret, requestRightSecret;
     private int currentPage = 1;
     private int numPerPage = 20;
     private boolean notNear=true;
+    private boolean loadComplete=false;
 
     public static TucaoListFrg newInstance(int PageType) {
         TucaoListFrg fragment = new TucaoListFrg();
@@ -118,6 +118,7 @@ public class TucaoListFrg extends QBaseFragment {
                 mAdapter.isLoadMore(true);
                 currentPage=1;
                 doRequest(false);
+
             }
         });
 
@@ -128,11 +129,16 @@ public class TucaoListFrg extends QBaseFragment {
             public void onScrollStateChanged(RecyclerView recyclerView,
                                              int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem + 1 == mAdapter.getItemCount()) {
-                    mAdapter.isLoadMore(true);
-                    currentPage++;
-                    doRequest(false);
+                if(mAdapter!=null) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE
+                            && lastVisibleItem + 1 == mAdapter.getItemCount()) {
+
+                        if(!loadComplete) {
+                            mAdapter.isLoadMore(true);
+                            currentPage++;
+                            doRequest(false);
+                        }
+                    }
                 }
             }
 
@@ -156,14 +162,18 @@ public class TucaoListFrg extends QBaseFragment {
             Intent intent=null;
             switch (v.getId()){
                 case R.id.favorBtn:
-                    Map<String, String> params=new HashMap<>();
-                    params.put("id", notes.get(position).getId()+"");
-                    if (PageType == QPublishAct.TypeTucao) {
-                        startRequest(ApiList.TUCAO_AddLike, params);
-                    } else if (PageType == QPublishAct.TypeDate) {
-                        startRequest(ApiList.DATE_AddLike, params);
-                    }else if (PageType == QPublishAct.TypeSecret) {
-                        startRequest(ApiList.SECRET_AddLike, params);
+                    if(notes.get(position).getIsLike()==0) {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("id", notes.get(position).getId() + "");
+                        if (PageType == QPublishAct.TypeTucao) {
+                            startRequest(ApiList.TUCAO_AddLike, params);
+                        } else if (PageType == QPublishAct.TypeDate) {
+                            startRequest(ApiList.DATE_AddLike, params);
+                        } else if (PageType == QPublishAct.TypeSecret) {
+                            startRequest(ApiList.SECRET_AddLike, params);
+                        }
+                    }else{
+                        ToastUtils.show(getActivity(), "此条已赞");
                     }
                     break;
                 case R.id.replyNums:
@@ -210,28 +220,31 @@ public class TucaoListFrg extends QBaseFragment {
     };
 
     private  void doRequest(boolean showDialog){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("currentPage", String.valueOf(currentPage));
+        params.put("numPerPage", String.valueOf(numPerPage));
         if(notNear) {
             switch (PageType){
                 case 0:
-                    addToRequestQueue(requestLeftTucao, ApiList.TUCAO_Friend, showDialog);
+                    startRequest(ApiList.TUCAO_Friend, params);
                     break;
                 case 1:
-                    addToRequestQueue(requestLeftDate, ApiList.DATE_Friend, showDialog);
+                    startRequest(ApiList.DATE_Friend, params);
                     break;
                 case 2:
-                    addToRequestQueue(requestLeftSecret, ApiList.SECRET_Friend, showDialog);
+                    startRequest(ApiList.SECRET_Friend, params);
                     break;
             }
         }else {
             switch (PageType){
                 case 0:
-                    addToRequestQueue(requestRightTucao, ApiList.TUCAO_Nearby, showDialog);
+                    startRequest(ApiList.TUCAO_Nearby, params);
                     break;
                 case 1:
-                    addToRequestQueue(requestRightDate, ApiList.DATE_Nearby, showDialog);
+                    startRequest(ApiList.DATE_Nearby, params);
                     break;
                 case 2:
-                    addToRequestQueue(requestRightSecret, ApiList.SECRET_Nearby, showDialog);
+                    startRequest(ApiList.SECRET_Nearby, params);
                     break;
             }
         }
@@ -271,12 +284,13 @@ public class TucaoListFrg extends QBaseFragment {
                     mRecyclerView.setAdapter(mAdapter);
                 } else {
                     notes.addAll(resultData);
-                    mAdapter.isLoadMore(false);
                     mAdapter.notifyDataSetChanged();
                 }
                 if (pageInfo.getCurrentPage() < pageInfo.getTotalPage()) {
                     mAdapter.isLoadMore(true);
-                }
+                    loadComplete=true;
+                }else
+                    mAdapter.isLoadMore(false);
             }
         }
 
@@ -318,125 +332,6 @@ public class TucaoListFrg extends QBaseFragment {
     };
 
     private void initHandler() {
-        requestLeftTucao = new StringRequest(Request.Method.POST, ApiList.TUCAO_Friend, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("currentPage", String.valueOf(currentPage));
-                map.put("numPerPage", String.valueOf(numPerPage));
-                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
-                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
-                return map;
-            }
-        };
-
-        requestRightTucao = new StringRequest(Request.Method.POST, ApiList.TUCAO_Nearby, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("currentPage", String.valueOf(currentPage));
-                map.put("numPerPage", String.valueOf(numPerPage));
-                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
-                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
-                return map;
-            }
-        };
-
-        requestLeftDate = new StringRequest(Request.Method.POST, ApiList.DATE_Friend, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("currentPage", String.valueOf(currentPage));
-                map.put("numPerPage", String.valueOf(numPerPage));
-                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
-                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
-                return map;
-            }
-        };
-
-        requestRightDate = new StringRequest(Request.Method.POST, ApiList.DATE_Nearby, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("currentPage", String.valueOf(currentPage));
-                map.put("numPerPage", String.valueOf(numPerPage));
-                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
-                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
-                return map;
-            }
-        };
-
-        requestLeftSecret = new StringRequest(Request.Method.POST, ApiList.SECRET_Friend, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("currentPage", String.valueOf(currentPage));
-                map.put("numPerPage", String.valueOf(numPerPage));
-                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
-                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
-                return map;
-            }
-        };
-
-        requestRightSecret = new StringRequest(Request.Method.POST, ApiList.SECRET_Friend, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("currentPage", String.valueOf(currentPage));
-                map.put("numPerPage", String.valueOf(numPerPage));
-                map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
-                map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
-                return map;
-            }
-        };
     }
 
     private void startRequest(String method, final Map<String, String> mapparams){
