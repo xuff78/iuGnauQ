@@ -358,11 +358,11 @@ public class QPublishAct extends QBaseActivity{
                 Map<String, String> params=new HashMap<>();
                 String userphone=complainPhoneEdt.getText().toString();
                 String useremail=complainEmailEdt.getText().toString();
-                if(userphone.length()==0&&useremail.length()==0) {
+                if(userphone.length()!=0||useremail.length()!=0) {
                     NoteInfo noteinfo= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
                     params.put("phone", userphone);
                     params.put("email", useremail);
-                    params.put("id", noteinfo.getId()+"");
+                    params.put("id", noteinfo.getId() + "");
                     if (PageType == TypeTucao) {
                         startRequest(ApiList.TUCAO_AddComplain, params);
                     } else if (PageType == TypeDate) {
@@ -370,7 +370,8 @@ public class QPublishAct extends QBaseActivity{
                     }else if (PageType == TypeSecret) {
                         startRequest(ApiList.SECRET_AddComplain, params);
                     }
-                }
+                }else
+                    ToastUtils.show(getApplicationContext(), "请至少填写一个联系方式");
             } else if (RequestType == RequestAddComment) {
                 NoteInfo noteinfo= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
                 Map<String, String> params=new HashMap<>();
