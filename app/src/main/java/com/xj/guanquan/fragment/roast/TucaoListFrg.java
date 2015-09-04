@@ -172,6 +172,8 @@ public class TucaoListFrg extends QBaseFragment {
                         } else if (PageType == QPublishAct.TypeSecret) {
                             startRequest(ApiList.SECRET_AddLike, params);
                         }
+                        notes.get(position).setIsLike(1);
+                        mAdapter.notifyDataSetChanged();
                     }else{
                         ToastUtils.show(getActivity(), "此条已赞");
                     }
