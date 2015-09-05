@@ -13,7 +13,7 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file("E:\\个人资料\\android_self.jks")
+            storeFile file("D:\\android_self.jks")
             storePassword "123456"
             keyAlias "eric_ji"
             keyPassword "123456"
@@ -21,7 +21,7 @@ android {
         }
 
         release {
-            storeFile file("E:\\个人资料\\android_self.jks")
+            storeFile file("D:\\android_self.jks")
             storePassword "123456"
             keyAlias "eric_ji"
             keyPassword "123456"

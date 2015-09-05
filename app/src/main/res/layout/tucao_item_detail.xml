@@ -120,6 +120,7 @@
                 android:src="@mipmap/gengduo" />
             </LinearLayout>
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="25dip"
                     android:id="@+id/hideMenuLayout"

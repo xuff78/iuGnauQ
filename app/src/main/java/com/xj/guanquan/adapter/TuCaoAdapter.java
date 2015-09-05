@@ -204,9 +204,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 		anim.setAnimationListener(new Animation.AnimationListener() {
 			@Override
 			public void onAnimationStart(Animation animation) {
-				if(!isShown){
-					view.setVisibility(View.VISIBLE);
-				}
+
 			}
 
 			@Override
@@ -222,6 +220,9 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 			}
 		});
+		if(!isShown){
+			view.setVisibility(View.VISIBLE);
+		}
 		view.startAnimation(anim);
 		view.invalidate();
 	}

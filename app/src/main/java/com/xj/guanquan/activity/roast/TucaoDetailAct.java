@@ -139,7 +139,7 @@ public class TucaoDetailAct extends QBaseActivity {
 //        PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             JSONObject obj=result.getData().getJSONObject("content");
-            if (obj.getJSONArray("commentList") != null) {
+            if (obj!=null&&obj.getJSONArray("commentList") != null) {
                 List<TucaoCommentInfo> resultData = JSONArray.parseArray(obj.getJSONArray("commentList").toJSONString(), TucaoCommentInfo.class);
                 if (currentPage == 1) {
                     swipeRefresh.setRefreshing(false);

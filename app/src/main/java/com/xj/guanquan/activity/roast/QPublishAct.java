@@ -133,7 +133,8 @@ public class QPublishAct extends QBaseActivity{
             photoLayout.setVisibility(View.VISIBLE);
             complainLayout.setVisibility(View.VISIBLE);
         } else if (RequestType == RequestAddComment){
-
+            _setHeaderTitle("回复");
+            editText.setHint("想回复些什么");
         }
         _setRightHomeGone();
         _setRightHomeText("发布", new View.OnClickListener() {
