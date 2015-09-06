@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
-import com.xj.guanquan.activity.user.QLoginActivity;
 import com.xj.guanquan.activity.user.QSystemSetActivity;
 import com.xj.guanquan.activity.user.QVisitorListActivity;
 import com.xj.guanquan.common.QBaseActivity;
@@ -113,23 +112,12 @@ public class QMeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         final View clickView = v;
-        ((QBaseActivity) getActivity()).alertConfirmDialog("您还没有登录，是否先去登录呢?",
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((QBaseActivity) getActivity()).toActivity(QLoginActivity.class);
-                    }
-                }, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (clickView == systemArea) {
-                            ((QBaseActivity) getActivity()).toActivity(QSystemSetActivity.class);
-                        } else if (clickView == visitorArea) {
-                            ((QBaseActivity) getActivity()).toActivity(QVisitorListActivity.class);
-                        } else if (clickView == selfDataArea) {
-                            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class);
-                        }
-                    }
-                });
+        if (clickView == systemArea) {
+            ((QBaseActivity) getActivity()).toActivity(QSystemSetActivity.class);
+        } else if (clickView == visitorArea) {
+            ((QBaseActivity) getActivity()).toActivity(QVisitorListActivity.class);
+        } else if (clickView == selfDataArea) {
+            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class);
+        }
     }
 }

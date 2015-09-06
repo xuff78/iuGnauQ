@@ -199,7 +199,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 return map;
             }
         };
-        addToRequestQueue(request, ApiList.CANCE_FOLLOW, true);
+        addToRequestQueue(request, ApiList.USER_DETAIL, true);
     }
 
     @Override
@@ -310,7 +310,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 height.setText(content.getString("height"));
                 marriage.setText(content.getString("feelingStatus"));
                 String relationTxt = "";
-                switch (content.getInteger("relation")) {
+                switch (content.getIntValue("relation")) {
                     case 0:
                         relationTxt = "自己";
                         break;
