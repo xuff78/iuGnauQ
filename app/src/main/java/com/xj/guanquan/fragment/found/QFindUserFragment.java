@@ -67,7 +67,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
     private int currentPage = 1;
     private int numPerPage = 20;
     private Integer sex;
-    private Integer age;
+    private String age;
     private String height;
     private Integer carCert;
     private Integer finallyTime;
@@ -381,7 +381,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 111) {
             sex = (Integer) data.getSerializableExtra("sex");
-            age = (Integer) data.getSerializableExtra("age");
+            age = (String) data.getSerializableExtra("age");
             finallyTime = (Integer) data.getSerializableExtra("finallyTime");
             carCert = (Integer) data.getSerializableExtra("carCert");
             height = data.getStringExtra("height");

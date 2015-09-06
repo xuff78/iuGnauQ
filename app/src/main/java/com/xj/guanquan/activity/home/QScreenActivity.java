@@ -1,14 +1,28 @@
 package com.xj.guanquan.activity.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.model.KeyValue;
+
+import java.util.List;
+
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
 
 public class QScreenActivity extends QBaseActivity implements View.OnClickListener {
 
@@ -27,10 +41,18 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private Button confirmBtn;
 
     private Integer sex;
-    private Integer age;
+    private String age;
     private String height;
     private Integer carCert;
     private Integer finallyTime;
+
+    private AlertDialog selectDialog;
+    private NumberPicker selectPicker;
+    private List<KeyValue> valueList;
+    private KeyValue carValue;
+    private KeyValue heightValue;
+    private KeyValue ageValue;
+    private TextView selectView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +71,10 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
             }
         });
         initialize();
-
         sex = (Integer) getIntent().getSerializableExtra("sex");
-        age = (Integer) getIntent().getSerializableExtra("age");
-        finallyTime = (Integer) getIntent().getSerializableExtra("finallyTime");
+        age = (String) getIntent().getSerializableExtra("age");
         carCert = (Integer) getIntent().getSerializableExtra("carCert");
+        finallyTime = (Integer) getIntent().getSerializableExtra("finallyTime");
         height = getIntent().getStringExtra("height");
         if (sex == null)
             sex = 0;
@@ -90,6 +111,9 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         oneDay.setOnClickListener(this);
         moreDay.setOnClickListener(this);
         confirmBtn.setOnClickListener(this);
+        selectAge.setOnClickListener(this);
+        selectCar.setOnClickListener(this);
+        selectHeight.setOnClickListener(this);
     }
 
     @Override
@@ -113,6 +137,43 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
             setSelectTimeView(v);
         } else if (v == confirmBtn) {
             backPressed();
+        } else if (v == selectAge) {
+            selectView = ageText;
+            initSelectPicker("age");
+            ageValue = valueList.get(0);
+            selectPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    ageValue = valueList.get(newVal);
+                    ageText.setText(ageValue.getValue());
+                }
+            });
+            initAlertDialog("请选择年龄", selectPicker);
+        } else if (v == selectCar) {
+            selectView = car;
+            initSelectPicker("configuration");
+            carValue = valueList.get(0);
+            selectPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    carValue = valueList.get(newVal);
+                    car.setText(carValue.getValue());
+                }
+            });
+            initAlertDialog("请选择车认证", selectPicker);
+
+        } else if (v == selectHeight) {
+            selectView = heightText;
+            initSelectPicker("height");
+            heightValue = valueList.get(0);
+            selectPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    heightValue = valueList.get(newVal);
+                    heightText.setText(heightValue.getValue());
+                }
+            });
+            initAlertDialog("请选择身高", selectPicker);
         }
     }
 
@@ -167,11 +228,46 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private void backPressed() {
         Intent intent = new Intent();
         intent.putExtra("sex", sex);
-        intent.putExtra("age", age);
-        intent.putExtra("height", height);
-        intent.putExtra("carCert", carCert);
+        intent.putExtra("age", ageValue == null ? null : ageValue.getKey());
+        intent.putExtra("height", heightValue == null ? null : heightValue.getKey());
+        intent.putExtra("carCert", carValue == null ? null : carValue.getKey());
         intent.putExtra("finallyTime", finallyTime);
         setResult(111, intent);
         this.finish();
+    }
+
+    private void initAlertDialog(String message, View v) {
+        if (selectDialog != null && selectDialog.isShowing()) {
+            selectDialog.dismiss();
+        }
+        selectDialog = new AlertDialog.Builder(this, android.support.v7.appcompat.R.style.Base_Theme_AppCompat_Dialog_Alert)
+                .setMessage(message).setCancelable(true)
+                .setView(v)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectView.setText(valueList.get(0).getValue());
+                        selectDialog.cancel();
+                    }
+                }).create();
+        Window window = selectDialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.dialog_animations);
+        selectDialog.show();
+    }
+
+    private void initSelectPicker(String type) {
+        JSONObject content = JSONObject.parseObject(PreferencesUtils.getString(this, "data_dict"));
+        valueList = JSONArray.parseArray(content.getJSONArray(type).toJSONString(), KeyValue.class);
+        String[] values = new String[valueList.size()];
+        for (int i = 0; i < valueList.size(); i++) {
+            values[i] = valueList.get(i).getValue();
+        }
+        selectPicker = new NumberPicker(this);
+        selectPicker.setDisplayedValues(values);
+        selectPicker.setMinValue(0);
+        selectPicker.setMaxValue(values.length - 1);
+        selectPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        ((EditText) selectPicker.getChildAt(0)).setInputType(InputType.TYPE_NULL);
     }
 }
