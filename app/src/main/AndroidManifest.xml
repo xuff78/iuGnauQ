@@ -28,6 +28,13 @@
             android:name="com.amap.api.v2.apikey"
             android:value="51e165b40e9be4dd078f2b5672cb39a5" />
 
+        <!-- 设置环信应用的appkey -->
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="bacifang#guiquan" />
+        <!-- 声明sdk所需的service SDK核心功能-->
+        <service android:name="com.easemob.chat.EMChatService" />
+
         <service
             android:name=".common.LocationService"
             android:exported="true" />
@@ -46,7 +53,7 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activity.user.QLoginActivity"
-            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden"  />
+            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.user.QFindPwdActivity"
             android:label="@string/title_activity_qfind_pwd" />
