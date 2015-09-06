@@ -69,7 +69,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
     private Integer sex;
     private String age;
     private String height;
-    private Integer carCert;
+    private String carCert;
     private Integer finallyTime;
     private Boolean isLoadMore = false;
 
@@ -383,7 +383,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
             sex = (Integer) data.getSerializableExtra("sex");
             age = (String) data.getSerializableExtra("age");
             finallyTime = (Integer) data.getSerializableExtra("finallyTime");
-            carCert = (Integer) data.getSerializableExtra("carCert");
+            carCert = data.getStringExtra("carCert");
             height = data.getStringExtra("height");
             addToRequestQueue(request, true);
         }

@@ -43,7 +43,7 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private Integer sex;
     private String age;
     private String height;
-    private Integer carCert;
+    private String carCert;
     private Integer finallyTime;
 
     private AlertDialog selectDialog;
@@ -73,7 +73,7 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         initialize();
         sex = (Integer) getIntent().getSerializableExtra("sex");
         age = (String) getIntent().getSerializableExtra("age");
-        carCert = (Integer) getIntent().getSerializableExtra("carCert");
+        carCert = getIntent().getStringExtra("carCert");
         finallyTime = (Integer) getIntent().getSerializableExtra("finallyTime");
         height = getIntent().getStringExtra("height");
         if (sex == null)
