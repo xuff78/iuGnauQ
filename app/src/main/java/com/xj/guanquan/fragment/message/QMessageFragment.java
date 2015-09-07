@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
@@ -21,6 +24,9 @@ import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.model.MessageInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
 import java.util.List;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
@@ -47,6 +53,8 @@ public class QMessageFragment extends QBaseFragment {
     private int lastVisibleItem;
 
     private List<MessageInfo> messageInfoList;
+
+    private List<EMConversation> conversationList = new ArrayList<EMConversation>();
 
     /**
      * Use this factory method to create a new instance of
@@ -93,6 +101,7 @@ public class QMessageFragment extends QBaseFragment {
         messageRecycler.setItemAnimator(new DefaultItemAnimator());
 
         initData();
+        conversationList.addAll(loadConversationsWithRecentChat());
         //通用adapter设置数据
         mAdapter = new RecyclerViewAdapter(new String[]{"name", "lastMsg", "msgNum", "headImage", "time"}, R.layout.list_message_record_item, messageInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
@@ -191,6 +200,67 @@ public class QMessageFragment extends QBaseFragment {
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
     }
 
+    /**
+     * 获取所有会话
+     *
+     * @param context
+     * @return +
+     */
+    private List<EMConversation> loadConversationsWithRecentChat() {
+        // 获取所有会话，包括陌生人
+        Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
+        // 过滤掉messages size为0的conversation
+        /**
+         * 如果在排序过程中有新消息收到，lastMsgTime会发生变化
+         * 影响排序过程，Collection.sort会产生异常
+         * 保证Conversation在Sort过程中最后一条消息的时间不变
+         * 避免并发问题
+         */
+        List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
+        synchronized (conversations) {
+            for (EMConversation conversation : conversations.values()) {
+                if (conversation.getAllMessages().size() != 0) {
+                    //if(conversation.getType() != EMConversationType.ChatRoom){
+                    sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
+                    //}
+                }
+            }
+        }
+        try {
+            // Internal is TimSort algorithm, has bug
+            sortConversationByLastChatTime(sortList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<EMConversation> list = new ArrayList<EMConversation>();
+        for (Pair<Long, EMConversation> sortItem : sortList) {
+            list.add(sortItem.second);
+        }
+        return list;
+    }
+
+    /**
+     * 根据最后一条消息的时间排序
+     *
+     * @param usernames
+     */
+    private void sortConversationByLastChatTime(List<Pair<Long, EMConversation>> conversationList) {
+        Collections.sort(conversationList, new Comparator<Pair<Long, EMConversation>>() {
+            @Override
+            public int compare(final Pair<Long, EMConversation> con1, final Pair<Long, EMConversation> con2) {
+
+                if (con1.first == con2.first) {
+                    return 0;
+                } else if (con2.first > con1.first) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+
+        });
+    }
+
     private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private SimpleDraweeView headImage;
         private TextView name;
@@ -255,7 +325,7 @@ public class QMessageFragment extends QBaseFragment {
         @Override
         public void onClick(View v) {
             //处理RecyclerView的点击事件
-            startActivity(new Intent(getActivity(),QMsgDetailActivity.class));
+            startActivity(new Intent(getActivity(), QMsgDetailActivity.class));
         }
     }
 }

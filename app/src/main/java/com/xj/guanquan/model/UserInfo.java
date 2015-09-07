@@ -20,6 +20,10 @@ public class UserInfo extends EBaseModel {
     private String time;
     private String distance;
 
+    //环信属性
+    private Integer huanxinName;
+    private String huanxinPassword;
+
     public UserInfo() {
     }
 
@@ -117,5 +121,21 @@ public class UserInfo extends EBaseModel {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public Integer getHuanxinName() {
+        return huanxinName;
+    }
+
+    public void setHuanxinName(Integer huanxinName) {
+        this.huanxinName = huanxinName;
+    }
+
+    public String getHuanxinPassword() {
+        return huanxinPassword;
+    }
+
+    public void setHuanxinPassword(String huanxinPassword) {
+        this.huanxinPassword = huanxinPassword;
     }
 }

@@ -11,17 +11,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroupManager;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.home.QHomeActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.model.UserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
-import common.eric.com.ebaselibrary.util.StringUtils;
 
 /**
  * A login screen that offers login via email/password.
@@ -101,21 +104,47 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
         }
     }
 
+    private void loginChatServer(String userName, String password) {
+        EMChatManager.getInstance().login(userName, password, new EMCallBack() {//回调
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        EMGroupManager.getInstance().loadAllGroups();
+                        EMChatManager.getInstance().loadAllConversations();
+                        if (isStart) {
+                            toActivity(QHomeActivity.class);
+                        } else {
+                            setResult(999);
+                        }
+                        QLoginActivity.this.finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, final String message) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        alertDialog("登陆聊天服务器失败！错误信息：" + message, null);
+                    }
+                });
+            }
+        });
+    }
+
 
     @Override
-    public void onResponse(Object response) {
-        super.onResponse(response);
+    protected void doResponse(Object response) {
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
-            PreferencesUtils.putString(QLoginActivity.this, "loginData", (String) response);
-            if (isStart) {
-                toActivity(QHomeActivity.class);
-            } else {
-                setResult(999);
-            }
-            QLoginActivity.this.finish();
-        } else {
-            alertDialog(result.getMsg(), null);
-        }
+        PreferencesUtils.putString(QLoginActivity.this, "loginData", (String) response);
+        UserInfo userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
+        loginChatServer(String.valueOf(userInfo.getHuanxinName()), userInfo.getHuanxinPassword());
     }
 }
