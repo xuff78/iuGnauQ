@@ -1,5 +1,7 @@
 package com.xj.guanquan.model;
 
+import android.text.Spannable;
+
 import common.eric.com.ebaselibrary.model.EBaseModel;
 
 /**
@@ -10,12 +12,12 @@ public class MessageInfo extends EBaseModel {
     private String headImage;
     private Integer msgNum;
     private String time;
-    private String lastMsg;
+    private Spannable lastMsg;
 
     public MessageInfo() {
     }
 
-    public MessageInfo(String name, String headImage, Integer msgNum, String time, String lastMsg) {
+    public MessageInfo(String name, String headImage, Integer msgNum, String time, Spannable lastMsg) {
         this.name = name;
         this.headImage = headImage;
         this.msgNum = msgNum;
@@ -55,11 +57,12 @@ public class MessageInfo extends EBaseModel {
         this.time = time;
     }
 
-    public String getLastMsg() {
+    public void setLastMsg(Spannable lastMsg) {
+        this.lastMsg = lastMsg;
+    }
+
+    public Spannable getLastMsg() {
         return lastMsg;
     }
 
-    public void setLastMsg(String lastMsg) {
-        this.lastMsg = lastMsg;
-    }
 }

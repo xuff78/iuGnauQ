@@ -1,5 +1,6 @@
 package com.xj.guanquan.fragment.message;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +19,32 @@ import android.widget.TextView;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.ImageMessageBody;
+import com.easemob.chat.TextMessageBody;
+import com.easemob.util.DateUtils;
+import com.easemob.util.EMLog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
+import com.xj.guanquan.common.Constant;
+import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
+import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,9 +114,16 @@ public class QMessageFragment extends QBaseFragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         messageRecycler.setLayoutManager(mLayoutManager);
         messageRecycler.setItemAnimator(new DefaultItemAnimator());
-
-        initData();
+        messageInfoList = new ArrayList<MessageInfo>();
         conversationList.addAll(loadConversationsWithRecentChat());
+        for (EMConversation conversation : conversationList) {
+            MessageInfo messageInfo = new MessageInfo(conversation.getUserName(),
+                    "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg",
+                    conversation.getUnreadMsgCount(),
+                    DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
+                    SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
+            messageInfoList.add(messageInfo);
+        }
         //通用adapter设置数据
         mAdapter = new RecyclerViewAdapter(new String[]{"name", "lastMsg", "msgNum", "headImage", "time"}, R.layout.list_message_record_item, messageInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
@@ -116,6 +138,10 @@ public class QMessageFragment extends QBaseFragment {
                     TextView tv = (TextView) view;
                     tv.setText("[" + (Integer) data + "]");
                     return true;
+                } else if (view instanceof TextView && data instanceof Spannable) {
+                    TextView tv = (TextView) view;
+                    Spannable spannable = (Spannable) data;
+                    tv.setText(spannable, TextView.BufferType.SPANNABLE);
                 }
                 return false;
             }
@@ -133,13 +159,8 @@ public class QMessageFragment extends QBaseFragment {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefresh.setRefreshing(false);
-                        mAdapter.isLoadMore(true);
-                    }
-                }, 2000);
+                refresh();
+                swipeRefresh.setRefreshing(false);
             }
         });
 
@@ -170,22 +191,6 @@ public class QMessageFragment extends QBaseFragment {
         });
     }
 
-    private void initData() {
-        messageInfoList = new ArrayList<MessageInfo>();
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-        messageInfoList.add(new MessageInfo("小明", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", 25, "下午12:57", "下个周三见面吧，小宇告诉我们下个周有个非常重要的事情"));
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -203,7 +208,6 @@ public class QMessageFragment extends QBaseFragment {
     /**
      * 获取所有会话
      *
-     * @param context
      * @return +
      */
     private List<EMConversation> loadConversationsWithRecentChat() {
@@ -241,8 +245,6 @@ public class QMessageFragment extends QBaseFragment {
 
     /**
      * 根据最后一条消息的时间排序
-     *
-     * @param usernames
      */
     private void sortConversationByLastChatTime(List<Pair<Long, EMConversation>> conversationList) {
         Collections.sort(conversationList, new Comparator<Pair<Long, EMConversation>>() {
@@ -259,6 +261,113 @@ public class QMessageFragment extends QBaseFragment {
             }
 
         });
+    }
+
+    /**
+     * 刷新页面
+     */
+    public void refresh() {
+        conversationList.clear();
+        messageInfoList.clear();
+        conversationList.addAll(loadConversationsWithRecentChat());
+        for (EMConversation conversation : conversationList) {
+            MessageInfo messageInfo = new MessageInfo(conversation.getUserName(),
+                    "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg",
+                    conversation.getUnreadMsgCount(),
+                    DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
+                    SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
+            messageInfoList.add(messageInfo);
+        }
+        if (mAdapter != null)
+            mAdapter.setData(messageInfoList);
+        mAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * 根据消息内容和消息类型获取消息内容提示
+     *
+     * @param message
+     * @param context
+     * @return
+     */
+    private String getMessageDigest(EMMessage message, Context context) {
+        String digest = "";
+        switch (message.getType()) {
+            case LOCATION: // 位置消息
+                if (message.direct == EMMessage.Direct.RECEIVE) {
+                    // 从sdk中提到了ui中，使用更简单不犯错的获取string的方法
+                    // digest = EasyUtils.getAppResourceString(context,
+                    // "location_recv");
+                    digest = getStrng(context, R.string.location_recv);
+                    digest = String.format(digest, message.getFrom());
+                    return digest;
+                } else {
+                    // digest = EasyUtils.getAppResourceString(context,
+                    // "location_prefix");
+                    digest = getStrng(context, R.string.location_prefix);
+                }
+                break;
+            case IMAGE: // 图片消息
+                ImageMessageBody imageBody = (ImageMessageBody) message.getBody();
+                digest = getStrng(context, R.string.picture) + imageBody.getFileName();
+                break;
+            case VOICE:// 语音消息
+                digest = getStrng(context, R.string.voice);
+                break;
+            case VIDEO: // 视频消息
+                digest = getStrng(context, R.string.video);
+                break;
+            case TXT: // 文本消息
+
+                if (isRobotMenuMessage(message)) {
+                    digest = getRobotMenuMessageDigest(message);
+                } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+                    TextMessageBody txtBody = (TextMessageBody) message.getBody();
+                    digest = getStrng(context, R.string.voice_call) + txtBody.getMessage();
+                } else {
+                    TextMessageBody txtBody = (TextMessageBody) message.getBody();
+                    digest = txtBody.getMessage();
+                }
+                break;
+            case FILE: // 普通文件消息
+                digest = getStrng(context, R.string.file);
+                break;
+            default:
+                EMLog.e("QMessageFragment", "unknow type");
+                return "";
+        }
+
+        return digest;
+    }
+
+    String getStrng(Context context, int resId) {
+        return context.getResources().getString(resId);
+    }
+
+    public boolean isRobotMenuMessage(EMMessage message) {
+
+        try {
+            JSONObject jsonObj = message.getJSONObjectAttribute(Constant.MESSAGE_ATTR_ROBOT_MSGTYPE);
+            if (jsonObj.has("choice")) {
+                return true;
+            }
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    public String getRobotMenuMessageDigest(EMMessage message) {
+        String title = "";
+        try {
+            JSONObject jsonObj = message.getJSONObjectAttribute(Constant.MESSAGE_ATTR_ROBOT_MSGTYPE);
+            if (jsonObj.has("choice")) {
+                JSONObject jsonChoice = jsonObj.getJSONObject("choice");
+                title = jsonChoice.getString("title");
+            }
+        } catch (Exception e) {
+        }
+        return title;
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -325,7 +434,31 @@ public class QMessageFragment extends QBaseFragment {
         @Override
         public void onClick(View v) {
             //处理RecyclerView的点击事件
-            startActivity(new Intent(getActivity(), QMsgDetailActivity.class));
+            EMConversation conversation = conversationList.get(getAdapterPosition());
+            String username = conversation.getUserName();
+            String loginName = PreferencesUtils.getString(getActivity(), "username", "");
+            if (StringUtils.isEquals(username, loginName)) {
+                ((QBaseActivity) getActivity()).showToastShort(getString(R.string.Cant_chat_with_yourself));
+            } else {
+                // 进入聊天页面
+                Intent intent = new Intent(getActivity(), QMsgDetailActivity.class);
+                if (conversation.isGroup()) {
+                    if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
+                        // it is group chat
+                        intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_CHATROOM);
+                        intent.putExtra("groupId", username);
+                    } else {
+                        // it is group chat
+                        intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_GROUP);
+                        intent.putExtra("groupId", username);
+                    }
+
+                } else {
+                    // it is single chat
+                    intent.putExtra("userId", username);
+                }
+                startActivity(intent);
+            }
         }
     }
 }

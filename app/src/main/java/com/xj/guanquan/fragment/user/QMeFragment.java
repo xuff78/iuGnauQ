@@ -120,4 +120,8 @@ public class QMeFragment extends Fragment implements View.OnClickListener {
             ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class);
         }
     }
+
+    public void refresh() {
+
+    }
 }

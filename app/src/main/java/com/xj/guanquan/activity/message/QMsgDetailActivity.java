@@ -12,6 +12,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.adapter.MessageAdapter;
@@ -19,6 +22,7 @@ import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.MessageInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import common.eric.com.ebaselibrary.util.ToastUtils;
 
@@ -34,25 +38,68 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private EditText msgEdt;
     private MessageAdapter adapter;
 
+    private static final String TAG = "QMsgDetailActivity";
+    private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
+    public static final int REQUEST_CODE_CONTEXT_MENU = 3;
+    private static final int REQUEST_CODE_MAP = 4;
+    public static final int REQUEST_CODE_TEXT = 5;
+    public static final int REQUEST_CODE_VOICE = 6;
+    public static final int REQUEST_CODE_PICTURE = 7;
+    public static final int REQUEST_CODE_LOCATION = 8;
+    public static final int REQUEST_CODE_NET_DISK = 9;
+    public static final int REQUEST_CODE_FILE = 10;
+    public static final int REQUEST_CODE_COPY_AND_PASTE = 11;
+    public static final int REQUEST_CODE_PICK_VIDEO = 12;
+    public static final int REQUEST_CODE_DOWNLOAD_VIDEO = 13;
+    public static final int REQUEST_CODE_VIDEO = 14;
+    public static final int REQUEST_CODE_DOWNLOAD_VOICE = 15;
+    public static final int REQUEST_CODE_SELECT_USER_CARD = 16;
+    public static final int REQUEST_CODE_SEND_USER_CARD = 17;
+    public static final int REQUEST_CODE_CAMERA = 18;
+    public static final int REQUEST_CODE_LOCAL = 19;
+    public static final int REQUEST_CODE_CLICK_DESTORY_IMG = 20;
+    public static final int REQUEST_CODE_GROUP_DETAIL = 21;
+    public static final int REQUEST_CODE_SELECT_VIDEO = 23;
+    public static final int REQUEST_CODE_SELECT_FILE = 24;
+    public static final int REQUEST_CODE_ADD_TO_BLACKLIST = 25;
+
+    public static final int RESULT_CODE_COPY = 1;
+    public static final int RESULT_CODE_DELETE = 2;
+    public static final int RESULT_CODE_FORWARD = 3;
+    public static final int RESULT_CODE_OPEN = 4;
+    public static final int RESULT_CODE_DWONLOAD = 5;
+    public static final int RESULT_CODE_TO_CLOUD = 6;
+    public static final int RESULT_CODE_EXIT_GROUP = 7;
+    public static final int CHATTYPE_SINGLE = 1;
+    public static final int CHATTYPE_GROUP = 2;
+    public static final int CHATTYPE_CHATROOM = 3;
+    private int chatType;
+    private String toChatUsername;
+    private EMConversation conversation;
+    private int pagesize = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qmsg_detail);
-
+        // 判断单聊还是群聊
+        chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);
         initData();
     }
 
     private void initData() {
-        datalist.add(new MessageInfo("你", "", 0, "", "跟你说个事"));
-        datalist.add(new MessageInfo("你", "", 0, "", "我就想问一下你是不是我最好的朋友"));
-        datalist.add(new MessageInfo("我", "", 0, "", "不借"));
-        datalist.add(new MessageInfo("你", "", 0, "", "我又不是找你借钱，姐又不穷，你就回答是或者不是"));
-        ;
-        datalist.add(new MessageInfo("我", "", 0, "", "是"));
-        datalist.add(new MessageInfo("你", "", 0, "", "刚吃看了部非常感人的电视剧，电视上说狗才是人类最好的朋友，所以我想确认一下"));
-        datalist.add(new MessageInfo("我", "", 0, "", "晕倒"));
-        adapter = new MessageAdapter(this, datalist);
+        if (chatType == CHATTYPE_SINGLE) { // 单聊
+            toChatUsername = getIntent().getStringExtra("userId");
+        } else {
+            toChatUsername = getIntent().getStringExtra("groupId");
+
+            if (chatType == CHATTYPE_GROUP) {
+            }
+        }
+        onConversationInit();
+        adapter = new MessageAdapter(this, toChatUsername, chatType);
         mRecyclerView.setAdapter(adapter);
+        adapter.refreshSelectLast();
         msgEdt.setImeOptions(EditorInfo.IME_ACTION_SEND);
         msgEdt.setInputType(EditorInfo.TYPE_CLASS_TEXT);
         msgEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -62,7 +109,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
                 // TODO Auto-generated method stub
                 if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!msgEdt.getText().toString().trim().equals("")) {
-                        datalist.add(new MessageInfo("我", "", 0, "", msgEdt.getText().toString()));
+                        //datalist.add(new MessageInfo("我", "", 0, "", msgEdt.getText().toString()));
                         adapter.notifyDataSetChanged();
                         msgEdt.setText("");
                         mRecyclerView.scrollToPosition(datalist.size() - 1);
@@ -119,4 +166,36 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
 
     }
 
+    protected void onConversationInit() {
+        if (chatType == CHATTYPE_SINGLE) {
+            conversation = EMChatManager.getInstance().getConversationByType(toChatUsername, EMConversation.EMConversationType.Chat);
+        } else if (chatType == CHATTYPE_GROUP) {
+            conversation = EMChatManager.getInstance().getConversationByType(toChatUsername, EMConversation.EMConversationType.GroupChat);
+        } else if (chatType == CHATTYPE_CHATROOM) {
+            conversation = EMChatManager.getInstance().getConversationByType(toChatUsername, EMConversation.EMConversationType.ChatRoom);
+        }
+
+        // 把此会话的未读数置为0
+        conversation.markAllMessagesAsRead();
+
+        // 初始化db时，每个conversation加载数目是getChatOptions().getNumberOfMessagesLoaded
+        // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
+        final List<EMMessage> msgs = conversation.getAllMessages();
+        int msgCount = msgs != null ? msgs.size() : 0;
+        if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
+            String msgId = null;
+            if (msgs != null && msgs.size() > 0) {
+                msgId = msgs.get(0).getMsgId();
+            }
+            if (chatType == CHATTYPE_SINGLE) {
+                conversation.loadMoreMsgFromDB(msgId, pagesize);
+            } else {
+                conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
+            }
+        }
+    }
+
+    public LinearLayoutManager getLayoutManager() {
+        return mLayoutManager;
+    }
 }

@@ -65,6 +65,18 @@
     <string name="title_activity_qregist_info">填写信息</string>
     <string name="title_activity_qhome">首页</string>
 
+    <!--即时通信 部分string-->
+    <string name="location_recv">[%1$s location]</string>
+    <string name="location_message">The location information</string>
+    <string name="recording_video">Record video</string>
+    <string name="location_prefix">[my location]</string>
+    <string name="voice">Voice</string>
+    <string name="picture">[Picture]</string>
+    <string name="video">[Video]</string>
+    <string name="file">[file]</string>
+    <string name="voice_call">[Voice call]</string>
+    <string name="Cant_chat_with_yourself">不能跟自己聊天</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">附近用户</string>
     <string name="hello_roast_fragment">吐槽</string>

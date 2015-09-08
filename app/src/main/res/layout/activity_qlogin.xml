@@ -65,7 +65,7 @@
         android:ems="10"
         android:hint="@string/login_password"
         android:inputType="textPassword"
-        android:text="qqqqqq"
+        android:text="123123"
         android:textColorHint="@color/view_color">
 
         <requestFocus />

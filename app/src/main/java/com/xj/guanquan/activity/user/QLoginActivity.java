@@ -45,6 +45,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
     private ImageView titlename;
 
     private Boolean isStart = false;
+    private UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +105,14 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
         }
     }
 
-    private void loginChatServer(String userName, String password) {
+    private void loginChatServer(final String userName, String password) {
         EMChatManager.getInstance().login(userName, password, new EMCallBack() {//回调
             @Override
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        PreferencesUtils.putString(QLoginActivity.this, "username", String.valueOf(userInfo.getHuanxinName()));
+                        PreferencesUtils.putString(QLoginActivity.this, "pwd", userInfo.getHuanxinPassword());
                         EMGroupManager.getInstance().loadAllGroups();
                         EMChatManager.getInstance().loadAllConversations();
                         if (isStart) {
@@ -144,7 +147,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
     protected void doResponse(Object response) {
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         PreferencesUtils.putString(QLoginActivity.this, "loginData", (String) response);
-        UserInfo userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
+        userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
         loginChatServer(String.valueOf(userInfo.getHuanxinName()), userInfo.getHuanxinPassword());
     }
 }

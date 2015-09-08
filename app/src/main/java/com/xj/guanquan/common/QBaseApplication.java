@@ -8,9 +8,11 @@ import common.eric.com.ebaselibrary.common.EBaseApplication;
  * Created by eric on 2015/9/7.
  */
 public class QBaseApplication extends EBaseApplication {
+    private QBaseApplication instance;
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         EMChat.getInstance().init(this);
         /**
          * debugMode == true 时为打开，sdk 会在log里输入调试信息

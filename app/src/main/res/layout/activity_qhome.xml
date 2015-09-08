@@ -80,6 +80,7 @@
 
             <RadioButton
                 android:id="@+id/radioBtn_me"
+
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -92,4 +93,18 @@
         </RadioGroup>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/message_person"
+        style="@style/text_10_white"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/shapecount"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#ffffffff"
+        android:visibility="invisible" />
 </RelativeLayout>
