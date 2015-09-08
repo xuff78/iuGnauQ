@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -68,6 +67,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     ArrayList<MessageInfo> datalist = new ArrayList<MessageInfo>();
     private String username;
     EMMessage[] messages = null;
+
+    public MessageAdapter(Context context, String username, int chatType) {
+        listInflater = LayoutInflater.from(act);
+        this.context = context;
+        this.username = username;
+        this.act = (Activity) context;
+        this.conversation = EMChatManager.getInstance().getConversation(username);
+    }
 
     Handler handler = new Handler() {
         private void refreshList() {
@@ -149,25 +156,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     LayoutInflater listInflater;
-
-    public MessageAdapter(Activity act, ArrayList<MessageInfo> datalist) {
-        this.act = act;
-        listInflater = LayoutInflater.from(act);
-        this.datalist = datalist;
-
-        WindowManager wm = act.getWindowManager();
-
-        width = wm.getDefaultDisplay().getWidth();
-//        this.imgWidth=(ConstantUtil.getWidth(act)-ImageUtil.dip2px(act, 30))/2;
-    }
-
-    public MessageAdapter(Context context, String username, int chatType) {
-        listInflater = LayoutInflater.from(act);
-        this.context = context;
-        this.username = username;
-        this.act = (Activity) context;
-        this.conversation = EMChatManager.getInstance().getConversation(username);
-    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
