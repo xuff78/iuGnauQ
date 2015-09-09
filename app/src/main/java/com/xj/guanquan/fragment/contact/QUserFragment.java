@@ -1,5 +1,6 @@
 package com.xj.guanquan.fragment.contact;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
+import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
@@ -38,6 +40,8 @@ import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QUserFragment extends QBaseFragment {
+
+    private String method = null;
 
     public static QUserFragment newInstance(Integer userType) {
         QUserFragment fragment = new QUserFragment();
@@ -168,7 +172,6 @@ public class QUserFragment extends QBaseFragment {
     }
 
     private void initHandler() {
-        String method = null;
         switch (userType.intValue()) {
             case 0:
                 method = "";//为圈子成员列表
@@ -288,9 +291,13 @@ public class QUserFragment extends QBaseFragment {
         @Override
         public void onClick(View v) {
             Bundle bundle = new Bundle();
-            circleUserInfoList.get(getAdapterPosition());
+            CircleUserInfo userInfo = circleUserInfoList.get(getAdapterPosition());
 //            bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
             ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class, bundle);
+
+            // 进入聊天页面
+            Intent intent = new Intent(getActivity(), QMsgDetailActivity.class);
+            intent.putExtra("userId", userInfo.getHuanxinName());
         }
     }
 
@@ -316,10 +323,6 @@ public class QUserFragment extends QBaseFragment {
             mAdapter.setData(circleUserInfoList);
             mAdapter.isLoadMore(false);
             mAdapter.notifyDataSetChanged();
-        } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
-            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
-        } else {
-            ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);
         }
     }
 

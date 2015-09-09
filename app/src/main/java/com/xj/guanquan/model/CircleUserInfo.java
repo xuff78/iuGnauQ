@@ -15,6 +15,10 @@ public class CircleUserInfo extends EBaseModel {
     private String distance;
     private String time;
 
+    //环信属性
+    private Integer huanxinName;
+    private String huanxinPassword;
+
     public CircleUserInfo() {
     }
 
@@ -82,5 +86,21 @@ public class CircleUserInfo extends EBaseModel {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public Integer getHuanxinName() {
+        return huanxinName;
+    }
+
+    public void setHuanxinName(Integer huanxinName) {
+        this.huanxinName = huanxinName;
+    }
+
+    public String getHuanxinPassword() {
+        return huanxinPassword;
+    }
+
+    public void setHuanxinPassword(String huanxinPassword) {
+        this.huanxinPassword = huanxinPassword;
     }
 }

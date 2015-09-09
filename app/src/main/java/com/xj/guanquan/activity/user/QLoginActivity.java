@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 /**
  * A login screen that offers login via email/password.
@@ -111,6 +112,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        getProgressDialog().dismiss();
                         PreferencesUtils.putString(QLoginActivity.this, "username", String.valueOf(userInfo.getHuanxinName()));
                         PreferencesUtils.putString(QLoginActivity.this, "pwd", userInfo.getHuanxinPassword());
                         EMGroupManager.getInstance().loadAllGroups();
@@ -135,6 +137,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        getProgressDialog().dismiss();
                         alertDialog("登陆聊天服务器失败！错误信息：" + message, null);
                     }
                 });
@@ -144,10 +147,13 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
 
 
     @Override
-    protected void doResponse(Object response) {
+    public void onResponse(Object response) {
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-        PreferencesUtils.putString(QLoginActivity.this, "loginData", (String) response);
-        userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
-        loginChatServer(String.valueOf(userInfo.getHuanxinName()), userInfo.getHuanxinPassword());
+        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+            PreferencesUtils.putString(QLoginActivity.this, "loginData", (String) response);
+            userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
+            loginChatServer(String.valueOf(userInfo.getHuanxinName()), userInfo.getHuanxinPassword());
+        } else
+            alertDialog(result.getMsg(), null);
     }
 }

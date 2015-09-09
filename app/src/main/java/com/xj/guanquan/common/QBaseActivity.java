@@ -419,7 +419,7 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
 
     protected void doResponse(Object response) {}
 
-    private CustomProgressDialog getProgressDialog() {
+    protected CustomProgressDialog getProgressDialog() {
         if (progressDialog == null) {
             progressDialog = ProgressUtil.getProgressDialog(this);
         }
