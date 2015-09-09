@@ -175,7 +175,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", String.valueOf(userInfo.getUserId()));
+                map.put("followId", String.valueOf(userInfo.getUserId()));
                 map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
                 map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
                 return map;
@@ -186,7 +186,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QUserDetailActivity.this, "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                map.put("followId", String.valueOf(userInfo.getUserId()));
+                map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
                 return map;
             }
 

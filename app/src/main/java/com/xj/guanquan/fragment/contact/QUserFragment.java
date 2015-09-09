@@ -21,10 +21,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
-import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.ApiList;
-import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.CircleUserInfo;
@@ -290,14 +288,11 @@ public class QUserFragment extends QBaseFragment {
 
         @Override
         public void onClick(View v) {
-            Bundle bundle = new Bundle();
             CircleUserInfo userInfo = circleUserInfoList.get(getAdapterPosition());
-//            bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
-            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class, bundle);
-
             // 进入聊天页面
             Intent intent = new Intent(getActivity(), QMsgDetailActivity.class);
-            intent.putExtra("userId", userInfo.getHuanxinName());
+            intent.putExtra("userId", String.valueOf(userInfo.getUserId()));
+            startActivity(intent);
         }
     }
 
