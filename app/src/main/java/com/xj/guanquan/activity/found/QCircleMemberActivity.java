@@ -202,7 +202,7 @@ public class QCircleMemberActivity extends QBaseActivity {
             time = (TextView) view.findViewById(R.id.time);
             relation = (TextView) view.findViewById(R.id.relation);
             headImg = (SimpleDraweeView) view.findViewById(R.id.headImg);
-            sex = (TextView) view.findViewById(R.id.sex);
+            sex = (TextView) view.findViewById(R.id.sexTxt);
             index = (TextView) view.findViewById(R.id.index);
             distance = (TextView) view.findViewById(R.id.distance);
             age = (TextView) view.findViewById(R.id.age);

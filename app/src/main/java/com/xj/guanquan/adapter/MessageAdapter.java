@@ -69,10 +69,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     EMMessage[] messages = null;
 
     public MessageAdapter(Context context, String username, int chatType) {
-        listInflater = LayoutInflater.from(act);
         this.context = context;
-        this.username = username;
         this.act = (Activity) context;
+        listInflater = LayoutInflater.from(act);
+        this.username = username;
         this.conversation = EMChatManager.getInstance().getConversation(username);
     }
 
@@ -116,7 +116,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     };
 
     public int getItemCount() {
-        return messages == null ? 0 : messages.length;
+        return messages == null ? 1 : messages.length + 1;
     }
 
     public int getItemViewType(int position) {

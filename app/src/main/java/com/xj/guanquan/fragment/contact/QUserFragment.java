@@ -278,7 +278,7 @@ public class QUserFragment extends QBaseFragment {
             time = (TextView) view.findViewById(R.id.time);
             relation = (TextView) view.findViewById(R.id.relation);
             avatar = (SimpleDraweeView) view.findViewById(R.id.headImg);
-            sex = (TextView) view.findViewById(R.id.sex);
+            sex = (TextView) view.findViewById(R.id.sexTxt);
             nickName = (TextView) view.findViewById(R.id.index);
             distance = (TextView) view.findViewById(R.id.distance);
             age = (TextView) view.findViewById(R.id.age);

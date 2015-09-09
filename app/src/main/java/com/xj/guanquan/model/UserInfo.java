@@ -1,6 +1,7 @@
 package com.xj.guanquan.model;
 
 import common.eric.com.ebaselibrary.model.EBaseModel;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 /**
  * Created by eric on 2015/8/22.
@@ -19,6 +20,10 @@ public class UserInfo extends EBaseModel {
 
     private String time;
     private String distance;
+
+    private String sexTxt;
+    private String heightTxt;
+    private String weightTxt;
 
     //环信属性
     private Integer huanxinName;
@@ -57,6 +62,11 @@ public class UserInfo extends EBaseModel {
 
     public void setSex(int sex) {
         this.sex = sex;
+        if (sex == 1) {
+            sexTxt = "♂ ";
+        } else {
+            sexTxt = "♀ ";
+        }
     }
 
     public int getAge() {
@@ -73,6 +83,7 @@ public class UserInfo extends EBaseModel {
 
     public void setHeight(int height) {
         this.height = height;
+        heightTxt = height + "cm";
     }
 
     public int getWeight() {
@@ -81,6 +92,7 @@ public class UserInfo extends EBaseModel {
 
     public void setWeight(int weight) {
         this.weight = weight;
+        weightTxt = weight + "kg";
     }
 
     public String getCar() {
@@ -137,5 +149,35 @@ public class UserInfo extends EBaseModel {
 
     public void setHuanxinPassword(String huanxinPassword) {
         this.huanxinPassword = huanxinPassword;
+    }
+
+    public String getSexTxt() {
+        if (StringUtils.isEmpty(sexTxt))
+            sexTxt = "♂ ";
+        return sexTxt;
+    }
+
+    public String getHeightTxt() {
+        if (StringUtils.isEmpty(heightTxt))
+            heightTxt = "0cm";
+        return heightTxt;
+    }
+
+    public String getWeightTxt() {
+        if (StringUtils.isEmpty(weightTxt))
+            weightTxt = "0kg";
+        return weightTxt;
+    }
+
+    public void setSexTxt(String sexTxt) {
+        this.sexTxt = sexTxt;
+    }
+
+    public void setHeightTxt(String heightTxt) {
+        this.heightTxt = heightTxt;
+    }
+
+    public void setWeightTxt(String weightTxt) {
+        this.weightTxt = weightTxt;
     }
 }

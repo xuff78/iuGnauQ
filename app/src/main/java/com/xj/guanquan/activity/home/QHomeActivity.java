@@ -66,6 +66,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
         super.onStop();
     }
 
+
     @Override
     protected void initView() {
 

@@ -224,7 +224,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         good = (Button) findViewById(R.id.good);
         sexAgeArea = (LinearLayout) findViewById(R.id.sexAgeArea);
         distance = (TextView) findViewById(R.id.distance);
-        sex = (TextView) findViewById(R.id.sex);
+        sex = (TextView) findViewById(R.id.sexTxt);
         sexAgeArea = (LinearLayout) findViewById(R.id.sexAgeArea);
         circleNum = (TextView) findViewById(R.id.circleNum);
         income = (TextView) findViewById(R.id.income);
@@ -239,12 +239,12 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         age = (TextView) findViewById(R.id.age);
         marriage = (TextView) findViewById(R.id.marriage);
         socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
-        weight = (TextView) findViewById(R.id.weight);
+        weight = (TextView) findViewById(R.id.weightTxt);
         roastTime = (TextView) findViewById(R.id.roastTime);
         socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
         career = (TextView) findViewById(R.id.career);
         headImage = (SimpleDraweeView) findViewById(R.id.avatar);
-        height = (TextView) findViewById(R.id.height);
+        height = (TextView) findViewById(R.id.heightTxt);
         roastDistance = (TextView) findViewById(R.id.roastDistance);
         relation = (TextView) findViewById(R.id.relation);
         roastContent = (TextView) findViewById(R.id.roastContent);

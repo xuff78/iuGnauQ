@@ -245,7 +245,7 @@ public class QFriendFragment extends QBaseFragment {
         private void initialize(View itemView) {
             nickName = (TextView) itemView.findViewById(R.id.name);
             avatar = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
-            sex = (TextView) itemView.findViewById(R.id.sex);
+            sex = (TextView) itemView.findViewById(R.id.sexTxt);
             age = (TextView) itemView.findViewById(R.id.age);
             time = (TextView) itemView.findViewById(R.id.time);
             distance = (TextView) itemView.findViewById(R.id.distance);

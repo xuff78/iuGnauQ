@@ -12,9 +12,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easemob.EMEventListener;
+import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.adapter.MessageAdapter;
@@ -24,12 +27,13 @@ import com.xj.guanquan.model.MessageInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.eric.com.ebaselibrary.util.StringUtils;
 import common.eric.com.ebaselibrary.util.ToastUtils;
 
 /**
  * Created by 可爱的蘑菇 on 2015/8/29.
  */
-public class QMsgDetailActivity extends QBaseActivity implements View.OnClickListener {
+public class QMsgDetailActivity extends QBaseActivity implements View.OnClickListener, EMEventListener {
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -87,6 +91,22 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register the event listener when enter the foreground
+        EMChatManager.getInstance().registerEventListener(
+                this,
+                new EMNotifierEvent.Event[]{EMNotifierEvent.Event.EventNewMessage, EMNotifierEvent.Event.EventOfflineMessage,
+                        EMNotifierEvent.Event.EventDeliveryAck, EMNotifierEvent.Event.EventReadAck});
+    }
+
+    @Override
+    protected void onStop() {
+        EMChatManager.getInstance().unregisterEventListener(this);
+        super.onStop();
+    }
+
     private void initData() {
         if (chatType == CHATTYPE_SINGLE) { // 单聊
             toChatUsername = getIntent().getStringExtra("userId");
@@ -108,11 +128,9 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 // TODO Auto-generated method stub
                 if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (!msgEdt.getText().toString().trim().equals("")) {
-                        //datalist.add(new MessageInfo("我", "", 0, "", msgEdt.getText().toString()));
-                        adapter.notifyDataSetChanged();
-                        msgEdt.setText("");
-                        mRecyclerView.scrollToPosition(datalist.size() - 1);
+                    String msg = msgEdt.getText().toString();
+                    if (!StringUtils.isEmpty(msg.trim())) {
+                        sendText(msg);
                     } else
                         ToastUtils.show(QMsgDetailActivity.this, "请输入内容");
                 }
@@ -197,5 +215,116 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
 
     public LinearLayoutManager getLayoutManager() {
         return mLayoutManager;
+    }
+
+    /**
+     * 事件监听
+     * <p/>
+     * see {@link EMNotifierEvent}
+     */
+    @Override
+    public void onEvent(EMNotifierEvent event) {
+        switch (event.getEvent()) {
+            case EventNewMessage: {
+                //获取到message
+                EMMessage message = (EMMessage) event.getData();
+
+                String username = null;
+                //群组消息
+                if (message.getChatType() == EMMessage.ChatType.GroupChat || message.getChatType() == EMMessage.ChatType.ChatRoom) {
+                    username = message.getTo();
+                } else {
+                    //单聊消息
+                    username = message.getFrom();
+                }
+
+                //如果是当前会话的消息，刷新聊天页面
+                if (username.equals(toChatUsername)) {
+                    refreshUIWithNewMessage();
+                    //声音和震动提示有新消息
+                    //HXSDKHelper.getInstance().getNotifier().viberateAndPlayTone(message);
+                } else {
+                    //如果消息不是和当前聊天ID的消息
+                    //HXSDKHelper.getInstance().getNotifier().onNewMsg(message);
+                }
+
+                break;
+            }
+            case EventDeliveryAck: {
+                //获取到message
+                EMMessage message = (EMMessage) event.getData();
+                refreshUI();
+                break;
+            }
+            case EventReadAck: {
+                //获取到message
+                EMMessage message = (EMMessage) event.getData();
+                refreshUI();
+                break;
+            }
+            case EventOfflineMessage: {
+                //a list of offline messages
+                //List<EMMessage> offlineMessages = (List<EMMessage>) event.getData();
+                refreshUI();
+                break;
+            }
+            default:
+                break;
+        }
+
+    }
+
+    private void refreshUIWithNewMessage() {
+        if (adapter == null) {
+            return;
+        }
+
+        runOnUiThread(new Runnable() {
+            public void run() {
+                adapter.refreshSelectLast();
+            }
+        });
+    }
+
+    private void refreshUI() {
+        if (adapter == null) {
+            return;
+        }
+
+        runOnUiThread(new Runnable() {
+            public void run() {
+                adapter.refresh();
+            }
+        });
+    }
+
+    /**
+     * 发送文本消息
+     *
+     * @param content message content
+     */
+    public void sendText(String content) {
+
+        if (content.length() > 0) {
+            EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+            // 如果是群聊，设置chattype,默认是单聊
+            if (chatType == CHATTYPE_GROUP) {
+                message.setChatType(EMMessage.ChatType.GroupChat);
+            } else if (chatType == CHATTYPE_CHATROOM) {
+                message.setChatType(EMMessage.ChatType.ChatRoom);
+            }
+            TextMessageBody txtBody = new TextMessageBody(content);
+            // 设置消息body
+            message.addBody(txtBody);
+            // 设置要发给谁,用户username或者群聊groupid
+            message.setReceipt(toChatUsername);
+            // 把messgage加到conversation中
+            conversation.addMessage(message);
+            // 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
+            adapter.refreshSelectLast();
+            msgEdt.setText("");
+            setResult(RESULT_OK);
+
+        }
     }
 }

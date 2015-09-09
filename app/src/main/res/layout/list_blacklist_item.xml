@@ -52,7 +52,7 @@
             android:paddingTop="1dp">
 
             <TextView
-                android:id="@+id/sex"
+                android:id="@+id/sexTxt"
                 style="@style/text_10_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

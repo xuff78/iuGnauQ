@@ -166,7 +166,7 @@ public class QVisitorListActivity extends QBaseActivity implements View.OnClickL
             headImage = (SimpleDraweeView) view.findViewById(R.id.avatar);
             name = (TextView) view.findViewById(R.id.name);
             age = (TextView) view.findViewById(R.id.age);
-            sex = (TextView) view.findViewById(R.id.sex);
+            sex = (TextView) view.findViewById(R.id.sexTxt);
             dateDescript = (TextView) view.findViewById(R.id.dateDescript);
             time = (TextView) view.findViewById(R.id.time);
             distance = (TextView) view.findViewById(R.id.distance);

@@ -90,7 +90,7 @@
                     android:paddingTop="2dp">
 
                     <TextView
-                        android:id="@+id/sex"
+                        android:id="@+id/sexTxt"
                         style="@style/text_11_white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -366,7 +366,7 @@
                     android:text="身高" />
 
                 <TextView
-                    android:id="@+id/height"
+                    android:id="@+id/heightTxt"
                     style="@style/text_13_7f"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -377,7 +377,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_alignBottom="@+id/height"
+                    android:layout_alignBottom="@+id/heightTxt"
                     android:layout_marginLeft="105dp"
                     android:background="@color/black_deep" />
             </RelativeLayout>
@@ -396,7 +396,7 @@
                     android:text="体重" />
 
                 <TextView
-                    android:id="@+id/weight"
+                    android:id="@+id/weightTxt"
                     style="@style/text_13_7f"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -408,7 +408,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_alignBottom="@+id/weight"
+                    android:layout_alignBottom="@+id/weightTxt"
                     android:background="@color/black_deep" />
             </RelativeLayout>
 

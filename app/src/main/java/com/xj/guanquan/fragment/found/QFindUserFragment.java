@@ -126,7 +126,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
         findRecyclerView.setLayoutManager(mLayoutManager);
         findRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"nickName", "age", "sex", "avatar", "height", "weight", "car", "dating"}, R.layout.list_find_user_item, userInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"nickName", "age", "sexTxt", "avatar", "heightTxt", "weightTxt", "car", "dating"}, R.layout.list_find_user_item, userInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -204,7 +204,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
                 if (sex != null)
-                    map.put("sex", String.valueOf(sex));
+                    map.put("sexTxt", String.valueOf(sex));
                 if (age != null)
                     map.put("age", String.valueOf(age));
                 if (carCert != null)
@@ -212,7 +212,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 if (finallyTime != null)
                     map.put("finallyTime", String.valueOf(finallyTime));
                 if (!StringUtils.isEmpty(height))
-                    map.put("height", height);
+                    map.put("heightTxt", height);
                 map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
                 map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
                 return map;
@@ -227,9 +227,9 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
             ((QHomeActivity) getActivity()).initFragment(QFindCircleFragment.newInstance(null, null));
         } else if (v == screen) {
             Intent intent = new Intent(getActivity(), QScreenActivity.class);
-            intent.putExtra("sex", sex);
+            intent.putExtra("sexTxt", sex);
             intent.putExtra("age", age);
-            intent.putExtra("height", height);
+            intent.putExtra("heightTxt", height);
             intent.putExtra("carCert", carCert);
             intent.putExtra("finallyTime", finallyTime);
             startActivityForResult(intent, 111);
@@ -238,11 +238,11 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener, View.OnLongClickListener {
         private TextView nickName;
-        private TextView sex;
+        private TextView sexTxt;
         private SimpleDraweeView avatar;
         private TextView age;
-        private TextView height;
-        private TextView weight;
+        private TextView heightTxt;
+        private TextView weightTxt;
         private TextView car;
         private TextView dating;
 
@@ -261,12 +261,12 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
             this.nickName = nickName;
         }
 
-        public TextView getSex() {
-            return sex;
+        public TextView getSexTxt() {
+            return sexTxt;
         }
 
-        public void setSex(TextView sex) {
-            this.sex = sex;
+        public void setSexTxt(TextView sexTxt) {
+            this.sexTxt = sexTxt;
         }
 
         public SimpleDraweeView getAvatar() {
@@ -285,20 +285,20 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
             this.age = age;
         }
 
-        public TextView getHeight() {
-            return height;
+        public TextView getHeightTxt() {
+            return heightTxt;
         }
 
-        public void setHeight(TextView height) {
-            this.height = height;
+        public void setHeightTxt(TextView heightTxt) {
+            this.heightTxt = heightTxt;
         }
 
-        public TextView getWeight() {
-            return weight;
+        public TextView getWeightTxt() {
+            return weightTxt;
         }
 
-        public void setWeight(TextView weight) {
-            this.weight = weight;
+        public void setWeightTxt(TextView weightTxt) {
+            this.weightTxt = weightTxt;
         }
 
         public TextView getCar() {
@@ -318,12 +318,12 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
         }
 
         private void initialize(View itemView) {
-            nickName = (TextView) itemView.findViewById(R.id.name);
+            nickName = (TextView) itemView.findViewById(R.id.nickName);
             avatar = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
-            sex = (TextView) itemView.findViewById(R.id.sex);
+            sexTxt = (TextView) itemView.findViewById(R.id.sexTxt);
             age = (TextView) itemView.findViewById(R.id.age);
-            height = (TextView) itemView.findViewById(R.id.height);
-            weight = (TextView) itemView.findViewById(R.id.weight);
+            heightTxt = (TextView) itemView.findViewById(R.id.heightTxt);
+            weightTxt = (TextView) itemView.findViewById(R.id.weightTxt);
             car = (TextView) itemView.findViewById(R.id.carDescript);
             dating = (TextView) itemView.findViewById(R.id.dateDescript);
         }
@@ -380,11 +380,11 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 111) {
-            sex = (Integer) data.getSerializableExtra("sex");
+            sex = (Integer) data.getSerializableExtra("sexTxt");
             age = (String) data.getSerializableExtra("age");
             finallyTime = (Integer) data.getSerializableExtra("finallyTime");
             carCert = data.getStringExtra("carCert");
-            height = data.getStringExtra("height");
+            height = data.getStringExtra("heightTxt");
             addToRequestQueue(request, true);
         }
     }

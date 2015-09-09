@@ -187,7 +187,7 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         moreDay = (TextView) findViewById(R.id.moreDay);
         ageText = (TextView) findViewById(R.id.age);
         selectAge = (ImageView) findViewById(R.id.selectAge);
-        heightText = (TextView) findViewById(R.id.height);
+        heightText = (TextView) findViewById(R.id.heightTxt);
         selectHeight = (ImageView) findViewById(R.id.selectHeight);
         car = (TextView) findViewById(R.id.car);
         selectCar = (ImageView) findViewById(R.id.selectCar);
