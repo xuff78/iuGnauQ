@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.views.TouchImageView;
 
 import java.util.ArrayList;
 
@@ -55,7 +55,7 @@ public class Photo9Layout extends LinearLayout {
                 itemLayout.setOrientation(LinearLayout.HORIZONTAL);
                 addView(itemLayout);
             }
-            SimpleDraweeView img = new SimpleDraweeView(act);
+            TouchImageView img = new TouchImageView(act);
             img.setLayoutParams(llp);
             img.setImageURI(Uri.parse(urls[i]));
             itemLayout.addView(img);

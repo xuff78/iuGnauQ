@@ -95,6 +95,7 @@
             android:label="@string/title_activity_qfeedback" />
         <activity
             android:name=".activity.roast.QPublishAct"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_publish"
             android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />
         <activity
@@ -124,6 +125,7 @@
         <activity
             android:name=".activity.found.QCirclePhotosActivity"
             android:label="@string/title_activity_qcircle_photos"></activity>
+        <activity android:name=".activity.roast.SelectPicActivity" android:theme="@style/DialogStyleBottom"/>
     </application>
 
 </manifest>
