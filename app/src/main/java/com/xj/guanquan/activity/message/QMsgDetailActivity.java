@@ -1,15 +1,27 @@
 package com.xj.guanquan.activity.message;
 
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.EMCallBack;
@@ -19,12 +31,18 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.util.VoiceRecorder;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
+import com.xj.guanquan.adapter.ExpressionAdapter;
+import com.xj.guanquan.adapter.ExpressionPagerAdapter;
 import com.xj.guanquan.adapter.MessageAdapter;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
+import com.xj.guanquan.views.ExpandGridView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +60,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private ArrayList<MessageInfo> datalist = new ArrayList<MessageInfo>();
     private EditText msgEdt;
     private MessageAdapter adapter;
+    private InputMethodManager manager;
 
     private static final String TAG = "QMsgDetailActivity";
     private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
@@ -82,6 +101,44 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private String toChatUsername;
     private EMConversation conversation;
     private int pagesize = 20;
+    private Drawable[] micImages;
+    private List<String> reslist;
+
+
+    private Button btnsetmodevoice;
+    private Button btnsetmodekeyboard;
+    private LinearLayout btnpresstospeak;
+    private ImageView ivemoticonsnormal;
+    private ImageView ivemoticonschecked;
+    private RelativeLayout edittextlayout;
+    private Button btnsend;
+    private LinearLayout rlbottom;
+    private ViewPager vPager;
+    private LinearLayout llfacecontainer;
+    private ImageView btntakepicture;
+    private ImageView btnpicture;
+    private ImageView btnlocation;
+    private ImageView btnvideo;
+    private ImageView btnfile;
+    private ImageView btnvoicecall;
+    private LinearLayout containervoicecall;
+    private ImageView btnvideocall;
+    private LinearLayout containervideocall;
+    private LinearLayout llbtncontainer;
+    private Button btnmore;
+    private LinearLayout more;
+    private LinearLayout barbottom;
+    private ImageView micImage;
+
+    private Handler micImageHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            // 切换msg切换图片
+            micImage.setImageDrawable(micImages[msg.what]);
+        }
+    };
+    private VoiceRecorder voiceRecorder;
+    private ClipboardManager clipboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +147,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         // 判断单聊还是群聊
         chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);
         initData();
+        initialize();
     }
 
     @Override
@@ -165,13 +223,13 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
                 toActivity(QUserDetailActivity.class, bundle);
             }
         });
-        mRecyclerView = (RecyclerView) findViewById(R.id.messageList);
+        clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        initialize();
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 //        mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-        msgEdt = (EditText) findViewById(R.id.msgEdt);
 
     }
 
@@ -182,7 +240,21 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-
+        if (v == ivemoticonsnormal) {
+            more.setVisibility(View.VISIBLE);
+            ivemoticonsnormal.setVisibility(View.INVISIBLE);
+            ivemoticonschecked.setVisibility(View.VISIBLE);
+            llbtncontainer.setVisibility(View.GONE);
+            llfacecontainer.setVisibility(View.VISIBLE);
+        } else if (v == ivemoticonschecked) {
+            ivemoticonsnormal.setVisibility(View.VISIBLE);
+            ivemoticonschecked.setVisibility(View.INVISIBLE);
+            llbtncontainer.setVisibility(View.VISIBLE);
+            llfacecontainer.setVisibility(View.GONE);
+            more.setVisibility(View.GONE);
+        } else if (v == btnmore) {
+            toggleMore(more);
+        }
     }
 
     protected void onConversationInit() {
@@ -346,4 +418,183 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
 
         }
     }
+
+    private void initialize() {
+
+        btnsetmodevoice = (Button) findViewById(R.id.btn_set_mode_voice);
+        btnsetmodekeyboard = (Button) findViewById(R.id.btn_set_mode_keyboard);
+        btnpresstospeak = (LinearLayout) findViewById(R.id.btn_press_to_speak);
+        ivemoticonsnormal = (ImageView) findViewById(R.id.iv_emoticons_normal);
+        ivemoticonschecked = (ImageView) findViewById(R.id.iv_emoticons_checked);
+        edittextlayout = (RelativeLayout) findViewById(R.id.edittext_layout);
+        btnmore = (Button) findViewById(R.id.btn_more);
+        btnsend = (Button) findViewById(R.id.btn_send);
+        rlbottom = (LinearLayout) findViewById(R.id.rl_bottom);
+        vPager = (ViewPager) findViewById(R.id.vPager);
+        llfacecontainer = (LinearLayout) findViewById(R.id.ll_face_container);
+        btntakepicture = (ImageView) findViewById(R.id.btn_take_picture);
+        btnpicture = (ImageView) findViewById(R.id.btn_picture);
+        btnlocation = (ImageView) findViewById(R.id.btn_location);
+        btnvideo = (ImageView) findViewById(R.id.btn_video);
+        btnvideocall = (ImageView) findViewById(R.id.btn_video_call);
+        btnfile = (ImageView) findViewById(R.id.btn_file);
+        btnvoicecall = (ImageView) findViewById(R.id.btn_voice_call);
+        containervoicecall = (LinearLayout) findViewById(R.id.container_voice_call);
+        btnvideocall = (ImageView) findViewById(R.id.btn_video_call);
+        containervideocall = (LinearLayout) findViewById(R.id.container_video_call);
+        llbtncontainer = (LinearLayout) findViewById(R.id.ll_btn_container);
+        btnmore = (Button) findViewById(R.id.btn_more);
+        more = (LinearLayout) findViewById(R.id.more);
+        barbottom = (LinearLayout) findViewById(R.id.bar_bottom);
+        mRecyclerView = (RecyclerView) findViewById(R.id.messageList);
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        msgEdt = (EditText) findViewById(R.id.msgEdt);
+
+        ivemoticonsnormal.setOnClickListener(this);
+        ivemoticonschecked.setOnClickListener(this);
+        btnmore.setOnClickListener(this);
+
+        // 动画资源文件,用于录制语音时
+        micImages = new Drawable[]{getResources().getDrawable(R.mipmap.record_animate_01),
+                getResources().getDrawable(R.mipmap.record_animate_02),
+                getResources().getDrawable(R.mipmap.record_animate_03),
+                getResources().getDrawable(R.mipmap.record_animate_04),
+                getResources().getDrawable(R.mipmap.record_animate_05),
+                getResources().getDrawable(R.mipmap.record_animate_06),
+                getResources().getDrawable(R.mipmap.record_animate_07),
+                getResources().getDrawable(R.mipmap.record_animate_08),
+                getResources().getDrawable(R.mipmap.record_animate_09),
+                getResources().getDrawable(R.mipmap.record_animate_10),
+                getResources().getDrawable(R.mipmap.record_animate_11),
+                getResources().getDrawable(R.mipmap.record_animate_12),
+                getResources().getDrawable(R.mipmap.record_animate_13),
+                getResources().getDrawable(R.mipmap.record_animate_14)};
+
+        // 表情list
+        reslist = getExpressionRes(35);
+        // 初始化表情viewpager
+        List<View> views = new ArrayList<View>();
+        View gv1 = getGridChildView(1);
+        View gv2 = getGridChildView(2);
+        views.add(gv1);
+        views.add(gv2);
+        vPager.setAdapter(new ExpressionPagerAdapter(views));
+        edittextlayout.requestFocus();
+        voiceRecorder = new VoiceRecorder(micImageHandler);
+        //buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());
+    }
+
+    public List<String> getExpressionRes(int getSum) {
+        List<String> reslist = new ArrayList<String>();
+        for (int x = 1; x <= getSum; x++) {
+            String filename = "ee_" + x;
+
+            reslist.add(filename);
+
+        }
+        return reslist;
+
+    }
+
+    /**
+     * 获取表情的gridview的子view
+     *
+     * @param i
+     * @return
+     */
+    private View getGridChildView(int i) {
+        View view = View.inflate(this, R.layout.expression_gridview, null);
+        ExpandGridView gv = (ExpandGridView) view.findViewById(R.id.gridview);
+        List<String> list = new ArrayList<String>();
+        if (i == 1) {
+            List<String> list1 = reslist.subList(0, 20);
+            list.addAll(list1);
+        } else if (i == 2) {
+            list.addAll(reslist.subList(20, reslist.size()));
+        }
+        list.add("delete_expression");
+        final ExpressionAdapter expressionAdapter = new ExpressionAdapter(this, 1, list);
+        gv.setAdapter(expressionAdapter);
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String filename = expressionAdapter.getItem(position);
+                try {
+                    // 文字输入框可见时，才可输入表情
+                    // 按住说话可见，不让输入表情
+                    if (btnsetmodekeyboard.getVisibility() != View.VISIBLE) {
+
+                        if (filename != "delete_expression") { // 不是删除键，显示表情
+                            // 这里用的反射，所以混淆的时候不要混淆SmileUtils这个类
+                            Class clz = Class.forName("com.xj.guanquan.common.SmileUtils");
+                            Field field = clz.getField(filename);
+                            msgEdt.append(SmileUtils.getSmiledText(QMsgDetailActivity.this,
+                                    (String) field.get(null)));
+                        } else { // 删除文字或者表情
+                            if (!TextUtils.isEmpty(msgEdt.getText())) {
+
+                                int selectionStart = msgEdt.getSelectionStart();// 获取光标的位置
+                                if (selectionStart > 0) {
+                                    String body = msgEdt.getText().toString();
+                                    String tempStr = body.substring(0, selectionStart);
+                                    int i = tempStr.lastIndexOf("[");// 获取最后一个表情的位置
+                                    if (i != -1) {
+                                        CharSequence cs = tempStr.substring(i, selectionStart);
+                                        if (SmileUtils.containsKey(cs.toString()))
+                                            msgEdt.getEditableText().delete(i, selectionStart);
+                                        else
+                                            msgEdt.getEditableText().delete(selectionStart - 1,
+                                                    selectionStart);
+                                    } else {
+                                        msgEdt.getEditableText().delete(selectionStart - 1, selectionStart);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                } catch (Exception e) {
+                }
+
+            }
+        });
+        return view;
+    }
+
+    /**
+     * 显示或隐藏图标按钮页
+     *
+     * @param view
+     */
+    public void toggleMore(View view) {
+        if (more.getVisibility() == View.GONE) {
+            hideKeyboard();
+            more.setVisibility(View.VISIBLE);
+            llbtncontainer.setVisibility(View.VISIBLE);
+            llfacecontainer.setVisibility(View.GONE);
+        } else {
+            if (llfacecontainer.getVisibility() == View.VISIBLE) {
+                llfacecontainer.setVisibility(View.GONE);
+                llbtncontainer.setVisibility(View.VISIBLE);
+                ivemoticonsnormal.setVisibility(View.VISIBLE);
+                ivemoticonsnormal.setVisibility(View.INVISIBLE);
+            } else {
+                more.setVisibility(View.GONE);
+            }
+
+        }
+
+    }
+
+    /**
+     * 隐藏软键盘
+     */
+    private void hideKeyboard() {
+        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null)
+                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
 }
