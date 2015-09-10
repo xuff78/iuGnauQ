@@ -51,6 +51,8 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
     @Override
     protected void onResume() {
         super.onResume();
+        updateUnreadLabel();
+        EMChatManager.getInstance().activityResumed();
         // register the event listener when enter the foreground
         EMChatManager.getInstance().registerEventListener(this,
                 new EMNotifierEvent.Event[]{

@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easemob.EMCallBack;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
@@ -313,6 +314,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             } else if (chatType == CHATTYPE_CHATROOM) {
                 message.setChatType(EMMessage.ChatType.ChatRoom);
             }
+            //conversation = EMChatManager.getInstance().getConversation(toChatUsername);
             TextMessageBody txtBody = new TextMessageBody(content);
             // 设置消息body
             message.addBody(txtBody);
@@ -320,6 +322,23 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             message.setReceipt(toChatUsername);
             // 把messgage加到conversation中
             conversation.addMessage(message);
+            //发送消息
+            EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(int i, String s) {
+
+                }
+
+                @Override
+                public void onProgress(int i, String s) {
+
+                }
+            });
             // 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
             adapter.refreshSelectLast();
             msgEdt.setText("");
