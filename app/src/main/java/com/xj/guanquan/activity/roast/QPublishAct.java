@@ -105,7 +105,7 @@ public class QPublishAct extends QBaseActivity implements UploadUtil.OnUploadPro
 //    private NoteInfo note;
     private StringRequest requestPublish;
     private String Avatar=null;
-    public static String requestURL = "http://192.168.10.160:8080/fileUpload/p/file!upload";
+    public String requestURL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -363,7 +363,14 @@ public class QPublishAct extends QBaseActivity implements UploadUtil.OnUploadPro
             if(RequestType == RequestPublish){
                 if (PageType == TypeTucao) {
                     Map<String, String> params=new HashMap<>();
-                    startRequest(ApiList.TUCAO_Publish, params);
+                    if(picPath!=null)
+                    {
+                        requestURL = ApiList.TUCAO_Publish;
+                        handler.sendEmptyMessage(TO_UPLOAD_FILE);
+                    }else{
+                        startRequest(ApiList.TUCAO_Publish, params);
+//                        ToastUtils.show(this, "上传的文件路径出错");
+                    }
                 } else if (PageType == TypeDate) {
                     if (timeTxt.getText().length() == 0) {
                         ToastUtils.show(getApplicationContext(), "请选择日期");
@@ -456,12 +463,6 @@ public class QPublishAct extends QBaseActivity implements UploadUtil.OnUploadPro
             Log.i("Upload", "最终选择的图片=" + picPath);
             Bitmap bmp = BitmapFactory.decodeFile(picPath);
             seImageView(bmp);
-            if(picPath!=null)
-            {
-                handler.sendEmptyMessage(TO_UPLOAD_FILE);
-            }else{
-                ToastUtils.show(this, "上传的文件路径出错");
-            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -489,7 +490,12 @@ public class QPublishAct extends QBaseActivity implements UploadUtil.OnUploadPro
         uploadUtil.setOnUploadProcessListener(this);  //设置监听器监听上传状态
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("orderId", "11111");
+//        params.put("orderId", "11111");
+        JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QPublishAct.this, "loginData"));
+        params.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+        params.put("content", String.valueOf(editText.getText().toString()));
+        params.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
+        params.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
         uploadUtil.uploadFile( picPath,fileKey, requestURL,params);
     }
 
@@ -506,8 +512,13 @@ public class QPublishAct extends QBaseActivity implements UploadUtil.OnUploadPro
                 case UPLOAD_IN_PROCESS:
                     break;
                 case UPLOAD_FILE_DONE:
-                    String result = "响应码："+msg.arg1+"\n响应信息："+msg.obj+"\n耗时："+UploadUtil.getRequestTime()+"秒";
-                    ToastUtils.show(getApplicationContext(), result);
+                    String result = "code："+msg.arg1+"\nresponseInfo："+msg.obj+"\n useTime："+UploadUtil.getRequestTime()+"秒";
+                    alertDialog(result, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
                     break;
                 default:
                     break;
