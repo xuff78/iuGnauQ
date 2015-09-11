@@ -720,4 +720,15 @@
             android:text="关注"
             android:textColor="@color/black_deep" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/toMessageBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="20dp"
+        android:background="@mipmap/icon_msg"
+        android:onClick="onClick" />
 </RelativeLayout>

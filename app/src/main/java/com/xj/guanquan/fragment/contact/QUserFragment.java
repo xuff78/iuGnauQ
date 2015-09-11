@@ -1,6 +1,5 @@
 package com.xj.guanquan.fragment.contact;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,12 +20,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
-import com.xj.guanquan.activity.message.QMsgDetailActivity;
+import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.common.ApiList;
+import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.CircleUserInfo;
 import com.xj.guanquan.model.PageInfo;
+import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -289,10 +290,12 @@ public class QUserFragment extends QBaseFragment {
         @Override
         public void onClick(View v) {
             CircleUserInfo userInfo = circleUserInfoList.get(getAdapterPosition());
-            // 进入聊天页面
-            Intent intent = new Intent(getActivity(), QMsgDetailActivity.class);
-            intent.putExtra("userId", String.valueOf(userInfo.getUserId()));
-            startActivity(intent);
+            UserInfo user = new UserInfo();
+            user.setNickName(userInfo.getNickName());
+            user.setUserId(userInfo.getUserId());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userInfo", user);
+            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class, bundle);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.xj.guanquan.activity.found;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
@@ -71,10 +73,12 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private ImageView roastMore;
     private TextView constellation;
     private TextView descript;
+    private Button toMessageBtn;
 
     private StringRequest request;
     private StringRequest requestFollow;
     private StringRequest requestCancelFollow;
+    private String huanxinName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +193,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 map.put("followId", String.valueOf(userInfo.getUserId()));
                 map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
                 map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
                 return map;
             }
 
@@ -216,6 +221,11 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 request = requestFollow;
                 addToRequestQueue(request, ApiList.ADD_FOLLOW, true);
             }
+        } else if (v == toMessageBtn) {
+            // 进入聊天页面
+            Intent intent = new Intent(this, QMsgDetailActivity.class);
+            intent.putExtra("userId", huanxinName);
+            startActivity(intent);
         }
     }
 
@@ -253,6 +263,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         roastMore = (ImageView) findViewById(R.id.roastMore);
         descript = (TextView) findViewById(R.id.descript);
         constellation = (TextView) findViewById(R.id.constellation);
+        toMessageBtn = (Button) findViewById(R.id.toMessageBtn);
 
         good.setOnClickListener(this);
         attentionBtn.setOnClickListener(this);
@@ -311,21 +322,34 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 age.setText(content.getString("age"));
                 height.setText(content.getString("height"));
                 marriage.setText(content.getString("feelingStatus"));
+                huanxinName = content.getString("huanxinName");
                 String relationTxt = "";
                 switch (content.getIntValue("relation")) {
                     case 0:
                         relationTxt = "自己";
+                        toMessageBtn.setVisibility(View.GONE);
+                        attentionArea.setVisibility(View.GONE);
                         break;
                     case 1:
                         relationTxt = "粉丝";
+                        attentionBtn.setSelected(false);
+                        attentionBtn.setText("关注");
                         break;
                     case 2:
                         relationTxt = "关注";
+                        attentionBtn.setSelected(true);
+                        attentionBtn.setText("取消关注");
                         break;
                     case 3:
                         relationTxt = "好友";
+                        attentionBtn.setSelected(true);
+                        attentionBtn.setText("取消关注");
                         break;
-
+                    case 4:
+                        relationTxt = "陌生人";
+                        attentionBtn.setSelected(false);
+                        attentionBtn.setText("关注");
+                        break;
                 }
                 relation.setText(relationTxt);
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
