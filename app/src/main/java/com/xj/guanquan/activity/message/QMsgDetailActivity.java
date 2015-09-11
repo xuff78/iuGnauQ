@@ -10,8 +10,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -196,6 +199,40 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
                 return false;
             }
         });
+        msgEdt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                more.setVisibility(View.GONE);
+                ivemoticonsnormal.setVisibility(View.VISIBLE);
+                ivemoticonschecked.setVisibility(View.INVISIBLE);
+                llfacecontainer.setVisibility(View.GONE);
+                llbtncontainer.setVisibility(View.GONE);
+            }
+        });
+        // 监听文字框
+        msgEdt.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) {
+                    btnmore.setVisibility(View.GONE);
+                    btnsend.setVisibility(View.VISIBLE);
+                } else {
+                    btnmore.setVisibility(View.VISIBLE);
+                    btnsend.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -230,6 +267,18 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         mRecyclerView.setLayoutManager(mLayoutManager);
 //        mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                more.setVisibility(View.GONE);
+                ivemoticonsnormal.setVisibility(View.VISIBLE);
+                ivemoticonschecked.setVisibility(View.INVISIBLE);
+                llfacecontainer.setVisibility(View.GONE);
+                llbtncontainer.setVisibility(View.GONE);
+                return false;
+            }
+        });
 
     }
 
@@ -254,6 +303,9 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             more.setVisibility(View.GONE);
         } else if (v == btnmore) {
             toggleMore(more);
+        } else if (v == btnsend) {
+            String s = msgEdt.getText().toString();
+            sendText(s);
         }
     }
 
