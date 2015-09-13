@@ -50,6 +50,7 @@ public class ApiList {
     public static String DATE_AddComment = BASE_API + "1/dating/addComment";
     public static String DATE_AddComplain = BASE_API + "1/dating/addComplain";
     public static String DATE_AddLike = BASE_API + "1/dating/addLike";
+    public static String DATE_Join = BASE_API + "1/dating/join";
 
     //秘密
     public static String SECRET_Avatar = BASE_API + "1/secret/avatarList";

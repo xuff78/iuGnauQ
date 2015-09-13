@@ -393,9 +393,10 @@ public class QPublishAct extends QBaseActivity implements UploadUtil.OnUploadPro
                     }
                 }
             } else if (RequestType == RequestJoin) {
-//                Map<String, String> params=new HashMap<>();
-//                params.put("id", AddrEdt.getText().toString());
-//                startRequest(ApiList.DA, params);
+                NoteInfo noteinfo= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
+                Map<String, String> params=new HashMap<>();
+                params.put("id", noteinfo.getId() + "");
+                startRequest(ApiList.DATE_Join, params);
             } else if (RequestType == RequestComplain) {
                 Map<String, String> params=new HashMap<>();
                 String userphone=complainPhoneEdt.getText().toString();

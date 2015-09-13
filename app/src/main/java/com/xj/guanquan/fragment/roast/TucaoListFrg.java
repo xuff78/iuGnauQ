@@ -189,6 +189,7 @@ public class TucaoListFrg extends QBaseFragment {
                     break;
                 case R.id.bookBtn:
                     intent=new Intent(getActivity(), QPublishAct.class);
+                    intent.putExtra("NoteInfo", notes.get(position));
                     intent.putExtra("PageType", PageType);
                     intent.putExtra("RequestType", QPublishAct.RequestJoin);
                     startActivity(intent);

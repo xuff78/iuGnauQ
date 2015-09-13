@@ -114,6 +114,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 				public void onClick(View view) {
 
 					Intent intent=new Intent(act, QPublishAct.class);
+					intent.putExtra("NoteInfo", datalist.get(position));
 					intent.putExtra("RequestType", QPublishAct.RequestJoin);
 					intent.putExtra("PageType", QPublishAct.TypeDate);
 					act.startActivity(intent);
