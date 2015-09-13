@@ -369,7 +369,6 @@ public class QPublishAct extends QBaseActivity implements UploadUtil.OnUploadPro
                         handler.sendEmptyMessage(TO_UPLOAD_FILE);
                     }else{
                         startRequest(ApiList.TUCAO_Publish, params);
-//                        ToastUtils.show(this, "上传的文件路径出错");
                     }
                 } else if (PageType == TypeDate) {
                     if (timeTxt.getText().length() == 0) {
