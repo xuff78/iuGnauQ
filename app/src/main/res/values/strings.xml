@@ -16,6 +16,13 @@
     <string name="nearby_circle">附近圈子</string>
     <string name="found_circle">发现圈子</string>
     <string name="found_user">发现用户</string>
+    <string name="recoding_fail">录音失败，请重试！</string>
+    <string name="Are_agree_with">正在同意...</string>
+    <string name="Is_download_voice_click_later">正在下载语音，稍后点击</string>
+    <string name="Send_voice_need_sdcard_support">发送语音需要sdcard支持</string>
+    <string name="Recording_without_permission">无录音权限</string>
+    <string name="The_recording_time_is_too_short">录音时间太短</string>
+    <string name="send_failure_please">发送失败，请检测服务器是否连接</string>
     <string name="title_activity_come">ComeActivity</string>
     <string name="title_activity_system_settings">SystemSettingsActivity</string>
     <string name="title_activity_message_settings">MessageSettingsActivity</string>

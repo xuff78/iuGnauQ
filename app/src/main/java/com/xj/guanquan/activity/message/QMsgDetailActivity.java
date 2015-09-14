@@ -2,9 +2,11 @@ package com.xj.guanquan.activity.message;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -26,25 +28,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.EMCallBack;
+import com.easemob.EMError;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.VoiceMessageBody;
 import com.easemob.util.VoiceRecorder;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.adapter.ExpressionAdapter;
 import com.xj.guanquan.adapter.ExpressionPagerAdapter;
 import com.xj.guanquan.adapter.MessageAdapter;
+import com.xj.guanquan.adapter.VoicePlayClickListener;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
 import com.xj.guanquan.views.ExpandGridView;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +71,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private EditText msgEdt;
     private MessageAdapter adapter;
     private InputMethodManager manager;
+    public String playMsgId;
 
     private static final String TAG = "QMsgDetailActivity";
     private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
@@ -131,7 +139,12 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private Button btnmore;
     private LinearLayout more;
     private LinearLayout barbottom;
+
+    private View recordingContainer;
     private ImageView micImage;
+    private TextView recordingHint;
+    private PowerManager.WakeLock wakeLock;
+    public boolean isRobot=false;
 
     private Handler micImageHandler = new Handler() {
         @Override
@@ -170,6 +183,9 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     }
 
     private void initData() {
+
+        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(
+                PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
         if (chatType == CHATTYPE_SINGLE) { // 单聊
             toChatUsername = getIntent().getStringExtra("userId");
         } else {
@@ -260,6 +276,10 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
                 toActivity(QUserDetailActivity.class, bundle);
             }
         });
+
+        recordingContainer = findViewById(R.id.recording_container);
+        micImage = (ImageView) findViewById(R.id.mic_image);
+        recordingHint = (TextView) findViewById(R.id.recording_hint);
         clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         initialize();
@@ -334,6 +354,92 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
                 conversation.loadMoreMsgFromDB(msgId, pagesize);
             } else {
                 conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
+            }
+        }
+    }
+
+    /**
+     * 按住说话listener
+     *
+     */
+    class PressToSpeakListen implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    if (!android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+                        String st4 = getResources().getString(R.string.Send_voice_need_sdcard_support);
+                        Toast.makeText(QMsgDetailActivity.this, st4, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    try {
+                        v.setPressed(true);
+                        wakeLock.acquire();
+                        if (VoicePlayClickListener.isPlaying)
+                            VoicePlayClickListener.currentPlayListener.stopPlayVoice();
+                        recordingContainer.setVisibility(View.VISIBLE);
+                        recordingHint.setText(getString(R.string.move_up_to_cancel));
+                        recordingHint.setBackgroundColor(Color.TRANSPARENT);
+                        voiceRecorder.startRecording(null, toChatUsername, getApplicationContext());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        v.setPressed(false);
+                        if (wakeLock.isHeld())
+                            wakeLock.release();
+                        if (voiceRecorder != null)
+                            voiceRecorder.discardRecording();
+                        recordingContainer.setVisibility(View.INVISIBLE);
+                        Toast.makeText(QMsgDetailActivity.this, R.string.recoding_fail, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                    return true;
+                case MotionEvent.ACTION_MOVE: {
+                    if (event.getY() < 0) {
+                        recordingHint.setText(getString(R.string.release_to_cancel));
+                        recordingHint.setBackgroundResource(R.drawable.recording_text_hint_bg);
+                    } else {
+                        recordingHint.setText(getString(R.string.move_up_to_cancel));
+                        recordingHint.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    return true;
+                }
+                case MotionEvent.ACTION_UP:
+                    v.setPressed(false);
+                    recordingContainer.setVisibility(View.INVISIBLE);
+                    if (wakeLock.isHeld())
+                        wakeLock.release();
+                    if (event.getY() < 0) {
+                        // discard the recorded audio.
+                        voiceRecorder.discardRecording();
+
+                    } else {
+                        // stop recording and send voice file
+                        String st1 = getResources().getString(R.string.Recording_without_permission);
+                        String st2 = getResources().getString(R.string.The_recording_time_is_too_short);
+                        String st3 = getResources().getString(R.string.send_failure_please);
+                        try {
+                            int length = voiceRecorder.stopRecoding();
+                            if (length > 0) {
+                                sendVoice(voiceRecorder.getVoiceFilePath(), voiceRecorder.getVoiceFileName(toChatUsername),
+                                        Integer.toString(length), false);
+                            } else if (length == EMError.INVALID_FILE) {
+                                Toast.makeText(getApplicationContext(), st1, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), st2, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(QMsgDetailActivity.this, st3, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    return true;
+                default:
+                    recordingContainer.setVisibility(View.INVISIBLE);
+                    if (voiceRecorder != null)
+                        voiceRecorder.discardRecording();
+                    return false;
             }
         }
     }
@@ -468,6 +574,43 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             msgEdt.setText("");
             setResult(RESULT_OK);
 
+        }
+    }
+
+    /**
+     * 发送语音
+     *
+     * @param filePath
+     * @param fileName
+     * @param length
+     * @param isResend
+     */
+    private void sendVoice(String filePath, String fileName, String length, boolean isResend) {
+        if (!(new File(filePath).exists())) {
+            return;
+        }
+        try {
+            final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
+            // 如果是群聊，设置chattype,默认是单聊
+            if (chatType == CHATTYPE_GROUP){
+                message.setChatType(EMMessage.ChatType.GroupChat);
+            }else if(chatType == CHATTYPE_CHATROOM){
+                message.setChatType(EMMessage.ChatType.ChatRoom);
+            }
+            message.setReceipt(toChatUsername);
+            int len = Integer.parseInt(length);
+            VoiceMessageBody body = new VoiceMessageBody(new File(filePath), len);
+            message.addBody(body);
+            if(isRobot){
+                message.setAttribute("em_robot_message", true);
+            }
+            conversation.addMessage(message);
+            adapter.refreshSelectLast();
+            setResult(RESULT_OK);
+            // send file
+            // sendVoiceSub(filePath, fileName, message);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -646,6 +789,26 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getCurrentFocus() != null)
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (wakeLock.isHeld())
+            wakeLock.release();
+        if (VoicePlayClickListener.isPlaying && VoicePlayClickListener.currentPlayListener != null) {
+            // 停止语音播放
+            VoicePlayClickListener.currentPlayListener.stopPlayVoice();
+        }
+
+        try {
+            // 停止录音
+            if (voiceRecorder.isRecording()) {
+                voiceRecorder.discardRecording();
+                recordingContainer.setVisibility(View.INVISIBLE);
+            }
+        } catch (Exception e) {
         }
     }
 
