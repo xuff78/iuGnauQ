@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
 import com.easemob.EMEventListener;
@@ -48,7 +49,9 @@ import com.xj.guanquan.adapter.MessageAdapter;
 import com.xj.guanquan.adapter.VoicePlayClickListener;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.SmileUtils;
+import com.xj.guanquan.model.ExpandMsgInfo;
 import com.xj.guanquan.model.MessageInfo;
+import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.ExpandGridView;
 
 import java.io.File;
@@ -56,6 +59,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
 import common.eric.com.ebaselibrary.util.ToastUtils;
 
@@ -144,7 +148,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private ImageView micImage;
     private TextView recordingHint;
     private PowerManager.WakeLock wakeLock;
-    public boolean isRobot=false;
+    public boolean isRobot = false;
 
     private Handler micImageHandler = new Handler() {
         @Override
@@ -155,6 +159,8 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     };
     private VoiceRecorder voiceRecorder;
     private ClipboardManager clipboard;
+    private UserInfo userInfo;
+    private ExpandMsgInfo fromUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +168,9 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_qmsg_detail);
         // 判断单聊还是群聊
         chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);
+        fromUser = (ExpandMsgInfo) getIntent().getSerializableExtra("messageInfo");
+        JSONObject jsonObject = JSONObject.parseObject(PreferencesUtils.getString(this, "loginData"));
+        userInfo = JSONObject.parseObject(jsonObject.getJSONObject("data").toJSONString(), UserInfo.class);
         initData();
         initialize();
     }
@@ -360,7 +369,6 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
 
     /**
      * 按住说话listener
-     *
      */
     class PressToSpeakListen implements View.OnTouchListener {
         @Override
@@ -548,6 +556,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             TextMessageBody txtBody = new TextMessageBody(content);
             // 设置消息body
             message.addBody(txtBody);
+            initExpandMsg(message);
             // 设置要发给谁,用户username或者群聊groupid
             message.setReceipt(toChatUsername);
             // 把messgage加到conversation中
@@ -592,16 +601,17 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         try {
             final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
             // 如果是群聊，设置chattype,默认是单聊
-            if (chatType == CHATTYPE_GROUP){
+            if (chatType == CHATTYPE_GROUP) {
                 message.setChatType(EMMessage.ChatType.GroupChat);
-            }else if(chatType == CHATTYPE_CHATROOM){
+            } else if (chatType == CHATTYPE_CHATROOM) {
                 message.setChatType(EMMessage.ChatType.ChatRoom);
             }
             message.setReceipt(toChatUsername);
             int len = Integer.parseInt(length);
             VoiceMessageBody body = new VoiceMessageBody(new File(filePath), len);
             message.addBody(body);
-            if(isRobot){
+            initExpandMsg(message);
+            if (isRobot) {
                 message.setAttribute("em_robot_message", true);
             }
             conversation.addMessage(message);
@@ -812,4 +822,16 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         }
     }
 
+    private void initExpandMsg(EMMessage message) {
+        if (this.fromUser != null) {
+            message.setAttribute("toUserInfo", JSONObject.toJSONString(fromUser));
+        }
+        ExpandMsgInfo toUser = new ExpandMsgInfo();
+        if (userInfo != null) {
+            toUser.setUserIcon(userInfo.getAvatar());
+            toUser.setUserId(String.valueOf(userInfo.getUserId()));
+            toUser.setUserName(userInfo.getNickName());
+            message.setAttribute("fromUserInfo", JSONObject.toJSONString(toUser));
+        }
+    }
 }

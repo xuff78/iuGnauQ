@@ -23,6 +23,7 @@ import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.model.ExpandMsgInfo;
 import com.xj.guanquan.model.PictureInfo;
 import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
@@ -79,6 +80,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private StringRequest requestFollow;
     private StringRequest requestCancelFollow;
     private String huanxinName;
+    JSONObject content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +227,8 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             // 进入聊天页面
             Intent intent = new Intent(this, QMsgDetailActivity.class);
             intent.putExtra("userId", huanxinName);
+            intent.putExtra("messageInfo", new ExpandMsgInfo(content.getString("nickName"),
+                    content.getString("avatar"), content.getString("huanxinName"), null, null, null));
             startActivity(intent);
         }
     }
@@ -310,7 +314,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             if (StringUtils.isEquals(request.getTag().toString(), ApiList.USER_DETAIL)) {
-                JSONObject content = result.getData().getJSONObject("content");
+                content = result.getData().getJSONObject("content");
                 income.setText(content.getString("income"));
                 distance.setText(content.getString("distance"));
                 constellation.setText(content.getString("constellation"));

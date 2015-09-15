@@ -22,6 +22,7 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -31,8 +32,11 @@ import com.xj.guanquan.common.Constant;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.common.SmileUtils;
+import com.xj.guanquan.model.ExpandMsgInfo;
 import com.xj.guanquan.model.MessageInfo;
+import com.xj.guanquan.model.UserInfo;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -70,6 +74,7 @@ public class QMessageFragment extends QBaseFragment {
     private List<MessageInfo> messageInfoList;
 
     private List<EMConversation> conversationList = new ArrayList<EMConversation>();
+    private UserInfo userInfo;
 
     /**
      * Use this factory method to create a new instance of
@@ -123,12 +128,23 @@ public class QMessageFragment extends QBaseFragment {
         messageInfoList = new ArrayList<MessageInfo>();
         conversationList.addAll(loadConversationsWithRecentChat());
         for (EMConversation conversation : conversationList) {
-            MessageInfo messageInfo = new MessageInfo(conversation.getUserName(),
-                    "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg",
-                    conversation.getUnreadMsgCount(),
-                    DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
-                    SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
-            messageInfoList.add(messageInfo);
+            try {
+                JSONObject jsonObject = conversation.getLastMessage().getJSONObjectAttribute("fromUserInfo");
+                JSONObject toUserJson = conversation.getLastMessage().getJSONObjectAttribute("toUserInfo");
+                if (jsonObject != null && StringUtils.isEquals(jsonObject.getString("userId"), String.valueOf(userInfo.getUserId()))) {
+                    jsonObject = toUserJson;
+                }
+                MessageInfo messageInfo = new MessageInfo(jsonObject != null ? jsonObject.getString("userName") : "",
+                        jsonObject != null ? jsonObject.getString("userIcon") : "",
+                        conversation.getUnreadMsgCount(),
+                        DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
+                        SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
+                messageInfoList.add(messageInfo);
+            } catch (EaseMobException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         //通用adapter设置数据
         mAdapter = new RecyclerViewAdapter(new String[]{"name", "lastMsg", "msgNum", "headImage", "time"}, R.layout.list_message_record_item, messageInfoList);
@@ -201,6 +217,8 @@ public class QMessageFragment extends QBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+        userInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getJSONObject("data").toJSONString(), UserInfo.class);
         return inflater.inflate(R.layout.fragment_qmessage, container, false);
     }
 
@@ -277,12 +295,24 @@ public class QMessageFragment extends QBaseFragment {
         messageInfoList.clear();
         conversationList.addAll(loadConversationsWithRecentChat());
         for (EMConversation conversation : conversationList) {
-            MessageInfo messageInfo = new MessageInfo(conversation.getUserName(),
-                    "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg",
-                    conversation.getUnreadMsgCount(),
-                    DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
-                    SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
-            messageInfoList.add(messageInfo);
+            try {
+                JSONObject jsonObject = conversation.getLastMessage().getJSONObjectAttribute("fromUserInfo");
+                JSONObject toUserJson = conversation.getLastMessage().getJSONObjectAttribute("toUserInfo");
+                if (jsonObject != null && StringUtils.isEquals(jsonObject.getString("userId"), String.valueOf(userInfo.getUserId()))) {
+                    jsonObject = toUserJson;
+                }
+                MessageInfo messageInfo = new MessageInfo(jsonObject != null ? jsonObject.getString("userName") : "",
+                        jsonObject != null ? jsonObject.getString("userIcon") : "",
+                        conversation.getUnreadMsgCount(),
+                        DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
+                        SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
+                messageInfoList.add(messageInfo);
+            } catch (EaseMobException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
         if (mAdapter != null)
             mAdapter.setData(messageInfoList);
@@ -443,6 +473,7 @@ public class QMessageFragment extends QBaseFragment {
             EMConversation conversation = conversationList.get(getAdapterPosition());
             String username = conversation.getUserName();
             String loginName = PreferencesUtils.getString(getActivity(), "username", "");
+            MessageInfo messageInfo = messageInfoList.get(getAdapterPosition());
             if (StringUtils.isEquals(username, loginName)) {
                 ((QBaseActivity) getActivity()).showToastShort(getString(R.string.Cant_chat_with_yourself));
             } else {
@@ -453,6 +484,7 @@ public class QMessageFragment extends QBaseFragment {
                         // it is group chat
                         intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_CHATROOM);
                         intent.putExtra("groupId", username);
+                        intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, messageInfo.getName(), messageInfo.getHeadImage(), username));
                     } else {
                         // it is group chat
                         intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_GROUP);
@@ -462,6 +494,7 @@ public class QMessageFragment extends QBaseFragment {
                 } else {
                     // it is single chat
                     intent.putExtra("userId", username);
+                    intent.putExtra("messageInfo", new ExpandMsgInfo(messageInfo.getName(), messageInfo.getHeadImage(), username, null, null, null));
                 }
                 startActivity(intent);
             }

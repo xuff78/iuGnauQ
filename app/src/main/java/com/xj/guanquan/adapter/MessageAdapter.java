@@ -2,6 +2,7 @@ package com.xj.guanquan.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,19 +11,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.Constant;
 import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -210,12 +213,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class MessageHolder extends RecyclerView.ViewHolder {
-        ImageView userImg;
+        SimpleDraweeView userImg;
         TextView userMsg;
 
         public MessageHolder(View itemView) {
             super(itemView);
-            userImg = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
+            userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
             userMsg = (TextView) itemView.findViewById(R.id.userMsg);
         }
     }
@@ -272,6 +275,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
         // 设置内容
         holder.userMsg.setText(span, TextView.BufferType.SPANNABLE);
+        Uri uri = null;
+        try {
+            uri = Uri.parse(message.getJSONObjectAttribute("fromUserInfo").getString("userIcon"));
+            holder.userImg.setImageURI(uri);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (EaseMobException e) {
+            e.printStackTrace();
+        }
 //        if (message.direct == EMMessage.Direct.SEND) {
 //            switch (message.status) {
 //                case SUCCESS: // 发送成功
