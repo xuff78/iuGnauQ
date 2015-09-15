@@ -16,6 +16,10 @@
     <string name="nearby_circle">附近圈子</string>
     <string name="found_circle">发现圈子</string>
     <string name="found_user">发现用户</string>
+    <string name="connect_failuer_toast">请检查网络或稍候重试</string>
+    <string name="network_unavailable">网络连接不可用，请检查网络</string>
+    <string name="text_ack_msg">已读</string>
+    <string name="text_delivered_msg">送达</string>
     <string name="recoding_fail">录音失败，请重试！</string>
     <string name="Are_agree_with">正在同意...</string>
     <string name="Is_download_voice_click_later">正在下载语音，稍后点击</string>
