@@ -30,6 +30,7 @@ import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
 import com.easemob.util.EMLog;
+import com.easemob.exceptions.EaseMobException;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
@@ -39,6 +40,8 @@ import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
 
 import java.io.File;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
@@ -250,12 +253,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class MessageHolder extends RecyclerView.ViewHolder {
-        ImageView userImg;
+        SimpleDraweeView userImg;
         TextView userMsg;
 
         public MessageHolder(View itemView) {
             super(itemView);
-            userImg = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
+            userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
             userMsg = (TextView) itemView.findViewById(R.id.userMsg);
         }
     }
@@ -349,6 +352,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
         // 设置内容
         holder.userMsg.setText(span, TextView.BufferType.SPANNABLE);
+        Uri uri = null;
+        try {
+            uri = Uri.parse(message.getJSONObjectAttribute("fromUserInfo").getString("userIcon"));
+            holder.userImg.setImageURI(uri);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (EaseMobException e) {
+            e.printStackTrace();
+        }
 //        if (message.direct == EMMessage.Direct.SEND) {
 //            switch (message.status) {
 //                case SUCCESS: // 发送成功
