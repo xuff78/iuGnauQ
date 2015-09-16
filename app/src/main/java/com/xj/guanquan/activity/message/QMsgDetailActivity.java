@@ -50,7 +50,6 @@ import com.easemob.chat.VoiceMessageBody;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 import com.xj.guanquan.R;
-import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.adapter.ExpressionAdapter;
 import com.xj.guanquan.adapter.ExpressionPagerAdapter;
 import com.xj.guanquan.adapter.MessageAdapter;
@@ -286,15 +285,6 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     protected void initView() {
         _setHeaderTitle(getString(R.string.title_activity_qmsg_detail));
         _setRightHomeGone();
-        _setRightHomeText("个人资料", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                //UserInfo userInfo = new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会");
-                //bundle.putSerializable("userInfo", userInfo);
-                toActivity(QUserDetailActivity.class, bundle);
-            }
-        });
 
         recordingContainer = findViewById(R.id.recording_container);
         micImage = (ImageView) findViewById(R.id.mic_image);

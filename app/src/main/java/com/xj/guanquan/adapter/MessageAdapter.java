@@ -3,6 +3,7 @@ package com.xj.guanquan.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
+import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
@@ -35,9 +37,11 @@ import com.easemob.util.EMLog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
-import com.xj.guanquan.Utils.LoadImageTask;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.Constant;
+import com.xj.guanquan.common.ImageCache;
+import com.xj.guanquan.common.LoadImageTask;
+import com.xj.guanquan.common.QShowBigImage;
 import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
 import com.xj.guanquan.model.UserInfo;
@@ -672,7 +676,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder.staus_iv.setVisibility(View.GONE);
                 break;
             default:
-//                sendMsgInBackground(message, holder);
+                sendMsgInBackground(message, holder);
         }
     }
 
@@ -732,15 +736,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private boolean showImageView(final String thumbernailPath, final SimpleDraweeView iv, final String localFullSizePath, String remoteDir,
-                                  final EMMessage message) {
-        final String remote = remoteDir;
-        new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, act, message);
-        return true;
-
-
-    }
-
     private void showDownloadImageProgress(final EMMessage message, final ImageHolder holder) {
         EMLog.d(TAG, "!!! show download image progress");
         // final ImageMessageBody msgbody = (ImageMessageBody)
@@ -788,6 +783,146 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
         });
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param message
+     * @param holder
+     * @param position
+     */
+    public void sendMsgInBackground(final EMMessage message, final VoiceHolder holder) {
+        holder.staus_iv.setVisibility(View.GONE);
+        holder.pb.setVisibility(View.VISIBLE);
+
+        final long start = System.currentTimeMillis();
+        // 调用sdk发送异步发送方法
+        EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+
+                updateSendedView(message, holder);
+            }
+
+            @Override
+            public void onError(int code, String error) {
+
+                updateSendedView(message, holder);
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+            }
+
+        });
+
+    }
+
+    /**
+     * 更新ui上消息发送状态
+     *
+     * @param message
+     * @param holder
+     */
+    private void updateSendedView(final EMMessage message, final VoiceHolder holder) {
+        act.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // send success
+                if (message.getType() == EMMessage.Type.VIDEO) {
+                    holder.tv.setVisibility(View.GONE);
+                }
+                EMLog.d(TAG, "message status : " + message.status);
+                if (message.status == EMMessage.Status.SUCCESS) {
+                    // if (message.getType() == EMMessage.Type.FILE) {
+                    // holder.pb.setVisibility(View.INVISIBLE);
+                    // holder.staus_iv.setVisibility(View.INVISIBLE);
+                    // } else {
+                    // holder.pb.setVisibility(View.GONE);
+                    // holder.staus_iv.setVisibility(View.GONE);
+                    // }
+
+                } else if (message.status == EMMessage.Status.FAIL) {
+                    // if (message.getType() == EMMessage.Type.FILE) {
+                    // holder.pb.setVisibility(View.INVISIBLE);
+                    // } else {
+                    // holder.pb.setVisibility(View.GONE);
+                    // }
+                    // holder.staus_iv.setVisibility(View.VISIBLE);
+
+                    if (message.getError() == EMError.MESSAGE_SEND_INVALID_CONTENT) {
+                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.error_send_invalid_content), 0)
+                                .show();
+                    } else if (message.getError() == EMError.MESSAGE_SEND_NOT_IN_THE_GROUP) {
+                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.error_send_not_in_the_group), 0)
+                                .show();
+                    } else {
+                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.connect_failuer_toast), 0)
+                                .show();
+                    }
+                }
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    /**
+     * load image into image view
+     *
+     * @param thumbernailPath
+     * @param iv
+     * @param position
+     * @return the image exists or not
+     */
+    private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,
+                                  final EMMessage message) {
+        final String remote = remoteDir;
+        EMLog.d("###", "local = " + localFullSizePath + " remote: " + remote);
+        // first check if the thumbnail image already loaded into cache
+        Bitmap bitmap = ImageCache.getInstance().get(thumbernailPath);
+        if (bitmap != null) {
+            // thumbnail image is already loaded, reuse the drawable
+            iv.setImageBitmap(bitmap);
+            iv.setClickable(true);
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EMLog.d(TAG, "image view on click");
+                    Intent intent = new Intent(act, QShowBigImage.class);
+                    File file = new File(localFullSizePath);
+                    if (file.exists()) {
+                        Uri uri = Uri.fromFile(file);
+                        intent.putExtra("uri", uri);
+                        EMLog.d(TAG, "here need to check why download everytime");
+                    } else {
+                        // The local full size pic does not exist yet.
+                        // ShowBigImage needs to download it from the server
+                        // first
+                        // intent.putExtra("", message.get);
+                        ImageMessageBody body = (ImageMessageBody) message.getBody();
+                        intent.putExtra("secret", body.getSecret());
+                        intent.putExtra("remotepath", remote);
+                    }
+                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
+                            && message.getChatType() != EMMessage.ChatType.GroupChat && message.getChatType() != EMMessage.ChatType.ChatRoom) {
+                        try {
+                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+                            message.isAcked = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    act.startActivity(intent);
+                }
+            });
+            return true;
+        } else {
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, act, message);
+            return true;
+        }
+
     }
 
 }

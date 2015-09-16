@@ -97,8 +97,8 @@
             android:label="@string/title_activity_qfeedback" />
         <activity
             android:name=".activity.roast.QPublishAct"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_publish"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.roast.TucaoDetailAct"
@@ -127,7 +127,12 @@
         <activity
             android:name=".activity.found.QCirclePhotosActivity"
             android:label="@string/title_activity_qcircle_photos"></activity>
-        <activity android:name=".activity.roast.SelectPicActivity" android:theme="@style/DialogStyleBottom"/>
+        <activity
+            android:name=".common.QShowBigImage"
+            android:label="@string/attach_picture"></activity>
+        <activity
+            android:name=".activity.roast.SelectPicActivity"
+            android:theme="@style/DialogStyleBottom" />
     </application>
 
 </manifest>

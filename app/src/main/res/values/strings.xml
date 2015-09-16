@@ -104,6 +104,11 @@
     <string name="release_to_cancel">松开手指，取消发送</string>
     <string name="send_fail">发送消息失败,</string>
     <string name="delete_message">删除消息</string>
+    <string name="error_send_invalid_content">你发送了不合法的消息内容</string>
+    <string name="error_send_not_in_the_group">你已经不在此群了</string>
+    <string name="Download_the_pictures">下载图片: 0%</string>
+    <string name="Download_the_pictures_new">下载图片:</string>
+    <string name="Failed_to_download_file">下载文件失败:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">附近用户</string>
