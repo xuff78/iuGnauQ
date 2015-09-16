@@ -4,11 +4,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,7 +47,6 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
-import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 import com.xj.guanquan.R;
@@ -67,8 +63,6 @@ import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.ExpandGridView;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -164,7 +158,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private TextView recordingHint;
     private PowerManager.WakeLock wakeLock;
     public boolean isRobot = false;
-    private String cameraFileName="camera_huanxin";
+    private String cameraFileName = "camera_huanxin";
 
     private Handler micImageHandler = new Handler() {
         @Override
@@ -351,13 +345,13 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         } else if (v == btnsend) {
             String s = msgEdt.getText().toString();
             sendText(s);
-        }else if (v == btnsetmodevoice) {
-            if(speakBtn.isShown()){
+        } else if (v == btnsetmodevoice) {
+            if (speakBtn.isShown()) {
                 speakBtn.setVisibility(View.GONE);
-            }else{
+            } else {
                 speakBtn.setVisibility(View.VISIBLE);
             }
-        }else if (v == btntakepicture) {
+        } else if (v == btntakepicture) {
             selectPicFromCamera();// 点击照相图标
         } else if (v == btnpicture) {
             selectPicFromLocal(); // 点击图片图标
@@ -660,9 +654,9 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         // create and add image message in view
         final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
         // 如果是群聊，设置chattype,默认是单聊
-        if (chatType == CHATTYPE_GROUP){
+        if (chatType == CHATTYPE_GROUP) {
             message.setChatType(EMMessage.ChatType.GroupChat);
-        }else if(chatType == CHATTYPE_CHATROOM){
+        } else if (chatType == CHATTYPE_CHATROOM) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
 
@@ -671,7 +665,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         // 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
         // body.setSendOriginalImage(true);
         message.addBody(body);
-        if(isRobot){
+        if (isRobot) {
             message.setAttribute("em_robot_message", true);
         }
         conversation.addMessage(message);
@@ -688,7 +682,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
      * @param selectedImage
      */
     private void sendPicByUri(Uri selectedImage) {
-        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
         String st8 = getResources().getString(R.string.cant_find_pictures);
         if (cursor != null) {
@@ -727,7 +721,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         ivemoticonsnormal = (ImageView) findViewById(R.id.iv_emoticons_normal);
         ivemoticonschecked = (ImageView) findViewById(R.id.iv_emoticons_checked);
         edittextlayout = (RelativeLayout) findViewById(R.id.edittext_layout);
-        speakBtn=(Button) findViewById(R.id.speakBtn);
+        speakBtn = (Button) findViewById(R.id.speakBtn);
         btnmore = (Button) findViewById(R.id.btn_more);
         btnsend = (Button) findViewById(R.id.btn_send);
         rlbottom = (LinearLayout) findViewById(R.id.rl_bottom);

@@ -29,9 +29,9 @@ import com.easemob.chat.FileMessageBody;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
-import com.easemob.exceptions.EaseMobException;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
@@ -40,16 +40,20 @@ import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.Constant;
 import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
+import com.xj.guanquan.model.UserInfo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
 
 /**
  * Created by 可爱的蘑菇 on 2015/8/29.
@@ -93,6 +97,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private String username;
     EMMessage[] messages = null;
     private Map<String, Timer> timers = new Hashtable<String, Timer>();
+    private UserInfo userInfo;
 
     public MessageAdapter(Context context, String username, int chatType) {
         this.context = context;
@@ -100,6 +105,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         listInflater = LayoutInflater.from(act);
         this.username = username;
         this.conversation = EMChatManager.getInstance().getConversation(username);
+        com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(PreferencesUtils.getString(act, "loginData"));
+        userInfo = com.alibaba.fastjson.JSONObject.parseObject(jsonObject.getJSONObject("data").toJSONString(), UserInfo.class);
     }
 
     Handler handler = new Handler() {
@@ -237,30 +244,30 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (message.getType() == EMMessage.Type.TXT) {
                 MessageHolder vh = (MessageHolder) viewHolder;
                 handleTextMessage(message, vh, position);
-            }else if (message.getType() == EMMessage.Type.VOICE){
+            } else if (message.getType() == EMMessage.Type.VOICE) {
                 VoiceHolder vh = (VoiceHolder) viewHolder;
                 handleVoiceMessage(message, vh, position);
-            }else if (message.getType() == EMMessage.Type.IMAGE){
+            } else if (message.getType() == EMMessage.Type.IMAGE) {
                 ImageHolder vh = (ImageHolder) viewHolder;
                 handleImageMessage(message, vh, position);
             }
 
             TextView timestamp = (TextView) viewHolder.itemView.findViewById(R.id.timestamp);
 
-            if(timestamp!=null)
-            if (position == 0) {
-                timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
-                timestamp.setVisibility(View.VISIBLE);
-            } else {
-                // 两条消息时间离得如果稍长，显示时间
-                EMMessage prevMessage = getItem(position - 1);
-                if (prevMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
-                    timestamp.setVisibility(View.GONE);
-                } else {
+            if (timestamp != null)
+                if (position == 0) {
                     timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
                     timestamp.setVisibility(View.VISIBLE);
+                } else {
+                    // 两条消息时间离得如果稍长，显示时间
+                    EMMessage prevMessage = getItem(position - 1);
+                    if (prevMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
+                        timestamp.setVisibility(View.GONE);
+                    } else {
+                        timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                        timestamp.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
         }
     }
 
@@ -317,14 +324,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class VoiceHolder extends RecyclerView.ViewHolder {
-        ImageView iv, iv_avatar, staus_iv, iv_read_status;
+        ImageView iv, staus_iv, iv_read_status;
+        SimpleDraweeView iv_avatar;
         TextView tv, tv_usernick;
         ProgressBar pb;
 
         public VoiceHolder(View convertView) {
             super(convertView);
             iv = ((ImageView) convertView.findViewById(R.id.iv_voice));
-            iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
+            iv_avatar = (SimpleDraweeView) convertView.findViewById(R.id.iv_userhead);
             tv = (TextView) convertView.findViewById(R.id.tv_length);
             pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
             staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
@@ -387,7 +395,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.userMsg.setText(span, TextView.BufferType.SPANNABLE);
         Uri uri = null;
         try {
-            uri = Uri.parse(message.getJSONObjectAttribute("fromUserInfo").getString("userIcon"));
+            JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
+            uri = Uri.parse(jsonObject.getString("userIcon"));
             holder.userImg.setImageURI(uri);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -425,6 +434,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      */
     private void handleImageMessage(final EMMessage message, final ImageHolder holder, final int position) {
         holder.pb.setTag(position);
+        Uri uri = null;
+        try {
+            JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
+            uri = Uri.parse(jsonObject.getString("userIcon"));
+            holder.iv_avatar.setImageURI(uri);
+        } catch (Exception e) {
+            Log.e("handleImageMessage", e.getMessage());
+        }
         holder.iv.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -454,7 +471,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     String remotePath = imgBody.getRemoteUrl();
                     String filePath = ImageUtils.getImagePath(remotePath);
                     String thumbRemoteUrl = imgBody.getThumbnailUrl();
-                    if(TextUtils.isEmpty(thumbRemoteUrl)&&!TextUtils.isEmpty(remotePath)){
+                    if (TextUtils.isEmpty(thumbRemoteUrl) && !TextUtils.isEmpty(remotePath)) {
                         thumbRemoteUrl = remotePath;
                     }
                     String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
@@ -540,14 +557,25 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param position
      * @param convertView
      */
+
     private void handleVoiceMessage(final EMMessage message, final VoiceHolder holder, final int position) {
         VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
         int len = voiceBody.getLength();
-        if(len>0){
+        if (len > 0) {
             holder.tv.setText(voiceBody.getLength() + "\"");
             holder.tv.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.tv.setVisibility(View.INVISIBLE);
+        }
+        Uri uri = null;
+        try {
+            JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
+            uri = Uri.parse(jsonObject.getString("userIcon"));
+            holder.iv_avatar.setImageURI(uri);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (EaseMobException e) {
+            e.printStackTrace();
         }
         holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, act, username));
         holder.iv.setOnLongClickListener(new View.OnLongClickListener() {
@@ -559,9 +587,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return true;
             }
         });
-        if (((QMsgDetailActivity)act).playMsgId != null
-                && ((QMsgDetailActivity)act).playMsgId.equals(message
-                .getMsgId())&&VoicePlayClickListener.isPlaying) {
+        if (((QMsgDetailActivity) act).playMsgId != null
+                && ((QMsgDetailActivity) act).playMsgId.equals(message
+                .getMsgId()) && VoicePlayClickListener.isPlaying) {
             AnimationDrawable voiceAnimation;
             if (message.direct == EMMessage.Direct.RECEIVE) {
                 holder.iv.setImageResource(R.anim.voice_from_icon);
@@ -707,8 +735,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private boolean showImageView(final String thumbernailPath, final SimpleDraweeView iv, final String localFullSizePath, String remoteDir,
                                   final EMMessage message) {
         final String remote = remoteDir;
-            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, act, message);
-            return true;
+        new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, act, message);
+        return true;
 
 
     }
@@ -718,9 +746,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // final ImageMessageBody msgbody = (ImageMessageBody)
         // message.getBody();
         final FileMessageBody msgbody = (FileMessageBody) message.getBody();
-        if(holder.pb!=null)
+        if (holder.pb != null)
             holder.pb.setVisibility(View.VISIBLE);
-        if(holder.tv!=null)
+        if (holder.tv != null)
             holder.tv.setVisibility(View.VISIBLE);
 
         msgbody.setDownloadCallback(new EMCallBack() {

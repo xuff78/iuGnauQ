@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:orientation="vertical"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    app:placeholderImageScaleType="fitXY"
+    fresco:placeholderImage="@mipmap/default_head_img">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/avatar"
@@ -15,7 +18,11 @@
         android:layout_height="40dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
-        app:roundedCornerRadius="5dp"></com.facebook.drawee.view.SimpleDraweeView>
+        app:roundedCornerRadius="5dp"
+        fresco:placeholderImage="@color/light_gray"
+        fresco:placeholderImageScaleType="fitCenter">
+
+    </com.facebook.drawee.view.SimpleDraweeView>
 
     <LinearLayout
         android:id="@+id/nameArea"

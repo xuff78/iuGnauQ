@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/timestamp"
@@ -15,17 +17,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity" >
+        android:layout_marginTop="@dimen/margin_chat_activity">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@mipmap/mini_avatar_shadow"
-            android:scaleType="fitXY" />
+            app:placeholderImageScaleType="fitCenter"
+            app:roundedCornerRadius="5dp"
+            fresco:placeholderImage="@color/light_gray" />
 
         <ImageView
             android:id="@+id/iv_voice"
@@ -57,11 +59,11 @@
 
         <ProgressBar
             android:id="@+id/pb_sending"
-            android:layout_toRightOf="@id/iv_unread_voice"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/iv_unread_voice"
             android:visibility="invisible" />
 
         <TextView
