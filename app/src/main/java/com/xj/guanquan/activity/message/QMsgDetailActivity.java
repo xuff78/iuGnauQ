@@ -140,7 +140,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private ImageView btnvideocall;
     private LinearLayout containervideocall;
     private LinearLayout llbtncontainer;
-    private Button btnmore;
+    private Button btnmore, speakBtn;
     private LinearLayout more;
     private LinearLayout barbottom;
 
@@ -335,6 +335,14 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         } else if (v == btnsend) {
             String s = msgEdt.getText().toString();
             sendText(s);
+        } else if (v == speakBtn) {
+
+        }else if (v == btnsetmodevoice) {
+            if(speakBtn.isShown()){
+                speakBtn.setVisibility(View.GONE);
+            }else{
+                speakBtn.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -632,6 +640,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         ivemoticonsnormal = (ImageView) findViewById(R.id.iv_emoticons_normal);
         ivemoticonschecked = (ImageView) findViewById(R.id.iv_emoticons_checked);
         edittextlayout = (RelativeLayout) findViewById(R.id.edittext_layout);
+        speakBtn=(Button) findViewById(R.id.speakBtn);
         btnmore = (Button) findViewById(R.id.btn_more);
         btnsend = (Button) findViewById(R.id.btn_send);
         rlbottom = (LinearLayout) findViewById(R.id.rl_bottom);
@@ -655,9 +664,11 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         msgEdt = (EditText) findViewById(R.id.msgEdt);
 
+        btnsetmodevoice.setOnClickListener(this);
         ivemoticonsnormal.setOnClickListener(this);
         ivemoticonschecked.setOnClickListener(this);
         btnmore.setOnClickListener(this);
+        speakBtn.setOnTouchListener(new PressToSpeakListen());
 
         // 动画资源文件,用于录制语音时
         micImages = new Drawable[]{getResources().getDrawable(R.mipmap.record_animate_01),

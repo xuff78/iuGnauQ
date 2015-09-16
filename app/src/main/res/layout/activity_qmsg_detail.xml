@@ -111,6 +111,14 @@
                     android:scaleType="fitCenter"
                     android:src="@mipmap/bq"
                     android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/speakBtn"
+                    android:visibility="gone"
+                    android:background="@drawable/shape_menu_hide"
+                    android:text="按住说话"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip" />
             </RelativeLayout>
 
             <Button
@@ -436,6 +444,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/mic_image"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
                 android:layout_marginTop="5dp"
                 android:padding="2dp"
                 android:text="@string/move_up_to_cancel"

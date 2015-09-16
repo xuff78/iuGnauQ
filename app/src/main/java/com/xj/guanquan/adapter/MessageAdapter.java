@@ -234,6 +234,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (message.getType() == EMMessage.Type.TXT) {
                 MessageHolder vh = (MessageHolder) viewHolder;
                 handleTextMessage(message, vh, position);
+            }else if (message.getType() == EMMessage.Type.VOICE){
+                VoiceHolder vh = (VoiceHolder) viewHolder;
+                handleVoiceMessage(message, vh, position);
+            }else if (message.getType() == EMMessage.Type.IMAGE){
+                ImageHolder vh = (ImageHolder) viewHolder;
+                handleImageMessage(message, vh, position);
             }
         }
     }
@@ -390,7 +396,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param position
      * @param convertView
      */
-    private void handleImageMessage(final EMMessage message, final ImageHolder holder, final int position, View convertView) {
+    private void handleImageMessage(final EMMessage message, final ImageHolder holder, final int position) {
         holder.pb.setTag(position);
         holder.iv.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -507,7 +513,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param position
      * @param convertView
      */
-    private void handleVoiceMessage(final EMMessage message, final VoiceHolder holder, final int position, View convertView) {
+    private void handleVoiceMessage(final EMMessage message, final VoiceHolder holder, final int position) {
         VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
         int len = voiceBody.getLength();
         if(len>0){
