@@ -29,11 +29,13 @@ import com.easemob.chat.FileMessageBody;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
+import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
 import com.easemob.exceptions.EaseMobException;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
+import com.xj.guanquan.Utils.LoadImageTask;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.Constant;
 import com.xj.guanquan.common.SmileUtils;
@@ -43,6 +45,7 @@ import java.io.File;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Timer;
@@ -241,7 +244,31 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ImageHolder vh = (ImageHolder) viewHolder;
                 handleImageMessage(message, vh, position);
             }
+
+            TextView timestamp = (TextView) viewHolder.itemView.findViewById(R.id.timestamp);
+
+            if(timestamp!=null)
+            if (position == 0) {
+                timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                timestamp.setVisibility(View.VISIBLE);
+            } else {
+                // 两条消息时间离得如果稍长，显示时间
+                EMMessage prevMessage = getItem(position - 1);
+                if (prevMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
+                    timestamp.setVisibility(View.GONE);
+                } else {
+                    timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                    timestamp.setVisibility(View.VISIBLE);
+                }
+            }
         }
+    }
+
+    public EMMessage getItem(int position) {
+        if (messages != null && position < messages.length) {
+            return messages[position];
+        }
+        return null;
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -679,51 +706,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private boolean showImageView(final String thumbernailPath, final SimpleDraweeView iv, final String localFullSizePath, String remoteDir,
                                   final EMMessage message) {
-        // String imagename =
-        // localFullSizePath.substring(localFullSizePath.lastIndexOf("/") + 1,
-        // localFullSizePath.length());
-        // final String remote = remoteDir != null ? remoteDir+imagename :
-        // imagename;
         final String remote = remoteDir;
-        EMLog.d("###", "local = " + localFullSizePath + " remote: " + remote);
-        // first check if the thumbnail image already loaded into cache
-            // thumbnail image is already loaded, reuse the drawable
-            iv.setImageURI(Uri.parse(thumbernailPath));
-            iv.setClickable(true);
-            iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EMLog.d(TAG, "image view on click");
-                    Intent intent = null; //new Intent(act, ShowBigImage.class);
-                    File file = new File(localFullSizePath);
-                    if (file.exists()) {
-                        Uri uri = Uri.fromFile(file);
-                        intent.putExtra("uri", uri);
-                        EMLog.d(TAG, "here need to check why download everytime");
-                    } else {
-                        // The local full size pic does not exist yet.
-                        // ShowBigImage needs to download it from the server
-                        // first
-                        // intent.putExtra("", message.get);
-                        ImageMessageBody body = (ImageMessageBody) message.getBody();
-                        intent.putExtra("secret", body.getSecret());
-                        intent.putExtra("remotepath", remote);
-                    }
-                    if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
-                            && message.getChatType() != EMMessage.ChatType.GroupChat && message.getChatType() != EMMessage.ChatType.ChatRoom) {
-                        try {
-                            EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
-                            message.isAcked = true;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    act.startActivity(intent);
-                }
-            });
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, act, message);
             return true;
-
-//            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, act, message);
 
 
     }

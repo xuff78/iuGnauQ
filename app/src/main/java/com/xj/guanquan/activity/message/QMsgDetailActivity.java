@@ -2,11 +2,19 @@ package com.xj.guanquan.activity.message;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,8 +47,11 @@ import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
+import com.easemob.util.EMLog;
+import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
@@ -55,6 +67,8 @@ import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.ExpandGridView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,12 +157,14 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private Button btnmore, speakBtn;
     private LinearLayout more;
     private LinearLayout barbottom;
+    private File cameraFile;
 
     private View recordingContainer;
     private ImageView micImage;
     private TextView recordingHint;
     private PowerManager.WakeLock wakeLock;
     public boolean isRobot = false;
+    private String cameraFileName="camera_huanxin";
 
     private Handler micImageHandler = new Handler() {
         @Override
@@ -335,14 +351,16 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         } else if (v == btnsend) {
             String s = msgEdt.getText().toString();
             sendText(s);
-        } else if (v == speakBtn) {
-
         }else if (v == btnsetmodevoice) {
             if(speakBtn.isShown()){
                 speakBtn.setVisibility(View.GONE);
             }else{
                 speakBtn.setVisibility(View.VISIBLE);
             }
+        }else if (v == btntakepicture) {
+            selectPicFromCamera();// 点击照相图标
+        } else if (v == btnpicture) {
+            selectPicFromLocal(); // 点击图片图标
         }
     }
 
@@ -632,6 +650,75 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * 发送图片
+     *
+     * @param filePath
+     */
+    private void sendPicture(final String filePath) {
+        String to = toChatUsername;
+        // create and add image message in view
+        final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
+        // 如果是群聊，设置chattype,默认是单聊
+        if (chatType == CHATTYPE_GROUP){
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        }else if(chatType == CHATTYPE_CHATROOM){
+            message.setChatType(EMMessage.ChatType.ChatRoom);
+        }
+
+        message.setReceipt(to);
+        ImageMessageBody body = new ImageMessageBody(new File(filePath));
+        // 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
+        // body.setSendOriginalImage(true);
+        message.addBody(body);
+        if(isRobot){
+            message.setAttribute("em_robot_message", true);
+        }
+        conversation.addMessage(message);
+
+        mRecyclerView.setAdapter(adapter);
+        adapter.refreshSelectLast();
+        setResult(RESULT_OK);
+        // more(more);
+    }
+
+    /**
+     * 根据图库图片uri发送图片
+     *
+     * @param selectedImage
+     */
+    private void sendPicByUri(Uri selectedImage) {
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        String st8 = getResources().getString(R.string.cant_find_pictures);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            cursor = null;
+
+            if (picturePath == null || picturePath.equals("null")) {
+                Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                return;
+            }
+            sendPicture(picturePath);
+        } else {
+            File file = new File(selectedImage.getPath());
+            if (!file.exists()) {
+                Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                return;
+
+            }
+            sendPicture(file.getAbsolutePath());
+        }
+
+    }
+
     private void initialize() {
 
         btnsetmodevoice = (Button) findViewById(R.id.btn_set_mode_voice);
@@ -830,6 +917,143 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
                 recordingContainer.setVisibility(View.INVISIBLE);
             }
         } catch (Exception e) {
+        }
+    }
+
+    /**
+     * 照相获取图片
+     */
+    public void selectPicFromCamera() {
+        if (!android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            String st = getResources().getString(R.string.sd_card_does_not_exist);
+            Toast.makeText(getApplicationContext(), st, 0).show();
+            return;
+        }
+
+        cameraFile = new File(PathUtil.getInstance().getImagePath(), cameraFileName
+                + System.currentTimeMillis() + ".jpg");
+        cameraFile.getParentFile().mkdirs();
+        startActivityForResult(
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
+                REQUEST_CODE_CAMERA);
+    }
+
+    /**
+     * 从图库获取图片
+     */
+    public void selectPicFromLocal() {
+        Intent intent;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+
+        } else {
+            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        startActivityForResult(intent, REQUEST_CODE_LOCAL);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) { // 清空消息
+            if (requestCode == REQUEST_CODE_EMPTY_HISTORY) {
+                // 清空会话
+                EMChatManager.getInstance().clearConversation(toChatUsername);
+                adapter.refresh();
+            } else if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
+                if (cameraFile != null && cameraFile.exists())
+                    sendPicture(cameraFile.getAbsolutePath());
+//            } else if (requestCode == REQUEST_CODE_SELECT_VIDEO) { // 发送本地选择的视频
+//
+//                int duration = data.getIntExtra("dur", 0);
+//                String videoPath = data.getStringExtra("path");
+//                File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+//                Bitmap bitmap = null;
+//                FileOutputStream fos = null;
+//                try {
+//                    if (!file.getParentFile().exists()) {
+//                        file.getParentFile().mkdirs();
+//                    }
+//                    bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+//                    if (bitmap == null) {
+//                        EMLog.d("chatactivity", "problem load video thumbnail bitmap,use default icon");
+//                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.app_panel_video_icon);
+//                    }
+//                    fos = new FileOutputStream(file);
+//
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    if (fos != null) {
+//                        try {
+//                            fos.close();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        fos = null;
+//                    }
+//                    if (bitmap != null) {
+//                        bitmap.recycle();
+//                        bitmap = null;
+//                    }
+//
+//                }
+//                sendVideo(videoPath, file.getAbsolutePath(), duration / 1000);
+
+            } else if (requestCode == REQUEST_CODE_LOCAL) { // 发送本地图片
+                if (data != null) {
+                    Uri selectedImage = data.getData();
+                    if (selectedImage != null) {
+                        sendPicByUri(selectedImage);
+                    }
+                }
+            }
+//            else if (requestCode == REQUEST_CODE_SELECT_FILE) { // 发送选择的文件
+//                if (data != null) {
+//                    Uri uri = data.getData();
+//                    if (uri != null) {
+//                        sendFile(uri);
+//                    }
+//                }
+
+//            }else if (requestCode == REQUEST_CODE_MAP) { // 地图
+//                double latitude = data.getDoubleExtra("latitude", 0);
+//                double longitude = data.getDoubleExtra("longitude", 0);
+//                String locationAddress = data.getStringExtra("address");
+//                if (locationAddress != null && !locationAddress.equals("")) {
+//                    toggleMore(more);
+//                    sendLocationMsg(latitude, longitude, "", locationAddress);
+//                } else {
+//                    String st = getResources().getString(R.string.unable_to_get_loaction);
+//                    Toast.makeText(this, st, 0).show();
+//                }
+//                // 重发消息
+//            } else if (requestCode == REQUEST_CODE_TEXT || requestCode == REQUEST_CODE_VOICE
+//                    || requestCode == REQUEST_CODE_PICTURE || requestCode == REQUEST_CODE_LOCATION
+//                    || requestCode == REQUEST_CODE_VIDEO || requestCode == REQUEST_CODE_FILE) {
+//                resendMessage();
+//            } else if (requestCode == REQUEST_CODE_COPY_AND_PASTE) {
+//                // 粘贴
+//                if (!TextUtils.isEmpty(clipboard.getText())) {
+//                    String pasteText = clipboard.getText().toString();
+//                    if (pasteText.startsWith(COPY_IMAGE)) {
+//                        // 把图片前缀去掉，还原成正常的path
+//                        sendPicture(pasteText.replace(COPY_IMAGE, ""));
+//                    }
+//
+//                }
+//            } else if (requestCode == REQUEST_CODE_ADD_TO_BLACKLIST) { // 移入黑名单
+//                EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
+//                addUserToBlacklist(deleteMsg.getFrom());
+//            } else if (conversation.getMsgCount() > 0) {
+//                adapter.refresh();
+//                setResult(RESULT_OK);
+//            } else if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
+//                adapter.refresh();
+//            }
         }
     }
 

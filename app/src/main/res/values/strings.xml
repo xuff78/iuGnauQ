@@ -22,7 +22,9 @@
     <string name="text_delivered_msg">送达</string>
     <string name="recoding_fail">录音失败，请重试！</string>
     <string name="Are_agree_with">正在同意...</string>
+    <string name="cant_find_pictures">找不到图片</string>
     <string name="Is_download_voice_click_later">正在下载语音，稍后点击</string>
+    <string name="sd_card_does_not_exist">sdcard不存在</string>
     <string name="Send_voice_need_sdcard_support">发送语音需要sdcard支持</string>
     <string name="Recording_without_permission">无录音权限</string>
     <string name="The_recording_time_is_too_short">录音时间太短</string>
