@@ -1,18 +1,11 @@
 package com.xj.guanquan.fragment.roast;
 
 import android.app.Activity;
-import android.content.Context;
 import android.net.Uri;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.xj.guanquan.R;
-import com.xj.guanquan.views.TouchImageView;
-
-import java.util.ArrayList;
+import com.xj.guanquan.views.TouchGrayImageView;
 
 /**
  * Created by 可爱的蘑菇 on 2015/8/28.
@@ -55,7 +48,7 @@ public class Photo9Layout extends LinearLayout {
                 itemLayout.setOrientation(LinearLayout.HORIZONTAL);
                 addView(itemLayout);
             }
-            TouchImageView img = new TouchImageView(act);
+            TouchGrayImageView img = new TouchGrayImageView(act);
             img.setLayoutParams(llp);
             img.setImageURI(Uri.parse(urls[i]));
             itemLayout.addView(img);

@@ -25,6 +25,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.roast.QPublishAct;
 import com.xj.guanquan.activity.roast.TucaoDetailAct;
+import com.xj.guanquan.activity.roast.ViewPagerExampleActivity;
 import com.xj.guanquan.fragment.roast.Photo9Layout;
 import com.xj.guanquan.model.DateInfo;
 import com.xj.guanquan.model.NoteInfo;
@@ -102,7 +103,15 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			if(datalist.get(position).getPicture().length()>0) {
 				String[] urls = datalist.get(position).getPicture().split(",");
 				vh.photoLayout.removeAllViews();
-				vh.photoLayout.addView(new Photo9Layout(act, (int) (width - ScreenUtils.dpToPxInt(act, 90)), urls));
+				Photo9Layout photo9Layout=new Photo9Layout(act, (int) (width - ScreenUtils.dpToPxInt(act, 90)), urls);
+				vh.photoLayout.addView(photo9Layout);
+				photo9Layout.setImgCallback(new Photo9Layout.ClickListener(){
+
+					@Override
+					public void onClick(View v, int position) {
+						act.startActivity(new Intent(act, ViewPagerExampleActivity.class));
+					}
+				});
 			}
 			if(PageType==QPublishAct.TypeDate){
 				DateInfo dateinfo= (DateInfo) datalist.get(position);

@@ -104,6 +104,10 @@
             android:name=".activity.roast.TucaoDetailAct"
             android:label="@string/hello_roast_detail"
             android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".activity.roast.ViewPagerExampleActivity"
+            android:label="@string/hello_roast_detail"
+            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden" />
 
         <activity
             android:name=".activity.message.QMsgDetailActivity"

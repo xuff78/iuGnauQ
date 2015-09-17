@@ -143,6 +143,7 @@ public class QPublishAct extends QBaseActivity {
             photoLayout.setVisibility(View.VISIBLE);
             shareLayout.setVisibility(View.VISIBLE);
             roleSelectLayout.setVisibility(View.VISIBLE);
+            setAddView();
             Map<String, String> params = new HashMap<>();
             startRequest(ApiList.SECRET_Avatar, params);
         } else if (RequestType == RequestJoin) {
@@ -387,7 +388,7 @@ public class QPublishAct extends QBaseActivity {
                             File file = new File(picUrl);
                             files.add(file);
                         }
-                        uploadRequest(requestURL, params, files);
+                        uploadRequest(requestURL, params, files, "pic");
                     } else {
                         startRequest(ApiList.TUCAO_Publish, params);
                     }
@@ -404,7 +405,7 @@ public class QPublishAct extends QBaseActivity {
                         params.put("address", AddrEdt.getText().toString());
                         params.put("title", titleEdt.getText().toString());
                         if (picPaths.size() > 0) {
-                            requestURL = ApiList.TUCAO_Publish;
+                            requestURL = ApiList.DATE_Publish;
                             //handler.sendEmptyMessage(TO_UPLOAD_FILE);
                             params.put("content", String.valueOf(editText.getText().toString()));
                             params.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
@@ -414,7 +415,7 @@ public class QPublishAct extends QBaseActivity {
                                 File file = new File(picUrl);
                                 files.add(file);
                             }
-                            uploadRequest(requestURL, params, files);
+                            uploadRequest(requestURL, params, files, "pic");
                         } else {
                             startRequest(ApiList.DATE_Publish, params);
                         }
@@ -422,8 +423,23 @@ public class QPublishAct extends QBaseActivity {
                 } else if (PageType == TypeSecret) {
                     if (Avatar != null && Avatar.length() > 0) {
                         Map<String, String> params = new HashMap<>();
-                        params.put("avatar", Avatar);
-                        startRequest(ApiList.SECRET_Publish, params);
+                        if (picPaths.size() > 0) {
+                            requestURL = ApiList.SECRET_Publish;
+                            //handler.sendEmptyMessage(TO_UPLOAD_FILE);
+                            params.put("content", String.valueOf(editText.getText().toString()));
+                            params.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
+                            params.put("lat", PreferencesUtils.getString(QPublishAct.this, "lat"));
+                            params.put("avatar", Avatar);
+                            List<File> files = new ArrayList<File>();
+                            for (String picUrl : picPaths) {
+                                File file = new File(picUrl);
+                                files.add(file);
+                            }
+                            uploadRequest(requestURL, params, files, "file_pic");
+                        } else {
+                            startRequest(ApiList.SECRET_Publish, params);
+                        }
+
                     } else {
                         ToastUtils.show(getApplicationContext(), "请选择角色");
                     }
@@ -491,8 +507,8 @@ public class QPublishAct extends QBaseActivity {
         addToRequestQueue(requestPublish, method, true);
     }
 
-    private void uploadRequest(String method, final Map<String, String> params, List<File> files) {
-        uploadRequest = new MultipartRequest(method, this, this, "pic", files, params) {
+    private void uploadRequest(String method, final Map<String, String> params, List<File> files, String key) {
+        uploadRequest = new MultipartRequest(method, this, this, key, files, params) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = super.getHeaders();
