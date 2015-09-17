@@ -11,11 +11,14 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.util.NetUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
@@ -71,7 +74,8 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
 
     @Override
     protected void initView() {
-
+        //注册一个监听连接状态的listener
+        EMChatManager.getInstance().addConnectionListener(new QConnectionListener());
         initialize();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -142,6 +146,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
             @Override
             public void onClick(View v) {
                 System.exit(0);
+                EMChatManager.getInstance().logout();//此方法为同步方法
             }
         }, null);
     }
@@ -216,5 +221,43 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
                 }
             }
         });
+    }
+
+    //实现ConnectionListener接口
+    private class QConnectionListener implements EMConnectionListener {
+        @Override
+        public void onConnected() {
+        }
+
+        @Override
+        public void onDisconnected(final int error) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (error == EMError.USER_REMOVED) {
+                        alertDialogNoCancel("帐号已经被移除", new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showLogin();
+                            }
+                        });
+                    } else if (error == EMError.CONNECTION_CONFLICT) {
+                        // 显示帐号在其他设备登陆
+                        alertDialogNoCancel("帐号在其他设备登陆", new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showLogin();
+                            }
+                        });
+                    } else {
+                        if (NetUtils.hasNetwork(QHomeActivity.this))
+                            showToastShort("聊天服务器连接失败");
+                        else
+                            showToastShort("当前网络不可用，请检查网络设置");
+                    }
+                }
+            });
+        }
     }
 }

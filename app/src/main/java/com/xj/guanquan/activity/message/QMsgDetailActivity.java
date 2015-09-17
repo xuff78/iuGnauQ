@@ -655,6 +655,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         // 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
         // body.setSendOriginalImage(true);
         message.addBody(body);
+        initExpandMsg(message);
         if (isRobot) {
             message.setAttribute("em_robot_message", true);
         }

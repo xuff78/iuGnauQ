@@ -57,7 +57,7 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
 
     private CustomProgressDialog progressDialog;
 
-    protected String requestMethod="";
+    protected String requestMethod = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -398,6 +398,34 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
         dialogBuilder.show();
     }
 
+    /**
+     * 弹出信息提示框
+     *
+     * @param message
+     * @param okClickListener
+     */
+    public void alertDialogNoCancel(String message, final OnClickListener okClickListener) {
+        dialogBuilder = NiftyDialogBuilder.getInstance(this);
+        dialogBuilder
+                .withTitle("温馨提示")
+                .withDialogColor(getResources().getColor(R.color.view_color))
+                .withIcon(R.mipmap.logo)
+                .withButton1Text("确定")                                    //def gone
+                .withDuration(500)
+                .withEffect(Effectstype.RotateBottom);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.isCancelableOnTouchOutside(false);
+        dialogBuilder.withMessage(message).setButton1Click(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (okClickListener != null)
+                    okClickListener.onClick(v);
+                dialogBuilder.dismiss();
+            }
+        });
+        dialogBuilder.show();
+    }
+
     @Override
     public void onErrorResponse(VolleyError error) {
         if (getProgressDialog().isShowing())
@@ -407,17 +435,18 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
 
     @Override
     public void onResponse(Object response) {
-        Log.i("Net","Response: "+response.toString());
+        Log.i("Net", "Response: " + response.toString());
         getProgressDialog().dismiss();
 
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-        if(StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)){
+        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             doResponse(response);
-        }else
+        } else
             alertDialog(result.getMsg(), null);
     }
 
-    protected void doResponse(Object response) {}
+    protected void doResponse(Object response) {
+    }
 
     protected CustomProgressDialog getProgressDialog() {
         if (progressDialog == null) {
@@ -436,7 +465,7 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
     public <T> void addToRequestQueue(Request<T> req, String tag, Boolean isShowDialog) {
         if (!getProgressDialog().isShowing() && isShowDialog)
             getProgressDialog().show();
-        requestMethod=tag;
+        requestMethod = tag;
         req.setRetryPolicy(new DefaultRetryPolicy(30 * 1000, 1, 1.0f));
         ((EBaseApplication) getApplication()).addToRequestQueue(req, tag);
     }
