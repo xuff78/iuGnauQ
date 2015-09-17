@@ -404,7 +404,7 @@ public class QPublishAct extends QBaseActivity {
                         params.put("address", AddrEdt.getText().toString());
                         params.put("title", titleEdt.getText().toString());
                         if (picPaths.size() > 0) {
-                            requestURL = ApiList.TUCAO_Publish;
+                            requestURL = ApiList.DATE_Publish;
                             //handler.sendEmptyMessage(TO_UPLOAD_FILE);
                             params.put("content", String.valueOf(editText.getText().toString()));
                             params.put("lng", PreferencesUtils.getString(QPublishAct.this, "lng"));
