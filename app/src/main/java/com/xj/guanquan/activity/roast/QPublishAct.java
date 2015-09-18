@@ -5,10 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.MultipartRequest;
 import com.xj.guanquan.common.QBaseActivity;
@@ -35,6 +39,8 @@ import com.xj.guanquan.fragment.roast.TucaoMianFrg;
 import com.xj.guanquan.model.NoteInfo;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -97,6 +103,7 @@ public class QPublishAct extends QBaseActivity {
     private String Avatar = null;
     public String requestURL = "";
     private MultipartRequest uploadRequest;
+    private int screenHeight=0, screenWidth=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +113,9 @@ public class QPublishAct extends QBaseActivity {
 
 //        note= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
 
+        Display display = getWindowManager().getDefaultDisplay();
+        screenWidth=display.getWidth()/7*6;
+        screenHeight=display.getHeight()/7*6;
         progressDialog = new ProgressDialog(this);
         PageType = getIntent().getIntExtra("PageType", 0);
         RequestType = getIntent().getIntExtra("RequestType", 0);
@@ -530,14 +540,46 @@ public class QPublishAct extends QBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
-            String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
+            final String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
             picPaths.add(picPath);
             Log.i("Upload", "最终选择的图片=" + picPath);
-            Bitmap bmp = BitmapFactory.decodeFile(picPath);
-            seImageView(bmp);
+            BitmapFactory.Options options1 = new BitmapFactory.Options();
+            options1.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(picPath, options1);
+            options1.inSampleSize = ImageUtils.calculateInSampleSize(options1, screenWidth, screenWidth);  //110,160：转换后的宽和高，具体值会有些出入
+            options1.inJustDecodeBounds = false;
+            final Bitmap bitmap = BitmapFactory.decodeFile(picPath, options1);
+//            Bitmap bmp = BitmapFactory.decodeFile(picPath);
+            seImageView(bitmap);
+
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    int bitmapSize=getBitmapSize(bitmap);
+                    if(bitmapSize>300000) {
+                        try {
+                            float scale=300000f/bitmapSize;
+                            FileOutputStream out = new FileOutputStream(new File(picPath));
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, (int)(100*scale), out);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }.start();
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
+    public int getBitmapSize(Bitmap bitmap){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){    //API 19
+            return bitmap.getAllocationByteCount();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1){//API 12
+            return bitmap.getByteCount();
+        }
+        return bitmap.getRowBytes() * bitmap.getHeight();                //earlier version
+    }
 }

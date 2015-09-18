@@ -15,6 +15,7 @@ package com.xj.guanquan.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
@@ -76,6 +77,25 @@ public class ImageUtils {
         EMLog.d("msg", "thum image path:" + path);
         return path;
     }
+
+	public static int calculateInSampleSize(BitmapFactory.Options options,
+											int reqWidth, int reqHeight) {
+
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			final int heightRatio = Math.round((float) height
+					/ (float) reqHeight);
+			final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+			inSampleSize = heightRatio < widthRatio ? widthRatio : heightRatio;
+		}
+
+		return inSampleSize;
+	}
 	
 	
 }
