@@ -65,7 +65,7 @@
         android:ems="10"
         android:hint="@string/login_password"
         android:inputType="textPassword"
-        android:text="123123"
+        android:text=""
         android:textColorHint="@color/view_color">
 
         <requestFocus />
@@ -116,7 +116,7 @@
         android:ems="10"
         android:hint="@string/login_name"
         android:inputType="phone"
-        android:text="15010163400"
+        android:text=""
         android:textColorHint="@color/view_color">
 
         <requestFocus />

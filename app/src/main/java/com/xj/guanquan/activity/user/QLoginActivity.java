@@ -61,6 +61,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
     protected void initView() {
         initialize();
         _setHeaderGone();
+        edittextname.setText(PreferencesUtils.getString(this, "login_phone"));
         forgetpassword.setOnClickListener(this);
         register.setOnClickListener(this);
         loginbtn.setOnClickListener(this);
@@ -153,6 +154,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             PreferencesUtils.putString(QLoginActivity.this, "loginData", (String) response);
             userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
+            PreferencesUtils.putString(QLoginActivity.this, "login_phone", userInfo.getPhone());
             loginChatServer(String.valueOf(userInfo.getHuanxinName()), userInfo.getHuanxinPassword());
         } else
             alertDialog(result.getMsg(), null);

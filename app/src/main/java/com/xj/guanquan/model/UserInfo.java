@@ -10,6 +10,7 @@ public class UserInfo extends EBaseModel {
     private Integer userId;
     private String nickName;
     private String avatar;
+    private String phone;
     private int sex;
     private int age;
     private int height;
@@ -178,6 +179,15 @@ public class UserInfo extends EBaseModel {
     }
 
     public void setWeightTxt(String weightTxt) {
+
         this.weightTxt = weightTxt;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
