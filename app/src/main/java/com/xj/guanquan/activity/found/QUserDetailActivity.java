@@ -371,7 +371,13 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                     mAdapter.notifyDataSetChanged();
                 }
                 noteinfo = new NoteInfo();
+                noteinfo.setNickName(content.getString("nickName"));
+                noteinfo.setCommentNum(tucao.getString("commentNum"));
+                noteinfo.setSex(content.getInteger("sex"));
+                noteinfo.setAge(content.getInteger("age"));
+                noteinfo.setTime(tucao.getString("time"));
                 noteinfo.setId(tucao.getInteger("id"));
+                noteinfo.setPicture(content.getString("picture"));
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
                 alertDialog(result.getMsg(), null);
                 attentionBtn.setSelected(true);
