@@ -1,5 +1,6 @@
 package com.xj.guanquan.fragment.user;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,12 +9,16 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.activity.user.QSystemSetActivity;
 import com.xj.guanquan.activity.user.QVisitorListActivity;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.model.UserInfo;
+
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +44,7 @@ public class QMeFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout mallArea;
     private RelativeLayout newerArea;
     private RelativeLayout systemArea;
+    private UserInfo userInfo;
 
     /**
      * Use this factory method to create a new instance of
@@ -75,6 +81,14 @@ public class QMeFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialize(view);
+
+        JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+        userInfo = JSONObject.parseObject(loginData.getJSONObject("data").toJSONString(), UserInfo.class);
+        Uri uri = Uri.parse((String) userInfo.getAvatar());
+        headImage.setImageURI(uri);
+        name.setText(userInfo.getNickName());
+        circleNum.setText("暂无");
+
     }
 
     @Override
@@ -117,7 +131,9 @@ public class QMeFragment extends Fragment implements View.OnClickListener {
         } else if (clickView == visitorArea) {
             ((QBaseActivity) getActivity()).toActivity(QVisitorListActivity.class);
         } else if (clickView == selfDataArea) {
-            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userInfo", userInfo);
+            ((QBaseActivity) getActivity()).toActivity(QUserDetailActivity.class, bundle);
         }
     }
 
