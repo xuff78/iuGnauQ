@@ -357,7 +357,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 }
                 relation.setText(relationTxt);
                 JSONObject tucao = content.getJSONObject("tucao");
-                Uri uri = Uri.parse(tucao.getString("picture") == null ? "" : tucao.getString("picture"));
+                Uri uri = Uri.parse(tucao.getString("picture") == null ? "" : tucao.getString("picture").split(",")[0]);
                 headImage.setImageURI(uri);
                 roastContent.setText(tucao.getString("content"));
                 roastTime.setText(tucao.getString("time"));
@@ -377,7 +377,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 noteinfo.setAge(content.getInteger("age"));
                 noteinfo.setTime(tucao.getString("time"));
                 noteinfo.setId(tucao.getInteger("id"));
-                noteinfo.setPicture(content.getString("picture"));
+                noteinfo.setPicture(tucao.getString("picture"));
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
                 alertDialog(result.getMsg(), null);
                 attentionBtn.setSelected(true);
