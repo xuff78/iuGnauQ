@@ -29,6 +29,7 @@ public class MultipartRequest extends Request<String> {
     private final Response.Listener<String> mListener;
     private List<File> mFileParts;
     private String mFilePartName;
+    private List<String> mFilePartNames;
     private Map<String, String> mParams;
 
     /**
@@ -58,10 +59,41 @@ public class MultipartRequest extends Request<String> {
         buildMultipartEntity();
     }
 
+    /**
+     * 多个文件，对应多个key	 * @param url	 * @param errorListener	 * @param listener	 * @param filePartName	 * @param files	 * @param params
+     */
+    public MultipartRequest(String url, Response.ErrorListener errorListener, Response.Listener<String> listener, List<String> filePartNames, List<File> files, Map<String, String> params) {
+        super(Method.POST, url, errorListener);
+        mFilePartNames = filePartNames;
+        mListener = listener;
+        mFileParts = files;
+        mParams = params;
+        buildMultipartEntityMore();
+    }
+
     private void buildMultipartEntity() {
         if (mFileParts != null && mFileParts.size() > 0) {
             for (File file : mFileParts) {
                 entity.addPart(mFilePartName, new FileBody(file));
+            }
+            long l = entity.getContentLength();
+            Log.e("buildMultipartEntity", mFileParts.size() + "个，长度：" + l);
+        }
+        try {
+            if (mParams != null && mParams.size() > 0) {
+                for (Map.Entry<String, String> entry : mParams.entrySet()) {
+                    entity.addPart(entry.getKey(), new StringBody(entry.getValue(), Charset.forName("UTF-8")));
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            VolleyLog.e("UnsupportedEncodingException");
+        }
+    }
+
+    private void buildMultipartEntityMore() {
+        if (mFileParts != null && mFileParts.size() > 0) {
+            for (int i = 0; i < mFileParts.size(); i++) {
+                entity.addPart(mFilePartNames.get(i), new FileBody(mFileParts.get(i)));
             }
             long l = entity.getContentLength();
             Log.e("buildMultipartEntity", mFileParts.size() + "个，长度：" + l);

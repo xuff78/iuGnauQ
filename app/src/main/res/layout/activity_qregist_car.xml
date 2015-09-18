@@ -1,0 +1,269 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_title"
+    tools:context="com.xj.guanquan.activity.user.QRegistCarActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/text_15_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="40dp"
+            android:text="你是否购车:" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/view_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/hasCarBtn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/radio_select_selector"
+                    android:onClick="onClick" />
+
+                <TextView
+                    style="@style/text_13_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="是" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/noCarBtn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/radio_select_selector"
+                    android:onClick="onClick" />
+
+                <TextView
+                    style="@style/text_13_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="否" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/text_11_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:text="车辆信息：" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/view_color" />
+
+        <LinearLayout
+            android:id="@+id/brandArea"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/text_13_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="品牌" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/brandBtn"
+                    android:layout_width="6dp"
+                    android:layout_height="12dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@mipmap/icon_gray_arrow"
+                    android:onClick="onClick" />
+
+                <TextView
+                    android:id="@+id/brandText"
+                    style="@style/text_14_yellow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/brandBtn"
+                    android:background="@null"
+                    android:gravity="center|right"
+                    android:text="暂无" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@color/view_color" />
+
+        <LinearLayout
+            android:id="@+id/modelArea"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/text_13_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="型号" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/modelBtn"
+                    android:layout_width="6dp"
+                    android:layout_height="12dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@mipmap/icon_gray_arrow"
+                    android:onClick="onClick" />
+
+                <TextView
+                    android:id="@+id/modelText"
+                    style="@style/text_14_yellow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/modelBtn"
+                    android:background="@null"
+                    android:gravity="center|right"
+                    android:text="暂无" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@color/view_color" />
+
+        <LinearLayout
+            android:id="@+id/configurationArea"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/text_13_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="配置" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/configurationBtn"
+                    android:layout_width="6dp"
+                    android:layout_height="12dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@mipmap/icon_gray_arrow"
+                    android:onClick="onClick" />
+
+                <TextView
+                    android:id="@+id/configurationText"
+                    style="@style/text_14_yellow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/configurationBtn"
+                    android:background="@null"
+                    android:gravity="center|right"
+                    android:text="暂无" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@color/view_color" />
+
+        <Button
+            android:id="@+id/nextStep"
+            style="@style/text_16_black"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/login_button_seletor"
+            android:onClick="onClick"
+            android:text="@string/comitie_btn" />
+    </LinearLayout>
+
+</ScrollView>

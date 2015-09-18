@@ -45,6 +45,8 @@
     <string name="modify_password">修改密码</string>
     <string name="password_confirm">密码确认</string>
     <string name="register_code">验证码</string>
+    <string name="industry_type">行业类别</string>
+    <string name="pro_type">职业类别</string>
     <string name="login_register">注册新的账号</string>
     <string name="login_buttom">北京贵圈科技有限公司</string>
     <string name="fill_information">填写信息</string>
@@ -137,4 +139,8 @@
     <string name="title_activity_qcreate_group">创建群组</string>
     <string name="title_activity_qmsg_detail">消息页</string>
     <string name="title_activity_qcircle_photos">圈子相册</string>
+    <string name="title_activity_qregist_industry">所属行业</string>
+    <string name="title_activity_qregist_certify">信息认证</string>
+    <string name="title_activity_qregist">手机号注册</string>
+    <string name="title_activity_qregist_car">车主认领</string>
 </resources>

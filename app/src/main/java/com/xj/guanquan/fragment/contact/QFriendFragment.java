@@ -82,7 +82,7 @@ public class QFriendFragment extends QBaseFragment {
         blackListView.setLayoutManager(mLayoutManager);
         blackListView.setItemAnimator(new DefaultItemAnimator());
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"nickName", "avatar", "age", "sex", "time", "signature", "distance"}, R.layout.list_blacklist_item, userInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"nickName", "avatar", "age", "sexTxt", "time", "signature", "distance"}, R.layout.list_blacklist_item, userInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -172,7 +172,7 @@ public class QFriendFragment extends QBaseFragment {
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView nickName;
-        private TextView sex;
+        private TextView sexTxt;
         private SimpleDraweeView avatar;
         private TextView age;
         private TextView time;
@@ -194,12 +194,12 @@ public class QFriendFragment extends QBaseFragment {
             this.nickName = nickName;
         }
 
-        public TextView getSex() {
-            return sex;
+        public TextView getSexTxt() {
+            return sexTxt;
         }
 
-        public void setSex(TextView sex) {
-            this.sex = sex;
+        public void setSexTxt(TextView sexTxt) {
+            this.sexTxt = sexTxt;
         }
 
         public SimpleDraweeView getAvatar() {
@@ -245,7 +245,7 @@ public class QFriendFragment extends QBaseFragment {
         private void initialize(View itemView) {
             nickName = (TextView) itemView.findViewById(R.id.name);
             avatar = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
-            sex = (TextView) itemView.findViewById(R.id.sexTxt);
+            sexTxt = (TextView) itemView.findViewById(R.id.sexTxt);
             age = (TextView) itemView.findViewById(R.id.age);
             time = (TextView) itemView.findViewById(R.id.time);
             distance = (TextView) itemView.findViewById(R.id.distance);

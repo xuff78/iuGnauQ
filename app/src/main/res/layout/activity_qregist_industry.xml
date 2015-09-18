@@ -1,0 +1,127 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_title"
+    android:orientation="vertical"
+    tools:context="com.xj.guanquan.activity.user.QRegistIndustryActivity">
+
+    <LinearLayout
+        android:id="@+id/proArea"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center_vertical"
+        android:onClick="onClick"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/text_13_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pro_type" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/proBtn"
+                android:layout_width="6dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="29dp"
+                android:background="@mipmap/icon_gray_arrow"
+                android:onClick="onClick" />
+
+            <TextView
+                android:id="@+id/proText"
+                style="@style/text_14_yellow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/proBtn"
+                android:background="@null"
+                android:gravity="center|right"
+                android:text="暂无" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@color/view_color" />
+
+    <LinearLayout
+        android:id="@+id/industryArea"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:gravity="center_vertical"
+        android:onClick="onClick"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/text_13_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/industry_type" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/industryBtn"
+                android:layout_width="6dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="29dp"
+                android:background="@mipmap/icon_gray_arrow"
+                android:onClick="onClick" />
+
+            <TextView
+                android:id="@+id/industryText"
+                style="@style/text_14_yellow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/industryBtn"
+                android:background="@null"
+                android:gravity="center|right"
+                android:text="暂无" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@color/view_color" />
+
+    <Button
+        android:id="@+id/nextStep"
+        style="@style/text_16_black"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="90dp"
+        android:background="@drawable/login_button_seletor"
+        android:onClick="onClick"
+        android:text="@string/fill_next" />
+
+</LinearLayout>

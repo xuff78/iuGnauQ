@@ -136,6 +136,11 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="text_14_yellow">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/yellow</item>
+    </style>
+
     <style name="text_14_red">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/red</item>

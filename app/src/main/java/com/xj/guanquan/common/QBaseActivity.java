@@ -451,6 +451,8 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
     protected CustomProgressDialog getProgressDialog() {
         if (progressDialog == null) {
             progressDialog = ProgressUtil.getProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
         }
         return progressDialog;
     }
