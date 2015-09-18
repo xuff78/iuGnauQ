@@ -101,7 +101,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			vh.replyNums.setText(datalist.get(position).getCommentNum()+"");
 			vh.userName.setText(datalist.get(position).getNickName());
 			if(datalist.get(position).getPicture().length()>0) {
-				String[] urls = datalist.get(position).getPicture().split(",");
+				final String[] urls = datalist.get(position).getPicture().split(",");
 				vh.photoLayout.removeAllViews();
 				Photo9Layout photo9Layout=new Photo9Layout(act, (int) (width - ScreenUtils.dpToPxInt(act, 90)), urls);
 				vh.photoLayout.addView(photo9Layout);
@@ -109,7 +109,10 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 					@Override
 					public void onClick(View v, int position) {
-						act.startActivity(new Intent(act, ViewPagerExampleActivity.class));
+						Intent intent=new Intent(act, ViewPagerExampleActivity.class);
+						intent.putExtra("Images", urls);
+						intent.putExtra("pos", position);
+						act.startActivity(intent);
 					}
 				});
 			}

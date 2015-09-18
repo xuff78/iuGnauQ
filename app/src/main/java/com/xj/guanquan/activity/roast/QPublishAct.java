@@ -31,6 +31,7 @@ import com.xj.guanquan.common.MultipartRequest;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.fragment.roast.Photo9Layout;
+import com.xj.guanquan.fragment.roast.TucaoMianFrg;
 import com.xj.guanquan.model.NoteInfo;
 
 import java.io.File;
@@ -234,6 +235,7 @@ public class QPublishAct extends QBaseActivity {
             alertDialog(result.getMsg(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    setResult(TucaoMianFrg.publishSuccess);
                     QPublishAct.this.finish();
                 }
             });
@@ -241,6 +243,7 @@ public class QPublishAct extends QBaseActivity {
             alertDialog(result.getMsg(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    setResult(TucaoMianFrg.publishSuccess);
                     QPublishAct.this.finish();
                 }
             });
@@ -248,11 +251,13 @@ public class QPublishAct extends QBaseActivity {
             alertDialog(result.getMsg(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    setResult(TucaoMianFrg.publishSuccess);
                     QPublishAct.this.finish();
                 }
             });
         } else {
             ToastUtils.show(this, "提交成功");
+            setResult(TucaoMianFrg.publishSuccess);
             finish();
         }
 
@@ -518,7 +523,7 @@ public class QPublishAct extends QBaseActivity {
             }
 
         };
-        addToRequestQueue(uploadRequest, method, true);
+        addUploadToRequestQueue(uploadRequest, method, true);
     }
 
 

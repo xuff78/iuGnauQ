@@ -115,9 +115,7 @@ public class TucaoListFrg extends QBaseFragment {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mAdapter.isLoadMore(true);
-                currentPage=1;
-                doRequest(false);
+                refreshPage();
 
             }
         });
@@ -152,6 +150,12 @@ public class TucaoListFrg extends QBaseFragment {
         initHandler();
         doRequest(true);
         return v;
+    }
+
+    public void refreshPage(){
+        mAdapter.isLoadMore(true);
+        currentPage=1;
+        doRequest(false);
     }
 
     View.OnClickListener listBtnListener = new View.OnClickListener() {

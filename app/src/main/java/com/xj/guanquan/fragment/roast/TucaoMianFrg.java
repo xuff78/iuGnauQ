@@ -37,6 +37,9 @@ public class TucaoMianFrg extends QBaseFragment {
     private ViewPager vPager;
     private View selectedView=null;
     private ArrayList<TextView> menu=new ArrayList<TextView>();
+    private int toPublish=0x22;
+    public static final int publishSuccess=0x23;
+    public TucaoListFrg frg=null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class TucaoMianFrg extends QBaseFragment {
                 Intent intent=new Intent(getActivity(), QPublishAct.class);
                 intent.putExtra("RequestType", QPublishAct.RequestPublish);
                 intent.putExtra("PageType", PageType);
-                startActivity(intent);
+                startActivityForResult(intent, toPublish);
             }
         });
         return v;
@@ -115,7 +118,7 @@ public class TucaoMianFrg extends QBaseFragment {
         }
     };
 
-    public static class TCMainAdapter extends FragmentStatePagerAdapter {
+    public class TCMainAdapter extends FragmentStatePagerAdapter {
         public TCMainAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -128,7 +131,7 @@ public class TucaoMianFrg extends QBaseFragment {
         //得到每个item
         @Override
         public Fragment getItem(int position) {
-            Fragment frg=TucaoListFrg.newInstance(position);
+            frg=TucaoListFrg.newInstance(position);
 //            switch (position){
 //                case 0:
 //                    frg=TucaoListFrg.newInstance(position);
@@ -158,4 +161,11 @@ public class TucaoMianFrg extends QBaseFragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==toPublish&&resultCode==publishSuccess){
+            frg.refreshPage();
+        }
+    }
 }

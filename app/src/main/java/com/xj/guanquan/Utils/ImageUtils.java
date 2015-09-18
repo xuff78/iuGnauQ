@@ -13,8 +13,17 @@
  */
 package com.xj.guanquan.Utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 public class ImageUtils {
 //	public static String getThumbnailImagePath(String imagePath) {
@@ -24,6 +33,32 @@ public class ImageUtils {
 //		EMLog.d("msg", "thum image path:" + path);
 //		return path;
 //	}
+
+	public static void initImageLoader(Context context) {
+		if(context!=null){
+			if(!ImageLoader.getInstance().isInited()){
+				ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+						.threadPriority(Thread.NORM_PRIORITY - 2)
+						.memoryCacheSize(1*1024*1024)
+						.defaultDisplayImageOptions(getImageOptions(context))
+						.denyCacheImageMultipleSizesInMemory()
+						.discCacheFileNameGenerator(new Md5FileNameGenerator())
+						.tasksProcessingOrder(QueueProcessingType.LIFO)
+						.build();
+				ImageLoader.getInstance().init(config);
+			}
+		}
+	}
+
+	public static DisplayImageOptions getImageOptions(Context con){
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheInMemory(true)
+				.cacheOnDisk(true)
+				.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+				.bitmapConfig(Bitmap.Config.RGB_565)
+				.build();
+		return options;
+	}
 	
 	public static String getImagePath(String remoteUrl)
 	{

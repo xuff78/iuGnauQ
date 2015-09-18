@@ -136,6 +136,7 @@
             android:label="@string/attach_picture"></activity>
         <activity
             android:name=".activity.roast.SelectPicActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/DialogStyleBottom" />
     </application>
 

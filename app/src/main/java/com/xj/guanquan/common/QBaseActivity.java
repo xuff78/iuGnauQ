@@ -469,4 +469,12 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
         req.setRetryPolicy(new DefaultRetryPolicy(30 * 1000, 1, 1.0f));
         ((EBaseApplication) getApplication()).addToRequestQueue(req, tag);
     }
+
+    public <T> void addUploadToRequestQueue(Request<T> req, String tag, Boolean isShowDialog) {
+        if (!getProgressDialog().isShowing() && isShowDialog)
+            getProgressDialog().show();
+        requestMethod = tag;
+        req.setRetryPolicy(new DefaultRetryPolicy(300 * 1000, 1, 1.0f));
+        ((EBaseApplication) getApplication()).addToRequestQueue(req, tag);
+    }
 }
