@@ -169,6 +169,7 @@
                         android:text="我的吐槽" />
 
                     <TextView
+                        android:id="@+id/roastNum"
                         style="@style/text_15_white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -203,7 +204,7 @@
                         android:layout_toRightOf="@+id/avatar"
                         android:ellipsize="end"
                         android:singleLine="true"
-                        android:text="让女人失望的男人不是好男人" />
+                        android:text="" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -219,7 +220,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="17dp"
-                            android:text="100m" />
+                            android:text="" />
 
                         <View
                             android:id="@+id/line1"
@@ -235,7 +236,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="7dp"
                             android:layout_toRightOf="@+id/line1"
-                            android:text="昨天15：38" />
+                            android:text="" />
 
 
                     </RelativeLayout>
@@ -279,7 +280,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="201412" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"

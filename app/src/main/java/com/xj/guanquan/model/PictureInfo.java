@@ -12,6 +12,7 @@ public class PictureInfo extends EBaseModel {
     public PictureInfo() {
     }
 
+
     public PictureInfo(String pictureUrl) {
         this.picture = pictureUrl;
     }

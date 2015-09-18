@@ -14,13 +14,11 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.xj.guanquan.R;
-import com.xj.guanquan.adapter.TuCaoAdapter;
 import com.xj.guanquan.adapter.TucaoCommentAdapter;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.NoteInfo;
-import com.xj.guanquan.model.PageInfo;
 import com.xj.guanquan.model.TucaoCommentInfo;
 
 import java.util.ArrayList;
@@ -36,10 +34,11 @@ import common.eric.com.ebaselibrary.util.StringUtils;
  */
 public class TucaoDetailAct extends QBaseActivity {
 
-    private int PageType=0;
+    private int PageType = 0;
     private RecyclerView recyclerList;
     private int currentPage = 1;
-    private int numPerPage = 20;;
+    private int numPerPage = 20;
+    ;
     private SwipeRefreshLayout swipeRefresh;
     private LinearLayoutManager mLayoutManager;
     private TucaoCommentAdapter mAdapter;
@@ -50,7 +49,7 @@ public class TucaoDetailAct extends QBaseActivity {
 
     @Override
     protected void initHandler() {
-        request = new StringRequest(Request.Method.POST, ApiList.TUCAO_Detail+note.getId(), this, this) {
+        request = new StringRequest(Request.Method.POST, ApiList.TUCAO_Detail + note.getId(), this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -75,22 +74,22 @@ public class TucaoDetailAct extends QBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        note= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
+        note = (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
         setContentView(R.layout.tucao_item_frg);
 
-        PageType=getIntent().getIntExtra("PageType", 0);
+        PageType = getIntent().getIntExtra("PageType", 0);
         findViewById(R.id.menuLayout).setVisibility(View.GONE);
 
         int scrennWidth = getWindowManager().getDefaultDisplay().getWidth();
         initData();
-        NoteInfo noteinfo= (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
-        Map<String, String> params=new HashMap<>();
+        NoteInfo noteinfo = (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
+        Map<String, String> params = new HashMap<>();
         if (PageType == QPublishAct.TypeTucao) {
-            startRequest(ApiList.TUCAO_Detail+noteinfo.getId(), params);
+            startRequest(ApiList.TUCAO_Detail + noteinfo.getId(), params);
         } else if (PageType == QPublishAct.TypeDate) {
-            startRequest(ApiList.DATE_Detail+noteinfo.getId(), params);
-        }else if (PageType == QPublishAct.TypeSecret) {
-            startRequest(ApiList.SECRET_Detail+noteinfo.getId(), params);
+            startRequest(ApiList.DATE_Detail + noteinfo.getId(), params);
+        } else if (PageType == QPublishAct.TypeSecret) {
+            startRequest(ApiList.SECRET_Detail + noteinfo.getId(), params);
         }
     }
 
@@ -104,11 +103,11 @@ public class TucaoDetailAct extends QBaseActivity {
     @Override
     protected void initView() {
 
-        recyclerList=(RecyclerView)findViewById(R.id.dataList);
-        mLayoutManager=new LinearLayoutManager(this);
+        recyclerList = (RecyclerView) findViewById(R.id.dataList);
+        mLayoutManager = new LinearLayoutManager(this);
         recyclerList.setLayoutManager(mLayoutManager);
         recyclerList.setItemAnimator(new DefaultItemAnimator());
-        swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swipeRefresh);
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         recyclerList.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -138,14 +137,14 @@ public class TucaoDetailAct extends QBaseActivity {
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
 //        PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
-            JSONObject obj=result.getData().getJSONObject("content");
-            if (obj!=null&&obj.getJSONArray("commentList") != null) {
+            JSONObject obj = result.getData().getJSONObject("content");
+            if (obj != null && obj.getJSONArray("commentList") != null) {
                 List<TucaoCommentInfo> resultData = JSONArray.parseArray(obj.getJSONArray("commentList").toJSONString(), TucaoCommentInfo.class);
                 if (currentPage == 1) {
                     swipeRefresh.setRefreshing(false);
                     comments = new ArrayList<TucaoCommentInfo>();
                     comments.addAll(resultData);
-                    mAdapter=new TucaoCommentAdapter(this, comments, note, PageType);
+                    mAdapter = new TucaoCommentAdapter(this, comments, note, PageType);
                     recyclerList.setAdapter(mAdapter);
                 } else {
                     comments.addAll(resultData);
@@ -167,7 +166,7 @@ public class TucaoDetailAct extends QBaseActivity {
         swipeRefresh.setRefreshing(false);
     }
 
-    private void startRequest(String method, final Map<String, String> mapparams){
+    private void startRequest(String method, final Map<String, String> mapparams) {
         StringRequest requestForList = new StringRequest(Request.Method.POST, method, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

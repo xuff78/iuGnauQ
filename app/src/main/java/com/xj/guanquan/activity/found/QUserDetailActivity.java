@@ -20,10 +20,12 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
+import com.xj.guanquan.activity.roast.TucaoDetailAct;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.ExpandMsgInfo;
+import com.xj.guanquan.model.NoteInfo;
 import com.xj.guanquan.model.PictureInfo;
 import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
@@ -75,12 +77,14 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private TextView constellation;
     private TextView descript;
     private Button toMessageBtn;
+    private TextView roastNum;
 
     private StringRequest request;
     private StringRequest requestFollow;
     private StringRequest requestCancelFollow;
     private String huanxinName;
     JSONObject content;
+    private NoteInfo noteinfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +118,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
         userPhotos.setLayoutManager(mGridLayoutManager);
         userPhotos.setItemAnimator(new DefaultItemAnimator());
-
-        initData();
+        pictureInfoList = new ArrayList<PictureInfo>();
         mAdapter = new RecyclerViewAdapter(new String[]{"picture"}, R.layout.list_photos_item, pictureInfoList);
         mAdapter.setIsShowFooter(false);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
@@ -137,16 +140,6 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             }
         });
         userPhotos.setAdapter(mAdapter);
-    }
-
-    private void initData() {
-        pictureInfoList = new ArrayList<PictureInfo>();
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
-        pictureInfoList.add(new PictureInfo("http://www.feizl.com/upload2007/2014_09/14090118321004.jpg"));
     }
 
     @Override
@@ -230,6 +223,11 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             intent.putExtra("messageInfo", new ExpandMsgInfo(content.getString("nickName"),
                     content.getString("avatar"), content.getString("huanxinName"), null, null, null));
             startActivity(intent);
+        } else if (v == roastMore) {
+            Intent intent = new Intent(this, TucaoDetailAct.class);
+            intent.putExtra("PageType", 0);
+            intent.putExtra("NoteInfo", noteinfo);
+            startActivity(intent);
         }
     }
 
@@ -268,9 +266,11 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         descript = (TextView) findViewById(R.id.descript);
         constellation = (TextView) findViewById(R.id.constellation);
         toMessageBtn = (Button) findViewById(R.id.toMessageBtn);
+        roastNum = (TextView) findViewById(R.id.roastNum);
 
         good.setOnClickListener(this);
         attentionBtn.setOnClickListener(this);
+        roastMore.setOnClickListener(this);
     }
 
     @Override
@@ -356,6 +356,22 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                         break;
                 }
                 relation.setText(relationTxt);
+                JSONObject tucao = content.getJSONObject("tucao");
+                Uri uri = Uri.parse(tucao.getString("picture") == null ? "" : tucao.getString("picture"));
+                headImage.setImageURI(uri);
+                roastContent.setText(tucao.getString("content"));
+                roastTime.setText(tucao.getString("time"));
+                roastDistance.setText(tucao.getString("tuCaoDistance"));
+                roastNum.setText(tucao.getString("commentNum"));
+                if (!StringUtils.isEmpty(content.getString("picture"))) {
+                    String[] pictures = content.getString("picture").split(",");
+                    for (int i = 0; i < pictures.length; i++) {
+                        pictureInfoList.add(new PictureInfo(pictures[i]));
+                    }
+                    mAdapter.notifyDataSetChanged();
+                }
+                noteinfo = new NoteInfo();
+                noteinfo.setId(tucao.getInteger("id"));
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
                 alertDialog(result.getMsg(), null);
                 attentionBtn.setSelected(true);
