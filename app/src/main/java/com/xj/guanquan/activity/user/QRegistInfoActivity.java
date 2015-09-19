@@ -104,8 +104,6 @@ public class QRegistInfoActivity extends QBaseActivity implements View.OnClickLi
             initTimePicker();
             dpd.show();
         } else if (v == starText) {
-            if (starValue == null)
-                starValue = valueList.get(0);
             initSelectPicker("constellation");
             selectPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                 @Override
@@ -114,6 +112,8 @@ public class QRegistInfoActivity extends QBaseActivity implements View.OnClickLi
                     starValue = valueList.get(newVal);
                 }
             });
+            if (starValue == null)
+                starValue = valueList.get(0);
             initAlertDialog("请选择星座", selectPicker);
         } else if (v == nextStep) {
             if (StringUtils.isEmpty(nickNameText.getText().toString().trim())) {
