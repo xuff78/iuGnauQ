@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import com.xj.guanquan.common.Constant;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QBaseFragment;
 import com.xj.guanquan.common.SmileUtils;
+import com.xj.guanquan.model.CircleInfo;
 import com.xj.guanquan.model.ExpandMsgInfo;
 import com.xj.guanquan.model.MessageInfo;
 import com.xj.guanquan.model.UserInfo;
@@ -511,9 +513,21 @@ public class QMessageFragment extends QBaseFragment {
                         intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, messageInfo.getName(), messageInfo.getHeadImage(), username));
                     } else {
                         // it is group chat
-                        intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_GROUP);
-                        intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, messageInfo.getName(), messageInfo.getHeadImage(), username));
-                        intent.putExtra("groupId", username);
+                        try {
+                            intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_GROUP);
+                            JSONObject jsonObject = conversation.getLastMessage().getJSONObjectAttribute("groupInfo");
+                            String userName = jsonObject != null ? jsonObject.getString("groupName") : "";
+                            String userIcon = jsonObject != null ? jsonObject.getString("groupIcon") : "";
+                            CircleInfo circleInfo = new CircleInfo();
+                            circleInfo.setPicture(userIcon);
+                            circleInfo.setName(username);
+                            circleInfo.setId(jsonObject.getInt("id"));
+                            intent.putExtra("groupInfo", circleInfo);
+                            intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, messageInfo.getName(), messageInfo.getHeadImage(), username));
+                            intent.putExtra("groupId", username);
+                        } catch (Exception e) {
+                            Log.e("GroupChat", e.getLocalizedMessage());
+                        }
                     }
 
                 } else {
