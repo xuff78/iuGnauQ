@@ -521,7 +521,7 @@ public class QMessageFragment extends QBaseFragment {
                             CircleInfo circleInfo = new CircleInfo();
                             circleInfo.setPicture(userIcon);
                             circleInfo.setName(userName);
-                            circleInfo.setId(Integer.valueOf(jsonObject.getString("id")));
+                            circleInfo.setId(Integer.valueOf(jsonObject.getString("groupId")));
                             intent.putExtra("groupInfo", circleInfo);
                             intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, messageInfo.getName(), messageInfo.getHeadImage(), username));
                             intent.putExtra("groupId", username);
