@@ -1073,7 +1073,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             }
             ExpandMsgInfo group = new ExpandMsgInfo();
             group.setGroupId(String.valueOf(groupInfo.getId()));
-            group.setGroupIcon(groupInfo.getPicture());
+            group.setGroupIcon(groupInfo.getPicture() == null ? "" : groupInfo.getPicture());
             group.setGroupName(groupInfo.getName());
             message.setAttribute("groupInfo", JSONObject.toJSONString(group));
         }

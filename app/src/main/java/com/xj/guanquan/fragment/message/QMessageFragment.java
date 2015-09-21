@@ -129,13 +129,24 @@ public class QMessageFragment extends QBaseFragment {
         conversationList.addAll(loadConversationsWithRecentChat());
         for (EMConversation conversation : conversationList) {
             try {
-                JSONObject jsonObject = conversation.getLastMessage().getJSONObjectAttribute("fromUserInfo");
-                JSONObject toUserJson = conversation.getLastMessage().getJSONObjectAttribute("toUserInfo");
-                if (jsonObject != null && StringUtils.isEquals(jsonObject.getString("userId"), String.valueOf(userInfo.getUserId()))) {
-                    jsonObject = toUserJson;
+                JSONObject jsonObject = null;
+                String userName = null;
+                String userIcon = null;
+
+                if (conversation.isGroup()) {
+                    jsonObject = conversation.getLastMessage().getJSONObjectAttribute("groupInfo");
+                    userName = jsonObject != null ? jsonObject.getString("groupName") : "";
+                    userIcon = jsonObject != null ? jsonObject.getString("groupIcon") : "";
+                } else {
+                    jsonObject = conversation.getLastMessage().getJSONObjectAttribute("fromUserInfo");
+                    JSONObject toUserJson = conversation.getLastMessage().getJSONObjectAttribute("toUserInfo");
+                    if (jsonObject != null && StringUtils.isEquals(jsonObject.getString("userId"), String.valueOf(userInfo.getUserId()))) {
+                        jsonObject = toUserJson;
+                    }
+                    userName = jsonObject != null ? jsonObject.getString("userName") : "";
+                    userIcon = jsonObject != null ? jsonObject.getString("userIcon") : "";
                 }
-                MessageInfo messageInfo = new MessageInfo(jsonObject != null ? jsonObject.getString("userName") : "",
-                        jsonObject != null ? jsonObject.getString("userIcon") : "",
+                MessageInfo messageInfo = new MessageInfo(userName, userIcon,
                         conversation.getUnreadMsgCount(),
                         DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
                         SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
@@ -296,13 +307,26 @@ public class QMessageFragment extends QBaseFragment {
         conversationList.addAll(loadConversationsWithRecentChat());
         for (EMConversation conversation : conversationList) {
             try {
-                JSONObject jsonObject = conversation.getLastMessage().getJSONObjectAttribute("fromUserInfo");
-                JSONObject toUserJson = conversation.getLastMessage().getJSONObjectAttribute("toUserInfo");
-                if (jsonObject != null && StringUtils.isEquals(jsonObject.getString("userId"), String.valueOf(userInfo.getUserId()))) {
-                    jsonObject = toUserJson;
+                JSONObject jsonObject = null;
+                String userName = null;
+                String userIcon = null;
+
+                if (conversation.isGroup()) {
+                    jsonObject = conversation.getLastMessage().getJSONObjectAttribute("groupInfo");
+                    userName = jsonObject != null ? jsonObject.getString("groupName") : "";
+                    userIcon = jsonObject != null ? jsonObject.getString("groupIcon") : "";
+                } else {
+                    jsonObject = conversation.getLastMessage().getJSONObjectAttribute("fromUserInfo");
+                    JSONObject toUserJson = conversation.getLastMessage().getJSONObjectAttribute("toUserInfo");
+                    if (jsonObject != null && StringUtils.isEquals(jsonObject.getString("userId"), String.valueOf(userInfo.getUserId()))) {
+                        jsonObject = toUserJson;
+                    }
+                    userName = jsonObject != null ? jsonObject.getString("userName") : "";
+                    userIcon = jsonObject != null ? jsonObject.getString("userIcon") : "";
                 }
-                MessageInfo messageInfo = new MessageInfo(jsonObject != null ? jsonObject.getString("userName") : "",
-                        jsonObject != null ? jsonObject.getString("userIcon") : "",
+
+
+                MessageInfo messageInfo = new MessageInfo(userName, userIcon,
                         conversation.getUnreadMsgCount(),
                         DateUtils.getTimestampString(new Date(conversation.getLastMessage().getMsgTime())),
                         SmileUtils.getSmiledText(getActivity(), getMessageDigest(conversation.getLastMessage(), getActivity())));
@@ -488,6 +512,7 @@ public class QMessageFragment extends QBaseFragment {
                     } else {
                         // it is group chat
                         intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_GROUP);
+                        intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, messageInfo.getName(), messageInfo.getHeadImage(), username));
                         intent.putExtra("groupId", username);
                     }
 
