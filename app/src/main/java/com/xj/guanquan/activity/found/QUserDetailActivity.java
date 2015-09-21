@@ -240,7 +240,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         distance = (TextView) findViewById(R.id.distance);
         sex = (TextView) findViewById(R.id.sexTxt);
         sexAgeArea = (LinearLayout) findViewById(R.id.sexAgeArea);
-        circleNum = (TextView) findViewById(R.id.circleNum);
+        circleNum = (TextView) findViewById(R.id.circleNumber);
         income = (TextView) findViewById(R.id.income);
         carTwo = (TextView) findViewById(R.id.carTwo);
         attentionArea = (LinearLayout) findViewById(R.id.attentionArea);

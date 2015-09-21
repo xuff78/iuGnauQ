@@ -66,6 +66,7 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
     private int currentPage = 1;
     private int numPerPage = 20;
     private boolean isLoadMore;
+    private String method;
 
     /**
      * Use this factory method to create a new instance of
@@ -115,6 +116,9 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
 
         if (mParam1 != null) {
             titleArea.setVisibility(View.GONE);
+            method = ApiList.GROUP_MYGROUP;
+        } else {
+            method = ApiList.FIND_GROUP_LIST;
         }
         // improve performance if you know that changes in content
         // do not change the size of the RecyclerView
@@ -187,7 +191,7 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
     }
 
     private void initHandler() {
-        request = new StringRequest(Request.Method.POST, ApiList.FIND_GROUP_LIST, this, this) {
+        request = new StringRequest(Request.Method.POST, method, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();

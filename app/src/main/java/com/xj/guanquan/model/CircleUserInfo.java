@@ -55,8 +55,27 @@ public class CircleUserInfo extends EBaseModel {
     }
 
     public String getRelation() {
-        if (relation != null)
-            return "关系 ： " + relation;
+        if (relation != null) {
+            String relationTxt = "";
+            switch (Integer.valueOf(relation)) {
+                case 0:
+                    relationTxt = "自己";
+                    break;
+                case 1:
+                    relationTxt = "粉丝";
+                    break;
+                case 2:
+                    relationTxt = "关注";
+                    break;
+                case 3:
+                    relationTxt = "好友";
+                    break;
+                case 4:
+                    relationTxt = "陌生人";
+                    break;
+            }
+            return "关系 ： " + relationTxt;
+        }
         return null;
     }
 

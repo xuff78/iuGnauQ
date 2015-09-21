@@ -101,7 +101,7 @@ public class QMeFragment extends Fragment implements View.OnClickListener {
     private void initialize(View view) {
         headImage = (SimpleDraweeView) view.findViewById(R.id.avatar);
         name = (TextView) view.findViewById(R.id.name);
-        circleNum = (TextView) view.findViewById(R.id.circleNum);
+        circleNum = (TextView) view.findViewById(R.id.circleNumber);
         selfDataArea = (RelativeLayout) view.findViewById(R.id.selfDataArea);
         signArea = (RelativeLayout) view.findViewById(R.id.signArea);
         visitorArea = (RelativeLayout) view.findViewById(R.id.visitorArea);

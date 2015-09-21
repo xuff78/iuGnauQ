@@ -43,6 +43,8 @@ import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMGroup;
+import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
@@ -54,8 +56,10 @@ import com.xj.guanquan.adapter.ExpressionAdapter;
 import com.xj.guanquan.adapter.ExpressionPagerAdapter;
 import com.xj.guanquan.adapter.MessageAdapter;
 import com.xj.guanquan.adapter.VoicePlayClickListener;
+import com.xj.guanquan.common.GroupRemoveListener;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.SmileUtils;
+import com.xj.guanquan.model.CircleInfo;
 import com.xj.guanquan.model.ExpandMsgInfo;
 import com.xj.guanquan.model.MessageInfo;
 import com.xj.guanquan.model.UserInfo;
@@ -170,6 +174,9 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     private ClipboardManager clipboard;
     private UserInfo userInfo;
     private ExpandMsgInfo fromUser;
+    public EMGroup group;
+    private GroupListener groupListener;
+    private CircleInfo groupInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +185,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         // 判断单聊还是群聊
         chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);
         fromUser = (ExpandMsgInfo) getIntent().getSerializableExtra("messageInfo");
+        groupInfo = (CircleInfo) getIntent().getSerializableExtra("groupInfo");
         JSONObject jsonObject = JSONObject.parseObject(PreferencesUtils.getString(this, "loginData"));
         userInfo = JSONObject.parseObject(jsonObject.getJSONObject("data").toJSONString(), UserInfo.class);
         initData();
@@ -210,6 +218,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             toChatUsername = getIntent().getStringExtra("groupId");
 
             if (chatType == CHATTYPE_GROUP) {
+                onGroupViewCreation();
             }
         }
         onConversationInit();
@@ -1043,15 +1052,80 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     }
 
     private void initExpandMsg(EMMessage message) {
-        if (this.fromUser != null) {
-            message.setAttribute("toUserInfo", JSONObject.toJSONString(fromUser));
+        if (chatType == CHATTYPE_SINGLE) {
+            if (this.fromUser != null) {
+                message.setAttribute("toUserInfo", JSONObject.toJSONString(fromUser));
+            }
+            ExpandMsgInfo toUser = new ExpandMsgInfo();
+            if (userInfo != null) {
+                toUser.setUserIcon(userInfo.getAvatar());
+                toUser.setUserId(String.valueOf(userInfo.getUserId()));
+                toUser.setUserName(userInfo.getNickName());
+                message.setAttribute("fromUserInfo", JSONObject.toJSONString(toUser));
+            }
+        } else {
+            ExpandMsgInfo toUser = new ExpandMsgInfo();
+            if (userInfo != null) {
+                toUser.setUserIcon(userInfo.getAvatar());
+                toUser.setUserId(String.valueOf(userInfo.getUserId()));
+                toUser.setUserName(userInfo.getNickName());
+                message.setAttribute("fromUserInfo", JSONObject.toJSONString(toUser));
+            }
+            ExpandMsgInfo group = new ExpandMsgInfo();
+            group.setGroupId(String.valueOf(groupInfo.getId()));
+            group.setGroupIcon(groupInfo.getPicture());
+            group.setGroupName(groupInfo.getName());
+            message.setAttribute("groupInfo", JSONObject.toJSONString(group));
         }
-        ExpandMsgInfo toUser = new ExpandMsgInfo();
-        if (userInfo != null) {
-            toUser.setUserIcon(userInfo.getAvatar());
-            toUser.setUserId(String.valueOf(userInfo.getUserId()));
-            toUser.setUserName(userInfo.getNickName());
-            message.setAttribute("fromUserInfo", JSONObject.toJSONString(toUser));
+    }
+
+    protected void onGroupViewCreation() {
+        group = EMGroupManager.getInstance().getGroup(toChatUsername);
+
+        if (group != null) {
+            setTitle(group.getGroupName());
+        } else {
+            setTitle(toChatUsername);
         }
+
+        // 监听当前会话的群聊解散被T事件
+        groupListener = new GroupListener();
+        EMGroupManager.getInstance().addGroupChangeListener(groupListener);
+    }
+
+    /**
+     * 监测群组解散或者被T事件
+     */
+    class GroupListener extends GroupRemoveListener {
+
+        @Override
+        public void onUserRemoved(final String groupId, String groupName) {
+            runOnUiThread(new Runnable() {
+                String st13 = getResources().getString(R.string.you_are_group);
+
+                public void run() {
+                    if (toChatUsername.equals(groupId)) {
+                        showToastShort(st13);
+                        finish();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onGroupDestroy(final String groupId, String groupName) {
+            // 群组解散正好在此页面，提示群组被解散，并finish此页面
+            runOnUiThread(new Runnable() {
+                String st14 = getResources().getString(R.string.the_current_group);
+
+                public void run() {
+                    if (toChatUsername.equals(groupId)) {
+                        showToastShort(st14);
+                        finish();
+                    }
+                }
+            });
+        }
+
     }
 }

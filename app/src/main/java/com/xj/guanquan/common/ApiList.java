@@ -62,4 +62,11 @@ public class ApiList {
     public static String SECRET_AddComment = BASE_API + "1/secret/addComment";
     public static String SECRET_AddComplain = BASE_API + "1/secret/addComplain";
     public static String SECRET_AddLike = BASE_API + "1/secret/addLike";
+
+    //圈子
+    public static String GROUP_DETAIL = BASE_API + "1/group/detail";
+    public static String GROUP_MYGROUP = BASE_API + "1/group/myGroup";
+    public static String GROUP_MEMBER = BASE_API + "1/group/member";
+    public static String GROUP_JOIN = BASE_API + "1/group/join";
+    public static String GROUP_CREATE = BASE_API + "1/group/create";
 }

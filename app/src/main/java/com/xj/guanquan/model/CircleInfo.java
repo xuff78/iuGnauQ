@@ -6,8 +6,8 @@ import common.eric.com.ebaselibrary.model.EBaseModel;
  * Created by eric on 2015/8/23.
  */
 public class CircleInfo extends EBaseModel {
-    private Integer groupId;
-    private String groupName;
+    private Integer id;
+    private String name;
     private String picture;
     private String level;
     private String distance;
@@ -16,21 +16,22 @@ public class CircleInfo extends EBaseModel {
     public CircleInfo() {
     }
 
-    public Integer getGroupId() {
-        return groupId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getName() {
+        return name;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setName(String name) {
+        this.name = name;
     }
+
 
     public String getPicture() {
         return picture;

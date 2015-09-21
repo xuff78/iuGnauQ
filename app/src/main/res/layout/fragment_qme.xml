@@ -50,7 +50,7 @@
             android:text="袁飞飞" />
 
         <TextView
-            android:id="@+id/circleNum"
+            android:id="@+id/circleNumber"
             style="@style/text_14_7f"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

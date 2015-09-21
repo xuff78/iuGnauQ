@@ -111,6 +111,8 @@
     <string name="Download_the_pictures">下载图片: 0%</string>
     <string name="Download_the_pictures_new">下载图片:</string>
     <string name="Failed_to_download_file">下载文件失败:</string>
+    <string name="the_current_group">当前群聊已被群创建者解散</string>
+    <string name="you_are_group">你被群创建者从此群中移除</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">附近用户</string>

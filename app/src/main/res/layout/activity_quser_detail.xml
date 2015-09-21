@@ -274,7 +274,7 @@
                     android:text="贵圈号" />
 
                 <TextView
-                    android:id="@+id/circleNum"
+                    android:id="@+id/circleNumber"
                     style="@style/text_13_7f"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -285,7 +285,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_alignBottom="@+id/circleNum"
+                    android:layout_alignBottom="@+id/circleNumber"
                     android:layout_marginLeft="105dp"
                     android:background="@color/black_deep" />
             </RelativeLayout>
