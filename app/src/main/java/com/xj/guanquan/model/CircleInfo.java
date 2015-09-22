@@ -1,6 +1,7 @@
 package com.xj.guanquan.model;
 
 import common.eric.com.ebaselibrary.model.EBaseModel;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 /**
  * Created by eric on 2015/8/23.
@@ -42,6 +43,8 @@ public class CircleInfo extends EBaseModel {
     }
 
     public String getLevel() {
+        if (!StringUtils.isEmpty(level))
+            return " LV " + level + " ";
         return level;
     }
 

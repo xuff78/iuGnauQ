@@ -149,7 +149,6 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
 
     @Override
     public void onResponse(Object response) {
-        getProgressDialog().dismiss();
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             PreferencesUtils.putString(QLoginActivity.this, "loginData", (String) response);

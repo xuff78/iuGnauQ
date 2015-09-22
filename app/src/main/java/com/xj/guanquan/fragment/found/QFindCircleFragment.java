@@ -128,7 +128,7 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
         findRecyclerView.setLayoutManager(mLayoutManager);
         findRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"groupName", "level", "description", "picture", "distance"}, R.layout.list_find_circle_item, circleInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"name", "level", "description", "picture", "distance"}, R.layout.list_find_circle_item, circleInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -222,7 +222,7 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener, View.OnLongClickListener {
         private SimpleDraweeView picture;
-        private TextView groupName;
+        private TextView name;
         private TextView level;
         private TextView distance;
         private RelativeLayout nameArea;
@@ -236,12 +236,12 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
             this.picture = picture;
         }
 
-        public TextView getGroupName() {
-            return groupName;
+        public TextView getName() {
+            return name;
         }
 
-        public void setGroupName(TextView groupName) {
-            this.groupName = groupName;
+        public void setName(TextView name) {
+            this.name = name;
         }
 
         public TextView getLevel() {
@@ -285,7 +285,7 @@ public class QFindCircleFragment extends QBaseFragment implements OnClickListene
 
         private void initialize(View itemView) {
             picture = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
-            groupName = (TextView) itemView.findViewById(R.id.circleName);
+            name = (TextView) itemView.findViewById(R.id.circleName);
             level = (TextView) itemView.findViewById(R.id.level);
             distance = (TextView) itemView.findViewById(R.id.distance);
             nameArea = (RelativeLayout) itemView.findViewById(R.id.nameArea);

@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -584,17 +585,17 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
                 @Override
                 public void onSuccess() {
-
+                    Log.e("onSuccess","onSuccess");
                 }
 
                 @Override
                 public void onError(int i, String s) {
-
+                    Log.e("sendMessage onError", s);
                 }
 
                 @Override
                 public void onProgress(int i, String s) {
-
+                    Log.e("sendMessage onProgress", s);
                 }
             });
             // 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法

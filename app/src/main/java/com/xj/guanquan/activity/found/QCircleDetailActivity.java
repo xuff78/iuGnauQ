@@ -69,7 +69,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
 
     private StringRequest request;
     private StringRequest requestJoin;
-    private String huanxinName;
+    private String huanxinGroupId;
     JSONObject content;
 
     @Override
@@ -184,7 +184,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             // 进入聊天页面
             Intent intent = new Intent(this, QMsgDetailActivity.class);
             intent.putExtra("chatType", QMsgDetailActivity.CHATTYPE_GROUP);
-            intent.putExtra("groupId", String.valueOf(circleInfo.getId()));
+            intent.putExtra("groupId", huanxinGroupId);
             intent.putExtra("groupInfo", circleInfo);
             intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, circleInfo.getName(),
                     circleInfo.getPicture(), String.valueOf(circleInfo.getId())));
@@ -264,8 +264,10 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             Uri uri = Uri.parse(content.getString("ownerAvatar"));
             masterImage.setImageURI(uri);
             JSONArray avaratList = content.getJSONArray("avatarList");
-            Uri uri1 = Uri.parse(avaratList.getJSONObject(0).getString("avatar"));
-            headImageOne.setImageURI(uri1);
+            if (avaratList.size() > 0) {
+                Uri uri1 = Uri.parse(avaratList.getJSONObject(0).getString("avatar"));
+                headImageOne.setImageURI(uri1);
+            }
             if (avaratList.size() > 1 && avaratList.getJSONObject(1) != null) {
                 Uri uri2 = Uri.parse(avaratList.getJSONObject(1).getString("avatar"));
                 headImageTwo.setImageURI(uri2);
@@ -285,8 +287,22 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             Uri circlePic = Uri.parse(content.getString("albumPicture"));
             circlePhotos.setImageURI(circlePic);
             photoDesc.setText(content.getString("albumContent"));
+            int isJoined = content.getInteger("isJoined");
+            if (isJoined == 1) {
+                attentionArea.setVisibility(View.GONE);
+            } else {
+                toMessageBtn.setVisibility(View.GONE);
+            }
+            huanxinGroupId = content.getString("huanxinGroupId");
+
         } else if (StringUtils.isEquals(requestMethod, ApiList.GROUP_JOIN)) {
-            alertDialog(result.getMsg(), null);
+            alertDialog(result.getMsg(), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    attentionArea.setVisibility(View.GONE);
+                    toMessageBtn.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 }
