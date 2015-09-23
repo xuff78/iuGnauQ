@@ -2,6 +2,7 @@ package com.xj.guanquan.fragment.roast;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -39,7 +40,7 @@ public class TucaoMianFrg extends QBaseFragment {
     private ArrayList<TextView> menu=new ArrayList<TextView>();
     private int toPublish=0x22;
     public static final int publishSuccess=0x23;
-    public TucaoListFrg frg=null;
+    public ArrayList<TucaoListFrg> frgs=new ArrayList<TucaoListFrg>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,19 +132,9 @@ public class TucaoMianFrg extends QBaseFragment {
         //得到每个item
         @Override
         public Fragment getItem(int position) {
-            frg=TucaoListFrg.newInstance(position);
-//            switch (position){
-//                case 0:
-//                    frg=TucaoListFrg.newInstance(position);
-//                    break;
-//                case 1:
-//                    frg=TucaoListFrg.newInstance(position);
-//                    break;
-//                case 2:
-//                    frg=TucaoListFrg.newInstance(position);
-//                    break;
-//            }
-            return frg;
+            frgs.add(position, TucaoListFrg.newInstance(position));
+
+            return frgs.get(position);
         }
 
 
@@ -165,7 +156,12 @@ public class TucaoMianFrg extends QBaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==toPublish&&resultCode==publishSuccess){
-            frg.refreshPage();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    frgs.get(PageType).refreshPage();
+                }
+            },500);
         }
     }
 }

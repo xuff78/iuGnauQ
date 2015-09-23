@@ -543,13 +543,14 @@ public class QPublishAct extends QBaseActivity {
             final String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
             picPaths.add(picPath);
             Log.i("Upload", "最终选择的图片=" + picPath);
-            BitmapFactory.Options options1 = new BitmapFactory.Options();
-            options1.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(picPath, options1);
-            options1.inSampleSize = ImageUtils.calculateInSampleSize(options1, screenWidth, screenWidth);  //110,160：转换后的宽和高，具体值会有些出入
-            options1.inJustDecodeBounds = false;
-            final Bitmap bitmap = BitmapFactory.decodeFile(picPath, options1);
+//            BitmapFactory.Options options1 = new BitmapFactory.Options();
+//            options1.inJustDecodeBounds = true;
+//            BitmapFactory.decodeFile(picPath, options1);
+//            options1.inSampleSize = ImageUtils.calculateInSampleSize(options1, screenWidth, screenWidth);  //110,160：转换后的宽和高，具体值会有些出入
+//            options1.inJustDecodeBounds = false;
+//            final Bitmap bitmap = BitmapFactory.decodeFile(picPath, options1);
 //            Bitmap bmp = BitmapFactory.decodeFile(picPath);
+            final Bitmap bitmap=ImageUtils.getSmallBitmap(picPath);
             seImageView(bitmap);
 
             new Thread(){
@@ -559,9 +560,10 @@ public class QPublishAct extends QBaseActivity {
                     int bitmapSize=getBitmapSize(bitmap);
                     if(bitmapSize>300000) {
                         try {
-                            float scale=300000f/bitmapSize;
+//                            float scale=300000f/bitmapSize;
                             FileOutputStream out = new FileOutputStream(new File(picPath));
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, (int)(100*scale), out);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);
+//                            bitmap.compress(Bitmap.CompressFormat.JPEG, (int)(100*scale), out);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
