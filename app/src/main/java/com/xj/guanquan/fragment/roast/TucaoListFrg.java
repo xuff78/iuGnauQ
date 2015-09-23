@@ -153,9 +153,9 @@ public class TucaoListFrg extends QBaseFragment {
     }
 
     public void refreshPage(){
-        mAdapter.isLoadMore(true);
+//        mAdapter.isLoadMore(true);
         currentPage=1;
-        doRequest(false);
+        doRequest(true);
     }
 
     View.OnClickListener listBtnListener = new View.OnClickListener() {
@@ -259,6 +259,8 @@ public class TucaoListFrg extends QBaseFragment {
 
     @Override
     public void doResponse(Object response) {
+        if(getActivity()==null)
+            return;
         swipeRefresh.setRefreshing(false);
         if (requestMethod.equals(ApiList.TUCAO_AddLike)||requestMethod.equals(ApiList.DATE_AddLike)||requestMethod.equals(ApiList.SECRET_AddLike)) {
             ToastUtils.show(getActivity(), "赞一个");
