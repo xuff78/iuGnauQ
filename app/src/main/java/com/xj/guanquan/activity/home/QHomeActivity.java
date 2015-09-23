@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.EMEventListener;
@@ -146,9 +147,38 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
         alertConfirmDialog(getString(R.string.exit_app), new OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.exit(0);
-                EMChatManager.getInstance().logout();//此方法为同步方法
-                ((QBaseApplication) QBaseApplication.getInstance()).AppExit(QHomeActivity.this);
+                //此方法为异步方法
+                EMChatManager.getInstance().logout(new EMCallBack() {
+
+                    @Override
+                    public void onSuccess() {
+                        // TODO Auto-generated method stub
+                        ((QBaseApplication) QBaseApplication.getInstance()).AppExit(QHomeActivity.this);
+                        System.exit(0);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+                        // TODO Auto-generated method stub
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showToastShort("正在退出贵圈...");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int code, final String message) {
+                        // TODO Auto-generated method stub
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showToastShort(message);
+                            }
+                        });
+                    }
+                });
             }
         }, null);
     }

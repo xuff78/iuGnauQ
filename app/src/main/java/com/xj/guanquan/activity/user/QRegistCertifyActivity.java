@@ -3,7 +3,6 @@ package com.xj.guanquan.activity.user;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -20,6 +19,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.activity.roast.SelectPicActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.MultipartRequest;
@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
-import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QRegistCertifyActivity extends QBaseActivity implements View.OnClickListener {
     public static final int TO_SELECT_PHOTO = 3;
@@ -82,17 +81,13 @@ public class QRegistCertifyActivity extends QBaseActivity implements View.OnClic
             initSelectPicker("height");
             selectView = heightText;
             initAlertDialog("请选择身高", selectPicker);
+            userDetailInfo.setHeight(valueList.get(0).getKey());
         } else if (v == weightArea) {
             initSelectPicker("weight");
             selectView = weightText;
             initAlertDialog("请选择体重", selectPicker);
+            userDetailInfo.setWeight(valueList.get(0).getKey());
         } else if (v == nextStep) {
-            if (!StringUtils.isEquals("暂无", heightText.getText().toString())) {
-                userDetailInfo.setBrand(heightText.getText().toString());
-            }
-            if (!StringUtils.isEquals("暂无", weightText.getText().toString())) {
-                userDetailInfo.setBrand(weightText.getText().toString());
-            }
             regist();
         } else if (v == photoArea) {
             Intent intent = new Intent(this, SelectPicActivity.class);
@@ -130,7 +125,7 @@ public class QRegistCertifyActivity extends QBaseActivity implements View.OnClic
         selectDialog.show();
     }
 
-    private void initSelectPicker(String type) {
+    private void initSelectPicker(final String type) {
         JSONObject content = JSONObject.parseObject(PreferencesUtils.getString(this, "data_dict"));
         valueList = JSONArray.parseArray(content.getJSONArray(type).toJSONString(), KeyValue.class);
         String[] values = new String[valueList.size()];
@@ -147,6 +142,11 @@ public class QRegistCertifyActivity extends QBaseActivity implements View.OnClic
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 selectView.setText(valueList.get(newVal).getValue());
+                if (type.equals("height")) {
+                    userDetailInfo.setHeight(valueList.get(newVal).getKey());
+                } else if (type.equals("weight")) {
+                    userDetailInfo.setWeight(valueList.get(newVal).getKey());
+                }
                 keyValue = valueList.get(newVal);
             }
         });
@@ -205,8 +205,8 @@ public class QRegistCertifyActivity extends QBaseActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
             String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
-            Bitmap bmp = BitmapFactory.decodeFile(picPath);
-            photoView.setImageBitmap(bmp);
+            Bitmap bitmap = ImageUtils.getSmallBitmap(picPath);
+            photoView.setImageBitmap(bitmap);
             userDetailInfo.setFile_beautyCert(picPath);
         }
         super.onActivityResult(requestCode, resultCode, data);

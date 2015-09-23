@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.CircleInfo;
 
@@ -48,7 +49,7 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
             }
         });
 
-        Bitmap bmp = BitmapFactory.decodeFile(circleInfo.getFile_logo());
+        Bitmap bmp = ImageUtils.getSmallBitmap(circleInfo.getFile_logo());
         groupImage.setImageBitmap(bmp);
     }
 

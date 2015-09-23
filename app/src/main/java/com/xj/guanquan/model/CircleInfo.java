@@ -14,6 +14,7 @@ public class CircleInfo extends EBaseModel {
     private String distance;
     private String description;
     private String file_logo;
+    private String logo;
 
     public CircleInfo() {
     }
@@ -75,5 +76,13 @@ public class CircleInfo extends EBaseModel {
 
     public void setFile_logo(String file_logo) {
         this.file_logo = file_logo;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

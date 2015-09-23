@@ -27,7 +27,14 @@
             app:placeholderImageScaleType="fitCenter"
             app:roundedCornerRadius="5dp"
             fresco:placeholderImage="@color/light_gray" />
-
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/iv_userhead"
+            android:text="暂无" />
         <ImageView
             android:id="@+id/iv_voice"
             android:layout_width="wrap_content"

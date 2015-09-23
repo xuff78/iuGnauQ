@@ -155,7 +155,9 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
             userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
             PreferencesUtils.putString(QLoginActivity.this, "login_phone", userInfo.getPhone());
             loginChatServer(String.valueOf(userInfo.getHuanxinName()), userInfo.getHuanxinPassword());
-        } else
+        } else {
+            getProgressDialog().dismiss();
             alertDialog(result.getMsg(), null);
+        }
     }
 }

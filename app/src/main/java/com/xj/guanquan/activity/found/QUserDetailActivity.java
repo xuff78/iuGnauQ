@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -327,6 +328,14 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 height.setText(content.getString("height"));
                 marriage.setText(content.getString("feelingStatus"));
                 huanxinName = content.getString("huanxinName");
+                if (content.getJSONArray("car") != null) {
+                    List<String> cars = JSONArray.parseArray(content.getJSONArray("car").toJSONString(), String.class);
+                    if (cars.size() > 0) {
+                        carOne.setText(cars.get(0));
+                    } else if (cars.size() > 1) {
+                        carTwo.setText(cars.get(1));
+                    }
+                }
                 String relationTxt = "";
                 switch (content.getIntValue("relation")) {
                     case 0:

@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -22,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.activity.roast.SelectPicActivity;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.KeyValue;
@@ -133,7 +133,7 @@ public class QRegistInfoActivity extends QBaseActivity implements View.OnClickLi
                 return;
             }
             userDetailInfo.setNickName(nickNameText.getText().toString());
-            userDetailInfo.setConstellation(starText.getText().toString());
+            userDetailInfo.setConstellation(starValue == null ? null : starValue.getKey());
             userDetailInfo.setBirthday(birthdayText.getText().toString());
             Bundle bundle = new Bundle();
             bundle.putSerializable("userDetailInfo", userDetailInfo);
@@ -210,8 +210,8 @@ public class QRegistInfoActivity extends QBaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
             String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
-            Bitmap bmp = BitmapFactory.decodeFile(picPath);
-            headImage.setImageBitmap(bmp);
+            Bitmap bitmap = ImageUtils.getSmallBitmap(picPath);
+            headImage.setImageBitmap(bitmap);
             userDetailInfo.setFile_avatar(picPath);
         }
         super.onActivityResult(requestCode, resultCode, data);

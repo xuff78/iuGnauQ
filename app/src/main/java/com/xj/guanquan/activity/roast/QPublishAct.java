@@ -549,7 +549,7 @@ public class QPublishAct extends QBaseActivity {
 //            options1.inSampleSize = ImageUtils.calculateInSampleSize(options1, screenWidth, screenWidth);  //110,160：转换后的宽和高，具体值会有些出入
 //            options1.inJustDecodeBounds = false;
 //            final Bitmap bitmap = BitmapFactory.decodeFile(picPath, options1);
-//            Bitmap bmp = BitmapFactory.decodeFile(picPath);
+//            Bitmap bmp= ImageUtils.getSmallBitmap(picPath);
             final Bitmap bitmap=ImageUtils.getSmallBitmap(picPath);
             seImageView(bitmap);
 

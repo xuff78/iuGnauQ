@@ -298,12 +298,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class MessageHolder extends RecyclerView.ViewHolder {
         SimpleDraweeView userImg;
-        TextView userMsg;
+        TextView userMsg, tv_userid;
 
         public MessageHolder(View itemView) {
             super(itemView);
             userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
             userMsg = (TextView) itemView.findViewById(R.id.userMsg);
+            tv_userid = (TextView) itemView.findViewById(R.id.tv_userid);
         }
     }
 
@@ -402,6 +403,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
             uri = Uri.parse(jsonObject.getString("userIcon"));
             holder.userImg.setImageURI(uri);
+            holder.tv_userid.setText(jsonObject.getString("userName"));
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (EaseMobException e) {
@@ -443,6 +445,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
             uri = Uri.parse(jsonObject.getString("userIcon"));
             holder.iv_avatar.setImageURI(uri);
+            holder.tv_usernick.setText(jsonObject.getString("userName"));
         } catch (Exception e) {
             Log.e("handleImageMessage", e.getMessage());
         }
@@ -576,6 +579,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
             uri = Uri.parse(jsonObject.getString("userIcon"));
             holder.iv_avatar.setImageURI(uri);
+            holder.tv_usernick.setText(jsonObject.getString("userName"));
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (EaseMobException e) {

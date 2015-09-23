@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.activity.roast.SelectPicActivity;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.CircleInfo;
@@ -80,7 +81,7 @@ public class QCreateGroupActivity extends QBaseActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
             String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
-            Bitmap bmp = BitmapFactory.decodeFile(picPath);
+            Bitmap bmp= ImageUtils.getSmallBitmap(picPath);
 //            ViewGroup.LayoutParams layoutParams = groupImage.getLayoutParams();
 //            layoutParams.height = addGroupIcon.getHeight();
 //            layoutParams.width = addGroupIcon.getWidth();

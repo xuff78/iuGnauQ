@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.android.volley.AuthFailureError;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.activity.home.QHomeActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.MultipartRequest;
@@ -61,7 +62,7 @@ public class QCreateGroupThreeActivity extends QBaseActivity implements View.OnC
                 createGroup();
             }
         });
-        Bitmap bmp = BitmapFactory.decodeFile(circleInfo.getFile_logo());
+        Bitmap bmp = ImageUtils.getSmallBitmap(circleInfo.getFile_logo());
         groupImage.setImageBitmap(bmp);
     }
 

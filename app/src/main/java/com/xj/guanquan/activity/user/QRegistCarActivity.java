@@ -84,23 +84,26 @@ public class QRegistCarActivity extends QBaseActivity implements View.OnClickLis
             selectView = brandText;
             initSelectPicker("brand");
             initAlertDialog("请选择品牌：", selectPicker);
+            userDetailInfo.setBrand(valueList.get(0).getKey());
         } else if (v == modelArea) {
             selectView = modelText;
             initSelectPicker("model");
             initAlertDialog("请选择型号：", selectPicker);
+            userDetailInfo.setModel(valueList.get(0).getKey());
         } else if (v == configurationArea) {
             selectView = configurationText;
             initSelectPicker("configuration");
             initAlertDialog("请选择配置：", selectPicker);
+            userDetailInfo.setConfiguration(valueList.get(0).getKey());
         } else if (v == nextStep) {
-            if (!StringUtils.isEquals("暂无", brandText.getText().toString())) {
-                userDetailInfo.setBrand(brandText.getText().toString());
+            if (StringUtils.isEquals("暂无", brandText.getText().toString())) {
+                userDetailInfo.setBrand(null);
             }
-            if (!StringUtils.isEquals("暂无", modelText.getText().toString())) {
-                userDetailInfo.setBrand(modelText.getText().toString());
+            if (StringUtils.isEquals("暂无", modelText.getText().toString())) {
+                userDetailInfo.setModel(null);
             }
-            if (!StringUtils.isEquals("暂无", configurationText.getText().toString())) {
-                userDetailInfo.setBrand(configurationText.getText().toString());
+            if (StringUtils.isEquals("暂无", configurationText.getText().toString())) {
+                userDetailInfo.setConfiguration(null);
             }
             regist();
         } else if (v == hasCarBtn) {
@@ -116,7 +119,7 @@ public class QRegistCarActivity extends QBaseActivity implements View.OnClickLis
             if (!noCarBtn.isSelected()) {
                 noCarBtn.setSelected(!noCarBtn.isSelected());
                 hasCarBtn.setSelected(!hasCarBtn.isSelected());
-                userDetailInfo.setSex(0);
+                userDetailInfo.setHaveCar(0);
             }
             brandArea.setVisibility(View.GONE);
             modelArea.setVisibility(View.GONE);
@@ -159,7 +162,7 @@ public class QRegistCarActivity extends QBaseActivity implements View.OnClickLis
         selectDialog.show();
     }
 
-    private void initSelectPicker(String type) {
+    private void initSelectPicker(final String type) {
         JSONObject content = JSONObject.parseObject(PreferencesUtils.getString(this, "data_dict"));
         valueList = JSONArray.parseArray(content.getJSONArray(type).toJSONString(), KeyValue.class);
         String[] values = new String[valueList.size()];
@@ -176,6 +179,13 @@ public class QRegistCarActivity extends QBaseActivity implements View.OnClickLis
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 selectView.setText(valueList.get(newVal).getValue());
+                if (type.equals("brand")) {
+                    userDetailInfo.setBrand(valueList.get(newVal).getKey());
+                } else if (type.equals("model")) {
+                    userDetailInfo.setModel(valueList.get(newVal).getKey());
+                } else if (type.equals("configuration")) {
+                    userDetailInfo.setConfiguration(valueList.get(newVal).getKey());
+                }
                 keyValue = valueList.get(newVal);
             }
         });
@@ -221,7 +231,10 @@ public class QRegistCarActivity extends QBaseActivity implements View.OnClickLis
         alertDialog(result.getMsg(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isStart", true);
                 Intent intent = new Intent(QRegistCarActivity.this, QLoginActivity.class);
+                intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 加入此标志后，intent中的参数被清空。
                 startActivity(intent);
             }

@@ -23,7 +23,6 @@ import com.xj.guanquan.model.UserDetailInfo;
 import java.util.List;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
-import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QRegistIndustryActivity extends QBaseActivity implements View.OnClickListener {
 
@@ -75,20 +74,16 @@ public class QRegistIndustryActivity extends QBaseActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if (v == proArea) {
-            initSelectPicker("industry");
+            initSelectPicker("job");
             selectView = proText;
             initAlertDialog("请选择职业类别", selectPicker);
+            userDetailInfo.setJob(valueList.get(0).getKey());
         } else if (v == industryArea) {
             initSelectPicker("industry");
             selectView = industryText;
             initAlertDialog("请选择行业类别", selectPicker);
+            userDetailInfo.setIndustry(valueList.get(0).getKey());
         } else if (v == nextStep) {
-            if (!StringUtils.isEquals("暂无", proText.getText().toString())) {
-                userDetailInfo.setJob(proText.getText().toString());
-            }
-            if (!StringUtils.isEquals("暂无", industryText.getText().toString())) {
-                userDetailInfo.setIndustry(industryText.getText().toString());
-            }
             Bundle bundle = new Bundle();
             bundle.putSerializable("userDetailInfo", userDetailInfo);
             toActivity(QRegistCarActivity.class, bundle);
@@ -115,7 +110,7 @@ public class QRegistIndustryActivity extends QBaseActivity implements View.OnCli
         selectDialog.show();
     }
 
-    private void initSelectPicker(String type) {
+    private void initSelectPicker(final String type) {
         JSONObject content = JSONObject.parseObject(PreferencesUtils.getString(this, "data_dict"));
         valueList = JSONArray.parseArray(content.getJSONArray(type).toJSONString(), KeyValue.class);
         String[] values = new String[valueList.size()];
@@ -133,6 +128,11 @@ public class QRegistIndustryActivity extends QBaseActivity implements View.OnCli
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 selectView.setText(valueList.get(newVal).getValue());
                 keyValue = valueList.get(newVal);
+                if (type.equals("industry")) {
+                    userDetailInfo.setIndustry(valueList.get(newVal).getKey());
+                } else if (type.equals("job")) {
+                    userDetailInfo.setJob(valueList.get(newVal).getKey());
+                }
             }
         });
     }

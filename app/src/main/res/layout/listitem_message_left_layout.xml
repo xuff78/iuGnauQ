@@ -13,13 +13,26 @@
         android:layout_marginRight="60dip"
         android:orientation="horizontal">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/userImg"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            app:placeholderImageScaleType="fitCenter"
-            app:roundedCornerRadius="5dp"
-            fresco:placeholderImage="@color/light_gray" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/userImg"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                app:placeholderImageScaleType="fitCenter"
+                app:roundedCornerRadius="5dp"
+                fresco:placeholderImage="@color/light_gray" />
+
+            <TextView
+                android:id="@+id/tv_userid"
+                style="@style/chat_text_name_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="暂无" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
