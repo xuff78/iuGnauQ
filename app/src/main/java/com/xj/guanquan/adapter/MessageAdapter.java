@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,10 +38,12 @@ import com.easemob.util.EMLog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
+import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.Constant;
 import com.xj.guanquan.common.ImageCache;
 import com.xj.guanquan.common.LoadImageTask;
+import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.QShowBigImage;
 import com.xj.guanquan.common.SmileUtils;
 import com.xj.guanquan.model.MessageInfo;
@@ -404,6 +407,17 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             uri = Uri.parse(jsonObject.getString("userIcon"));
             holder.userImg.setImageURI(uri);
             holder.tv_userid.setText(jsonObject.getString("userName"));
+            final Integer userId = jsonObject.getInt("userId");
+            holder.userImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setUserId(userId);
+                    bundle.putSerializable("userInfo", userInfo);
+                    ((QBaseActivity) act).toActivity(QUserDetailActivity.class, bundle);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (EaseMobException e) {
@@ -442,10 +456,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.pb.setTag(position);
         Uri uri = null;
         try {
-            JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
+            final JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
             uri = Uri.parse(jsonObject.getString("userIcon"));
             holder.iv_avatar.setImageURI(uri);
             holder.tv_usernick.setText(jsonObject.getString("userName"));
+            final Integer userId = jsonObject.getInt("userId");
+            holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setUserId(userId);
+                    bundle.putSerializable("userInfo", userInfo);
+                    ((QBaseActivity) act).toActivity(QUserDetailActivity.class, bundle);
+                }
+            });
         } catch (Exception e) {
             Log.e("handleImageMessage", e.getMessage());
         }
@@ -576,10 +601,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         Uri uri = null;
         try {
-            JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
+            final JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
             uri = Uri.parse(jsonObject.getString("userIcon"));
             holder.iv_avatar.setImageURI(uri);
             holder.tv_usernick.setText(jsonObject.getString("userName"));
+            final Integer userId = jsonObject.getInt("userId");
+            holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setUserId(userId);
+                    bundle.putSerializable("userInfo", userInfo);
+                    ((QBaseActivity) act).toActivity(QUserDetailActivity.class, bundle);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (EaseMobException e) {
