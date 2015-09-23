@@ -40,6 +40,7 @@ public class QAddFriendActivity extends QBaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         toActivity(QCreateGroupActivity.class);
+        this.finish();
     }
 
     private void initialize() {

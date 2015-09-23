@@ -72,6 +72,7 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
         btnBack.setOnClickListener(listener);
         rightTxtBtn = (Button) findViewById(R.id.of_back_right_txtbtn);
         rightTxtBtn.setOnClickListener(listener);
+        ((QBaseApplication) QBaseApplication.getInstance()).addActivity(this);
     }
 
     protected abstract void initView();

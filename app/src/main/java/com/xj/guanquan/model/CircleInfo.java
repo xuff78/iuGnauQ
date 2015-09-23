@@ -13,6 +13,7 @@ public class CircleInfo extends EBaseModel {
     private String level;
     private String distance;
     private String description;
+    private String file_logo;
 
     public CircleInfo() {
     }
@@ -66,5 +67,13 @@ public class CircleInfo extends EBaseModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFile_logo() {
+        return file_logo;
+    }
+
+    public void setFile_logo(String file_logo) {
+        this.file_logo = file_logo;
     }
 }

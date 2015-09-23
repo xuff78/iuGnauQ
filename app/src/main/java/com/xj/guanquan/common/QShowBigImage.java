@@ -40,7 +40,7 @@ import java.util.Map;
 /**
  * 下载显示大图
  */
-public class QShowBigImage extends QBaseActivity {
+public class QShowBigImage extends QBaseActivity implements OnClickListener {
     private static final String TAG = "ShowBigImage";
     private ProgressDialog pd;
     private PhotoView image;
@@ -214,5 +214,12 @@ public class QShowBigImage extends QBaseActivity {
         if (isDownloaded)
             setResult(RESULT_OK);
         finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == image) {
+            this.finish();
+        }
     }
 }

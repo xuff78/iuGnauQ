@@ -22,6 +22,7 @@ import com.easemob.util.NetUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
+import com.xj.guanquan.common.QBaseApplication;
 import com.xj.guanquan.fragment.contact.QContactFragment;
 import com.xj.guanquan.fragment.found.QFindUserFragment;
 import com.xj.guanquan.fragment.message.QMessageFragment;
@@ -147,6 +148,7 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
             public void onClick(View v) {
                 System.exit(0);
                 EMChatManager.getInstance().logout();//此方法为同步方法
+                ((QBaseApplication) QBaseApplication.getInstance()).AppExit(QHomeActivity.this);
             }
         }, null);
     }

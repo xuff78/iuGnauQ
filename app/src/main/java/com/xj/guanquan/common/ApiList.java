@@ -30,6 +30,7 @@ public class ApiList {
     public static String CONTACT_FOLLOW_LIST = BASE_API + "1/relation/followList";
     public static String CONTACT_FANS_LIST = BASE_API + "1/relation/fansList";
     public static String USER_DETAIL = BASE_API + "1/user/detail";
+    public static String FRIEND_ADD = BASE_API + "1/friend/add";
 
     //吐槽
     public static String TUCAO_Publish = BASE_API + "1/tucao/publish";

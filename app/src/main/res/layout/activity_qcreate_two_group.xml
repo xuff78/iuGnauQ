@@ -17,6 +17,7 @@
         android:orientation="horizontal">
 
         <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/groupImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             fresco:placeholderImage="@mipmap/scrollview_header"
