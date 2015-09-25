@@ -34,7 +34,8 @@
                 android:layout_marginLeft="10dp"
                 android:background="@null"
                 android:gravity="center"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:maxLength="11" />
         </LinearLayout>
 
         <View

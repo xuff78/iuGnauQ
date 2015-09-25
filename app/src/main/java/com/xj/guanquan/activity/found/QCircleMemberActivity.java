@@ -24,6 +24,7 @@ import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.CircleUserInfo;
 import com.xj.guanquan.model.PageInfo;
+import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +48,6 @@ public class QCircleMemberActivity extends QBaseActivity {
     private TextView relation;
     private SimpleDraweeView headImg;
     private TextView sex;
-    private TextView index;
     private TextView distance;
     private TextView age;
     private int lastVisibleItem;
@@ -81,7 +81,7 @@ public class QCircleMemberActivity extends QBaseActivity {
         circleNumRecycler.setItemAnimator(new DefaultItemAnimator());
         initData();
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"relation", "sex", "age", "distance", "time", "avatar", "nickName"}, R.layout.list_circle_user_item, circleUserInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"relation", "sex", "age", "distance", "time", "avatar", "name"}, R.layout.list_circle_user_item, circleUserInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -191,7 +191,16 @@ public class QCircleMemberActivity extends QBaseActivity {
         private TextView age;
         private TextView distance;
         private TextView time;
-        private SimpleDraweeView headImg;
+        private SimpleDraweeView avatar;
+        private TextView name;
+
+        public SimpleDraweeView getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(SimpleDraweeView avatar) {
+            this.avatar = avatar;
+        }
 
         public TextView getRelation() {
             return relation;
@@ -233,21 +242,22 @@ public class QCircleMemberActivity extends QBaseActivity {
             this.time = time;
         }
 
-        public SimpleDraweeView getHeadImg() {
-            return headImg;
+
+        public TextView getName() {
+            return name;
         }
 
-        public void setHeadImg(SimpleDraweeView headImg) {
-            this.headImg = headImg;
+        public void setName(TextView name) {
+            this.name = name;
         }
 
         public ItemViewHolder(View view) {
             super(view);
             time = (TextView) view.findViewById(R.id.time);
             relation = (TextView) view.findViewById(R.id.relation);
-            headImg = (SimpleDraweeView) view.findViewById(R.id.headImg);
+            avatar = (SimpleDraweeView) view.findViewById(R.id.headImg);
             sex = (TextView) view.findViewById(R.id.sexTxt);
-            index = (TextView) view.findViewById(R.id.index);
+            name = (TextView) view.findViewById(R.id.index);
             distance = (TextView) view.findViewById(R.id.distance);
             age = (TextView) view.findViewById(R.id.age);
             view.setOnClickListener(this);
@@ -256,8 +266,10 @@ public class QCircleMemberActivity extends QBaseActivity {
         @Override
         public void onClick(View v) {
             Bundle bundle = new Bundle();
-            circleUserInfoList.get(getAdapterPosition());
-            //bundle.putSerializable("userInfo", new UserInfo("孔先生", "http://www.feizl.com/upload2007/2014_09/14090118321004.jpg", " ♂ ", 23, "87kg", "183cm", "奥迪A8L 2014豪华版", "爱风尚音乐会"));
+            CircleUserInfo circleUserInfo = circleUserInfoList.get(getAdapterPosition());
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(circleUserInfo.getId());
+            bundle.putSerializable("userInfo", userInfo);
             toActivity(QUserDetailActivity.class, bundle);
         }
     }

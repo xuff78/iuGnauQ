@@ -14,6 +14,8 @@ public class CircleUserInfo extends EBaseModel {
     private String avatar;
     private String distance;
     private String time;
+    private String name;
+    private Integer id;
 
     //环信属性
     private Integer huanxinName;
@@ -121,5 +123,21 @@ public class CircleUserInfo extends EBaseModel {
 
     public void setHuanxinPassword(String huanxinPassword) {
         this.huanxinPassword = huanxinPassword;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

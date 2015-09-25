@@ -14,6 +14,7 @@ public class ApiList {
     public static String ACCOUNT_CHECK = BASE_API + "1/user/checkAccount";
     public static String ACCOUNT_REGIST = BASE_API + "1/user/save";
     public static String ACCOUNT_LOGIN = BASE_API + "1/login";
+    public static String ACCOUNT_LOGINOUT = BASE_API + "1/logout";
     public static String ACCOUNT_AUTO_LOGIN = BASE_API + "/1/autoLogin";
     public static String ACCOUNT_FIND_PWD = BASE_API + "1/findPassword";
     public static String ADD_FOLLOW = BASE_API + "1/relation/addFollow";

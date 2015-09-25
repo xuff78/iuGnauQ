@@ -249,6 +249,7 @@
             style="@style/text_16_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onClick"
             android:background="@drawable/login_button_seletor"
             android:text="退出账号" />
     </LinearLayout>
