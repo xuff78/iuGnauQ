@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xj.guanquan" >
+    package="com.xj.guanquan">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -19,12 +19,17 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
+    <!--mob 短信平台-->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".common.QBaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="51e165b40e9be4dd078f2b5672cb39a5" />
@@ -38,10 +43,16 @@
         <service
             android:name=".common.LocationService"
             android:exported="true" />
+        <!--mob短信平台-->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
             android:name=".activity.home.QStartActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -139,20 +150,16 @@
             android:theme="@style/DialogStyleBottom" />
         <activity
             android:name=".activity.user.QRegistIndustryActivity"
-            android:label="@string/title_activity_qregist_industry" >
-        </activity>
+            android:label="@string/title_activity_qregist_industry"></activity>
         <activity
             android:name=".activity.user.QRegistCertifyActivity"
-            android:label="@string/title_activity_qregist_certify" >
-        </activity>
+            android:label="@string/title_activity_qregist_certify"></activity>
         <activity
             android:name=".activity.user.QRegistActivity"
-            android:label="@string/title_activity_qregist" >
-        </activity>
+            android:label="@string/title_activity_qregist"></activity>
         <activity
             android:name=".activity.user.QRegistCarActivity"
-            android:label="@string/title_activity_qregist_car" >
-        </activity>
+            android:label="@string/title_activity_qregist_car"></activity>
     </application>
 
 </manifest>

@@ -103,8 +103,10 @@
                     android:layout_height="28dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="21dp"
-                    android:background="@drawable/send_msg_button_seletor"
-                    android:onClick="onClick" />
+                    android:background="@drawable/sms_border_send_conner"
+                    android:onClick="onClick"
+                    android:text="发送验证码"
+                    android:textColor="@color/yellow" />
 
                 <EditText
                     android:id="@+id/codeText"
@@ -114,7 +116,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/sendSms"
                     android:background="@null"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:inputType="numberSigned" />
 
 
             </RelativeLayout>

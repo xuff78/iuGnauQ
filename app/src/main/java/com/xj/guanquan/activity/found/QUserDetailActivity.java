@@ -1,15 +1,18 @@
 package com.xj.guanquan.activity.found;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -17,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.easemob.util.DensityUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
@@ -87,6 +91,8 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     JSONObject content;
     private NoteInfo noteinfo;
 
+    private PopupWindow popup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Fresco.initialize(this);
@@ -104,7 +110,34 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         _setRightHomeText("投诉", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (popup != null && popup.isShowing()) {
+                    popup.dismiss();
+                } else {
+                    if (popup == null) {
+                        View view = getLayoutInflater().inflate(R.layout.complaint_list_view, null);
+                        Button defriend = (Button) view.findViewById(R.id.defriend);
+                        Button cancel = (Button) view.findViewById(R.id.cancel);
+                        popup = new PopupWindow(view, DensityUtil.dip2px(QUserDetailActivity.this, 50),
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popup.setAnimationStyle(R.style.Animation_AppCompat_Dialog);//设置动画样式
+                        defriend.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                            }
+                        });
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                popup.dismiss();
+                            }
+                        });
+                    }
+                    popup.showAsDropDown(rightTxtBtn, 40, 0);
+                    popup.setFocusable(true);
+                    popup.setOutsideTouchable(true);
+                    popup.setBackgroundDrawable(new ColorDrawable(0));
+                }
             }
         });
 

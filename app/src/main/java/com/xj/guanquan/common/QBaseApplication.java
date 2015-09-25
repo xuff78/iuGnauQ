@@ -9,6 +9,7 @@ import com.easemob.chat.EMChat;
 
 import java.util.Stack;
 
+import cn.smssdk.SMSSDK;
 import common.eric.com.ebaselibrary.common.EBaseApplication;
 
 /**
@@ -23,6 +24,9 @@ public class QBaseApplication extends EBaseApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        //mob
+        SMSSDK.initSDK(this, "91a2d8d54e56", "894e59f37c2945d90e9a2266f4b908db");
+
         EMChat.getInstance().init(this);
         /**
          * debugMode == true 时为打开，sdk 会在log里输入调试信息

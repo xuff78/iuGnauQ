@@ -1,6 +1,8 @@
 package com.xj.guanquan.activity.user;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -12,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.TimeCount;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.UserDetailInfo;
@@ -19,6 +22,8 @@ import com.xj.guanquan.model.UserDetailInfo;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
 
@@ -69,6 +74,21 @@ public class QRegistActivity extends QBaseActivity implements View.OnClickListen
 
     @Override
     protected void initHandler() {
+        EventHandler eh = new EventHandler() {
+
+            @Override
+            public void afterEvent(int event, int result, Object data) {
+
+                Message msg = new Message();
+                msg.arg1 = event;
+                msg.arg2 = result;
+                msg.obj = data;
+                handler.sendMessage(msg);
+            }
+
+        };
+        SMSSDK.registerEventHandler(eh);
+
         request = new StringRequest(Request.Method.POST, ApiList.ACCOUNT_CHECK, this, this) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -92,23 +112,33 @@ public class QRegistActivity extends QBaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (v == sendSms) {
-            showToastShort("目前测试阶段，验证码为123456");
-            codeText.setText("123456");
-        } else if (v == nextStep) {
-            if (StringUtils.isEmpty(phoneText.getText().toString().trim()) || phoneText.getText().toString().length() != 11 || !isUsePhone) {
+            if (StringUtils.isEmpty(phoneText.getText().toString().trim()) || phoneText.getText().toString().length() != 11) {
                 showToastShort("请输入正确的手机号码！");
                 return;
+            }
+            if (!isUsePhone) {
+                showToastShort("手机号已被注册，请更换手机号注册，或点击忘记密码");
+            }
+            SMSSDK.getVerificationCode("86", phoneText.getText().toString());
+            getProgressDialog().show();
+        } else if (v == nextStep) {
+            if (StringUtils.isEmpty(phoneText.getText().toString().trim()) || phoneText.getText().toString().length() != 11) {
+                showToastShort("请输入正确的手机号码！");
+                return;
+            }
+            if (!isUsePhone) {
+                showToastShort("手机号已被注册，请更换手机号注册，或点击忘记密码");
             }
             if (StringUtils.isEmpty(pwdText.getText().toString().trim())) {
                 showToastShort("请输入正确的密码！");
                 return;
             }
-            UserDetailInfo userDetailInfo = new UserDetailInfo();
-            userDetailInfo.setPhone(phoneText.getText().toString());
-            userDetailInfo.setPassword(pwdText.getText().toString());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("userDetailInfo", userDetailInfo);
-            toActivity(QRegistInfoActivity.class, bundle);
+            if (StringUtils.isEmpty(codeText.getText().toString().trim())) {
+                showToastShort("请输入正确的验证码！");
+                return;
+            }
+            SMSSDK.submitVerificationCode("86", phoneText.getText().toString(), codeText.getText().toString());
+            getProgressDialog().show();
         }
     }
 
@@ -123,4 +153,39 @@ public class QRegistActivity extends QBaseActivity implements View.OnClickListen
         super.onErrorResponse(error);
         isUsePhone = false;
     }
+
+    Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            int event = msg.arg1;
+            int result = msg.arg2;
+            Object data = msg.obj;
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                //短信注册成功后，返回MainActivity,然后提示新好友
+                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功
+                    getProgressDialog().dismiss();
+                    UserDetailInfo userDetailInfo = new UserDetailInfo();
+                    userDetailInfo.setPhone(phoneText.getText().toString());
+                    userDetailInfo.setPassword(pwdText.getText().toString());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("userDetailInfo", userDetailInfo);
+                    toActivity(QRegistInfoActivity.class, bundle);
+                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                    getProgressDialog().dismiss();
+                    showToastShort("验证码已经发送");
+                    TimeCount time = TimeCount.getInstance(60000, 1000, sendSms, QRegistActivity.this);
+                    time.start();
+                }
+            } else {
+                getProgressDialog().dismiss();
+                ((Throwable) data).printStackTrace();
+                showToastShort("验证码错误");
+            }
+
+        }
+
+    };
 }

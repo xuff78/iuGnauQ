@@ -23,6 +23,7 @@ import com.xj.guanquan.model.KeyValue;
 import java.util.List;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QScreenActivity extends QBaseActivity implements View.OnClickListener {
 
@@ -49,9 +50,7 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private AlertDialog selectDialog;
     private NumberPicker selectPicker;
     private List<KeyValue> valueList;
-    private KeyValue carValue;
-    private KeyValue heightValue;
-    private KeyValue ageValue;
+    private KeyValue keyValue;
     private TextView selectView;
 
     @Override
@@ -140,24 +139,24 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         } else if (v == selectAge) {
             selectView = ageText;
             initSelectPicker("age");
-            ageValue = valueList.get(0);
+            keyValue = valueList.get(0);
             selectPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                 @Override
                 public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                    ageValue = valueList.get(newVal);
-                    ageText.setText(ageValue.getValue());
+                    keyValue = valueList.get(newVal);
+                    ageText.setText(keyValue.getValue());
                 }
             });
             initAlertDialog("请选择年龄", selectPicker);
         } else if (v == selectCar) {
             selectView = car;
             initSelectPicker("configuration");
-            carValue = valueList.get(0);
+            keyValue = valueList.get(0);
             selectPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                 @Override
                 public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                    carValue = valueList.get(newVal);
-                    car.setText(carValue.getValue());
+                    keyValue = valueList.get(newVal);
+                    car.setText(keyValue.getValue());
                 }
             });
             initAlertDialog("请选择车认证", selectPicker);
@@ -165,12 +164,12 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         } else if (v == selectHeight) {
             selectView = heightText;
             initSelectPicker("height");
-            heightValue = valueList.get(0);
+            keyValue = valueList.get(0);
             selectPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                 @Override
                 public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                    heightValue = valueList.get(newVal);
-                    heightText.setText(heightValue.getValue());
+                    keyValue = valueList.get(newVal);
+                    heightText.setText(keyValue.getValue());
                 }
             });
             initAlertDialog("请选择身高", selectPicker);
@@ -228,9 +227,9 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private void backPressed() {
         Intent intent = new Intent();
         intent.putExtra("sex", sex);
-        intent.putExtra("age", ageValue == null ? null : ageValue.getKey());
-        intent.putExtra("height", heightValue == null ? null : heightValue.getKey());
-        intent.putExtra("carCert", carValue == null ? null : carValue.getKey());
+        intent.putExtra("age", StringUtils.isEquals(ageText.getText().toString(), "不限") ? null : ageText.getText().toString());
+        intent.putExtra("height", StringUtils.isEquals(heightText.getText().toString(), "不限") ? null : heightText.getText().toString());
+        intent.putExtra("carCert", StringUtils.isEquals(car.getText().toString(), "不限") ? null : car.getText().toString());
         intent.putExtra("finallyTime", finallyTime);
         setResult(111, intent);
         this.finish();
@@ -246,7 +245,7 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        selectView.setText(valueList.get(0).getValue());
+                        selectView.setText(keyValue.getValue());
                         selectDialog.cancel();
                     }
                 }).create();

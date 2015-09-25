@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="50dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/black_border_popu_conner"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/defriend"
+        style="@style/text_12_7f"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:text="拉黑" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/title_text_color" />
+
+    <Button
+        android:id="@+id/cancel"
+        style="@style/text_12_7f"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:text="取消" />
+</LinearLayout>
