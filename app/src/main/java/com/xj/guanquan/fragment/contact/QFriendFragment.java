@@ -282,8 +282,6 @@ public class QFriendFragment extends QBaseFragment {
                 if (userInfoList.size() < pageInfo.getTotalCount()) {
                     isLoadMore = true;
                 }
-            } else {
-                userInfoList = null;
             }
             mAdapter.setData(userInfoList);
             mAdapter.isLoadMore(false);

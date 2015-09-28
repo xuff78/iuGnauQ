@@ -358,8 +358,6 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 if (userInfoList.size() < pageInfo.getTotalCount()) {
                     isLoadMore = true;
                 }
-            } else {
-                userInfoList = null;
             }
             mAdapter.setData(userInfoList);
             mAdapter.isLoadMore(false);

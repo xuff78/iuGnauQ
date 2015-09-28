@@ -315,8 +315,6 @@ public class QUserFragment extends QBaseFragment {
                 if (circleUserInfoList.size() < pageInfo.getTotalCount()) {
                     isLoadMore = true;
                 }
-            } else {
-                circleUserInfoList = null;
             }
             mAdapter.setData(circleUserInfoList);
             mAdapter.isLoadMore(false);
