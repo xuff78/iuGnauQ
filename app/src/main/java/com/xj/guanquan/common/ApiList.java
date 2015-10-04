@@ -33,6 +33,9 @@ public class ApiList {
     public static String USER_DETAIL = BASE_API + "1/user/detail";
     public static String FRIEND_ADD = BASE_API + "1/friend/add";
 
+    //推送
+    public static String PUSH_Bind = BASE_API + "1/user/bind"; //clientId
+
     //吐槽
     public static String TUCAO_Publish = BASE_API + "1/tucao/publish";
     public static String TUCAO_Friend = BASE_API + "1/tucao/friend";

@@ -6,7 +6,7 @@ package com.xj.guanquan.model;
 public class DateInfo extends NoteInfo{
 
     private String address="";
-    private Long beginTime=0l;
+    private String beginTime="";
 
     public String getAddress() {
         return address;
@@ -16,11 +16,11 @@ public class DateInfo extends NoteInfo{
         this.address = address;
     }
 
-    public Long getBeginTime() {
+    public String getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(Long beginTime) {
+    public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
 }

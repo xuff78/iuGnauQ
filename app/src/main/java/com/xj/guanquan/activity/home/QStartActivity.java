@@ -12,6 +12,8 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
+
+import com.igexin.sdk.PushManager;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.user.QLoginActivity;
 import com.xj.guanquan.common.ApiList;
@@ -89,6 +91,7 @@ public class QStartActivity extends QBaseActivity {
     }
 
     private void startLocationService() {
+
         Intent startLocationServiceIntent = new Intent(QStartActivity.this,
                 LocationService.class);
         startService(startLocationServiceIntent);
@@ -108,6 +111,7 @@ public class QStartActivity extends QBaseActivity {
                 QStartActivity.this.finish();
             }
         } else if (StringUtils.isEquals(requestMethod, ApiList.ACCOUNT_AUTO_LOGIN)) {
+            PushManager.getInstance().initialize(this.getApplicationContext());
             EMChatManager.getInstance().login(userInfoJson.getString("huanxinName"), userInfoJson.getString("huanxinPassword"), new EMCallBack() {//回调
                 @Override
                 public void onSuccess() {

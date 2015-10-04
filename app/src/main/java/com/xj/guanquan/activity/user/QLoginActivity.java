@@ -14,6 +14,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
+import com.igexin.sdk.PushManager;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.home.QHomeActivity;
 import com.xj.guanquan.common.ApiList;
@@ -155,6 +156,7 @@ public class QLoginActivity extends QBaseActivity implements View.OnClickListene
             userInfo = JSONObject.parseObject(result.getData().toJSONString(), UserInfo.class);
             PreferencesUtils.putString(QLoginActivity.this, "login_phone", userInfo.getPhone());
             loginChatServer(String.valueOf(userInfo.getHuanxinName()), userInfo.getHuanxinPassword());
+            PushManager.getInstance().initialize(this.getApplicationContext());
         } else {
             getProgressDialog().dismiss();
             alertDialog(result.getMsg(), null);
