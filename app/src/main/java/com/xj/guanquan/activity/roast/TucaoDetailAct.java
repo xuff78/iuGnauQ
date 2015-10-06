@@ -1,11 +1,13 @@
 package com.xj.guanquan.activity.roast;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -28,6 +30,7 @@ import java.util.Map;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
+import common.eric.com.ebaselibrary.util.ToastUtils;
 
 /**
  * Created by 可爱的蘑菇 on 2015/9/1.
@@ -82,14 +85,17 @@ public class TucaoDetailAct extends QBaseActivity {
 
         int scrennWidth = getWindowManager().getDefaultDisplay().getWidth();
         initData();
-        NoteInfo noteinfo = (NoteInfo) getIntent().getSerializableExtra("NoteInfo");
+        getCommentList();
+    }
+
+    private void getCommentList(){
         Map<String, String> params = new HashMap<>();
         if (PageType == QPublishAct.TypeTucao) {
-            startRequest(ApiList.TUCAO_Detail + noteinfo.getId(), params);
+            startRequest(ApiList.TUCAO_Detail + note.getId(), params);
         } else if (PageType == QPublishAct.TypeDate) {
-            startRequest(ApiList.DATE_Detail + noteinfo.getId(), params);
+            startRequest(ApiList.DATE_Detail + note.getId(), params);
         } else if (PageType == QPublishAct.TypeSecret) {
-            startRequest(ApiList.SECRET_Detail + noteinfo.getId(), params);
+            startRequest(ApiList.SECRET_Detail + note.getId(), params);
         }
     }
 
@@ -130,31 +136,101 @@ public class TucaoDetailAct extends QBaseActivity {
         });
     }
 
+    View.OnClickListener listener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            Intent intent;
+            switch (v.getId()){
+                case R.id.favorBtn:
+                    if (note.getIsLike() == 0) {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("id", note.getId() + "");
+                        if (PageType == QPublishAct.TypeTucao) {
+                            startRequest(ApiList.TUCAO_AddLike, params);
+                        } else if (PageType == QPublishAct.TypeDate) {
+                            startRequest(ApiList.DATE_AddLike, params);
+                        } else if (PageType == QPublishAct.TypeSecret) {
+                            startRequest(ApiList.SECRET_AddLike, params);
+                        }
+                        note.setIsLike(1);
+                        ((TextView)v).setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.zan2), null, null, null);
+                    } else {
+                        ToastUtils.show(TucaoDetailAct.this, "此条已赞");
+                    }
+                    break;
+                case R.id.replyNums:
+                    intent = new Intent(TucaoDetailAct.this, QPublishAct.class);
+                    intent.putExtra("NoteInfo", note);
+                    intent.putExtra("PageType", PageType);
+                    intent.putExtra("RequestType", QPublishAct.RequestAddComment);
+                    startActivityForResult(intent, 888);
+                    break;
+                case R.id.shareBtn:
+                    break;
+                case R.id.bookBtn:
+                    intent = new Intent(TucaoDetailAct.this, QPublishAct.class);
+                    intent.putExtra("NoteInfo", note);
+                    intent.putExtra("PageType", PageType);
+                    intent.putExtra("RequestType", QPublishAct.RequestJoin);
+//                    startActivityForResult(intent, 888);
+                    startActivity(intent);
+                    break;
+                case R.id.complainBtn:
+                    intent = new Intent(TucaoDetailAct.this, QPublishAct.class);
+                    intent.putExtra("NoteInfo", note);
+                    intent.putExtra("PageType", PageType);
+                    intent.putExtra("RequestType", QPublishAct.RequestComplain);
+//                    startActivityForResult(intent, 888);
+                    startActivity(intent);
+                    break;
+                case R.id.deleteBtn:
+                    alertConfirmDialog("确认删除？", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Map<String, String> paramsDel = new HashMap<>();
+                            if (PageType == QPublishAct.TypeTucao) {
+                                startRequest(ApiList.TUCAO_Delete + note.getId(), paramsDel);
+                            } else if (PageType == QPublishAct.TypeDate) {
+                                startRequest(ApiList.DATE_Delete + note.getId(), paramsDel);
+                            } else if (PageType == QPublishAct.TypeSecret) {
+                                startRequest(ApiList.SECRET_Delete + note.getId(), paramsDel);
+                            }
+                        }
+                    }, null);
+
+                    break;
+            }
+
+        }
+    };
+
     @Override
     public void onResponse(Object response) {
         super.onResponse(response);
         swipeRefresh.setRefreshing(false);
-        ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-//        PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
-        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
-            JSONObject obj = result.getData().getJSONObject("content");
-            if (obj != null && obj.getJSONArray("commentList") != null) {
-                List<TucaoCommentInfo> resultData = JSONArray.parseArray(obj.getJSONArray("commentList").toJSONString(), TucaoCommentInfo.class);
-                if (currentPage == 1) {
-                    swipeRefresh.setRefreshing(false);
-                    comments = new ArrayList<TucaoCommentInfo>();
-                    comments.addAll(resultData);
-                    mAdapter = new TucaoCommentAdapter(this, comments, note, PageType);
-                    recyclerList.setAdapter(mAdapter);
-                } else {
-                    comments.addAll(resultData);
+        if (requestMethod.startsWith(ApiList.TUCAO_Delete) || requestMethod.startsWith(ApiList.DATE_Delete) || requestMethod.startsWith(ApiList.SECRET_Delete)) {
+            ToastUtils.show(this, "删除成功");
+            finish();
+        }else {
+            ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+            if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+                JSONObject obj = result.getData().getJSONObject("content");
+                if (obj != null && obj.getJSONArray("commentList") != null) {
+                    List<TucaoCommentInfo> resultData = JSONArray.parseArray(obj.getJSONArray("commentList").toJSONString(), TucaoCommentInfo.class);
+                    if (currentPage == 1) {
+                        swipeRefresh.setRefreshing(false);
+                        comments = new ArrayList<TucaoCommentInfo>();
+                        comments.addAll(resultData);
+                        mAdapter = new TucaoCommentAdapter(this, comments, note, PageType, listener);
+                        recyclerList.setAdapter(mAdapter);
+                    } else {
+                        comments.addAll(resultData);
+                        mAdapter.isLoadMore(false);
+                        mAdapter.notifyDataSetChanged();
+                    }
                     mAdapter.isLoadMore(false);
-                    mAdapter.notifyDataSetChanged();
                 }
-                mAdapter.isLoadMore(false);
-//                if (pageInfo.getCurrentPage() < pageInfo.getTotalPage()) {
-//                    mAdapter.isLoadMore(true);
-//                }
             }
         }
 
@@ -185,5 +261,13 @@ public class TucaoDetailAct extends QBaseActivity {
             }
         };
         addToRequestQueue(requestForList, method, true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 888) {
+            getCommentList();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -183,7 +183,8 @@ public class TucaoListFrg extends QBaseFragment {
                     intent.putExtra("NoteInfo", notes.get(position));
                     intent.putExtra("PageType", PageType);
                     intent.putExtra("RequestType", QPublishAct.RequestAddComment);
-                    startActivityForResult(intent, 888);
+//                    startActivityForResult(intent, 888);
+                    startActivity(intent);
                     break;
                 case R.id.shareBtn:
                     break;
@@ -192,14 +193,16 @@ public class TucaoListFrg extends QBaseFragment {
                     intent.putExtra("NoteInfo", notes.get(position));
                     intent.putExtra("PageType", PageType);
                     intent.putExtra("RequestType", QPublishAct.RequestJoin);
-                    startActivityForResult(intent, 888);
+//                    startActivityForResult(intent, 888);
+                    startActivity(intent);
                     break;
                 case R.id.complainBtn:
                     intent = new Intent(getActivity(), QPublishAct.class);
                     intent.putExtra("NoteInfo", notes.get(position));
                     intent.putExtra("PageType", PageType);
                     intent.putExtra("RequestType", QPublishAct.RequestComplain);
-                    startActivityForResult(intent, 888);
+//                    startActivityForResult(intent, 888);
+                    startActivity(intent);
                     break;
                 case R.id.deleteBtn:
                     ((QBaseActivity) getActivity()).alertConfirmDialog("确认删除？", new View.OnClickListener() {

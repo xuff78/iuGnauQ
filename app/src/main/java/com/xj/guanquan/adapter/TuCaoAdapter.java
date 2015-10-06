@@ -3,6 +3,7 @@ package com.xj.guanquan.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -100,6 +101,10 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			vh.favorBtn.setText(datalist.get(position).getIsLike()+"");
 			vh.replyNums.setText(datalist.get(position).getCommentNum()+"");
 			vh.userName.setText(datalist.get(position).getNickName());
+			if (datalist.get(position).getIsLike() == 0) {
+				vh.favorBtn.setCompoundDrawablesWithIntrinsicBounds(act.getResources().getDrawable(R.mipmap.zan1),null,null,null);
+			}else
+				vh.favorBtn.setCompoundDrawablesWithIntrinsicBounds(act.getResources().getDrawable(R.mipmap.zan2),null,null,null);
 			if(datalist.get(position).getPicture().length()>0) {
 				final String[] urls = datalist.get(position).getPicture().split(",");
 				vh.photoLayout.removeAllViews();
