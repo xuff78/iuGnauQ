@@ -1,3 +1,10 @@
+/.idea
+/gradle.properties
+/iuGnauQ.iml
+/gradlew.bat
+/gradlew
+/gradle
+/app/app.iml
 .gradle
 /local.properties
 /.idea/workspace.xml

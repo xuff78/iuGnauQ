@@ -145,4 +145,5 @@
     <string name="title_activity_qregist_certify">信息认证</string>
     <string name="title_activity_qregist">手机号注册</string>
     <string name="title_activity_qregist_car">车主认领</string>
+    <string name="title_activity_qmap_select">选择地点</string>
 </resources>

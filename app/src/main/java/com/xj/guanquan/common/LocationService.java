@@ -99,6 +99,7 @@ public class LocationService extends Service implements AMapLocationListener {
         }
         PreferencesUtils.putString(this, "lat", String.valueOf(aMapLocation.getLatitude()));
         PreferencesUtils.putString(this, "lng", String.valueOf(aMapLocation.getLongitude()));
+        PreferencesUtils.putString(this, "city_code", aMapLocation.getCityCode());
     }
 
     @Override

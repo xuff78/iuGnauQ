@@ -15,6 +15,7 @@ public class CircleInfo extends EBaseModel {
     private String description;
     private String file_logo;
     private String logo;
+    private String address;
 
     public CircleInfo() {
     }
@@ -84,5 +85,13 @@ public class CircleInfo extends EBaseModel {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
