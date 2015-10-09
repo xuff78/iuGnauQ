@@ -65,7 +65,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile group: 'common.eric.com.ebaselibrary', name: 'ebaselibrary', version: '0.0.7-SNAPSHOT', changing: true
-    compile group: 'cn.smssdk', name: 'SMSSDK', version: '0.0.2-SNAPSHOT', changing: true
+    compile group: 'cn.smssdk', name: 'SMSSDK', version: '0.0.3-SNAPSHOT', changing: true
     compile('com.lsjwzh:materialloadingprogressbar:0.5.6-RELEASE')
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'

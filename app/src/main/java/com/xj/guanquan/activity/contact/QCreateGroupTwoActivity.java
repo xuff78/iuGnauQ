@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnClickListener {
     private CircleInfo circleInfo;
@@ -41,6 +42,7 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
     private ImageView createGroup;
     private RelativeLayout selectGroupAddress;
     private ListView searchPoiList;
+    private TextView address;
     private Double lat;
     private Double lng;
     private PoiSearch.Query query;
@@ -64,6 +66,10 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
         _setRightHomeText("下一步", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (StringUtils.isEmpty(circleInfo.getAddress())) {
+                    showToastShort("请选择创建地点!");
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("circleInfo", circleInfo);
                 toActivity(QCreateGroupThreeActivity.class, bundle);
@@ -80,7 +86,8 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PoiItem poiItem = (PoiItem) parent.getAdapter().getItem(position);
-                circleInfo.setAddress(poiItem.getAdName());
+                circleInfo.setAddress(poiItem.getTitle());
+                address.setText(poiItem.getTitle());
             }
         });
     }
@@ -123,6 +130,7 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
         createGroup = (ImageView) findViewById(R.id.createGroup);
         selectGroupAddress = (RelativeLayout) findViewById(R.id.selectGroupAddress);
         searchPoiList = (ListView) findViewById(R.id.searchPoiList);
+        address = (TextView) findViewById(R.id.address);
     }
 
     @Override
@@ -153,7 +161,8 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
             @Override
             public void onPoiSearched(PoiResult poiResult, int i) {
                 poiItemList = poiResult.getPois();
-                adapter.notifyDataSetChanged();
+                adapter = new SearchPoiAdapter(poiItemList, QCreateGroupTwoActivity.this);
+                searchPoiList.setAdapter(adapter);
             }
 
             @Override
@@ -195,7 +204,7 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
             TextView areaName = (TextView) convertView.findViewById(R.id.areaName);
             TextView distance = (TextView) convertView.findViewById(R.id.distance);
             PoiItem poiItem = poiItems.get(position);
-            areaName.setText(poiItem.getAdName());
+            areaName.setText(poiItem.getTitle());
             distance.setText(poiItem.getDistance() + "m");
             return convertView;
         }
