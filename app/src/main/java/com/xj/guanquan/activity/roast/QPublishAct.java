@@ -30,6 +30,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
+import com.xj.guanquan.activity.contact.QMapSelectActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.MultipartRequest;
 import com.xj.guanquan.common.QBaseActivity;
@@ -80,7 +81,8 @@ public class QPublishAct extends QBaseActivity {
     private static final int UPLOAD_IN_PROCESS = 5;
     private ProgressDialog progressDialog;
     private List<String> picPaths = new ArrayList<String>();
-    private EditText editText, complainPhoneEdt, complainEmailEdt, titleEdt, AddrEdt;
+    private EditText editText, complainPhoneEdt, complainEmailEdt, titleEdt;
+    private TextView AddrEdt;
     private LinearLayout photoLayout, dateLayout, complainLayout;
     private RelativeLayout copyLayout, roleSelectLayout, shareLayout, timePickerLayout;
 
@@ -94,6 +96,7 @@ public class QPublishAct extends QBaseActivity {
     public static final int RequestComplain = 1;
     public static final int RequestAddComment = 2;
     public static final int RequestJoin = 3;
+    public static final int RequestAddress=0x11;
     private TextView timeTxt;
     private int imgItemWidth = 0;
     private View addIconView;
@@ -183,7 +186,13 @@ public class QPublishAct extends QBaseActivity {
     @Override
     protected void initView() {
         timeTxt = (TextView) findViewById(R.id.timeTxt);
-        AddrEdt = (EditText) findViewById(R.id.AddrEdt);
+        AddrEdt = (TextView) findViewById(R.id.AddrEdt);
+        AddrEdt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(QPublishAct.this, QMapSelectActivity.class), RequestAddress);
+            }
+        });
         titleEdt = (EditText) findViewById(R.id.titleEdt);
         editText = (EditText) findViewById(R.id.publishTxt);
         complainPhoneEdt = (EditText) findViewById(R.id.complainPhoneEdt);
@@ -412,8 +421,8 @@ public class QPublishAct extends QBaseActivity {
                         ToastUtils.show(getApplicationContext(), "请选择日期");
                     } else if (titleEdt.getText().length() == 0) {
                         ToastUtils.show(getApplicationContext(), "请输入主题");
-                    } else if (AddrEdt.getText().length() == 0) {
-                        ToastUtils.show(getApplicationContext(), "请输入地址");
+                    } else if (AddrEdt.getText().length() == 0||AddrEdt.getText().toString().equals("请选择地点")) {
+                        ToastUtils.show(getApplicationContext(), "请选择地点");
                     } else {
                         Map<String, String> params = new HashMap<>();
                         params.put("beginTime", timeTxt.getText().toString());
@@ -539,7 +548,9 @@ public class QPublishAct extends QBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
+        if(resultCode == RESULT_OK && requestCode == RequestAddress){
+            AddrEdt.setText(data.getStringExtra("addr"));
+        }else if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
             final String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
             picPaths.add(picPath);
             Log.i("Upload", "最终选择的图片=" + picPath);

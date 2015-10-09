@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="地点" />
-            <EditText
+            <TextView
                 style="@style/text_16_white"
                 android:id="@+id/AddrEdt"
                 android:textColorHint="@color/normal_gray"
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:hint="请输入地点" />
+                android:text="请选择地点" />
         </RelativeLayout>
 
         <View
