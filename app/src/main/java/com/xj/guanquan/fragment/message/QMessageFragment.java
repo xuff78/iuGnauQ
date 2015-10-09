@@ -18,6 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
@@ -45,8 +49,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
@@ -77,6 +83,7 @@ public class QMessageFragment extends QBaseFragment {
 
     private List<EMConversation> conversationList = new ArrayList<EMConversation>();
     private UserInfo userInfo;
+    private StringRequest request;
 
     /**
      * Use this factory method to create a new instance of
@@ -224,6 +231,24 @@ public class QMessageFragment extends QBaseFragment {
             }
 
         });
+        initHandler();
+    }
+
+    private void initHandler() {
+        String city = PreferencesUtils.getString(getActivity(), "city");
+        if (city.contains("市")) {
+            city = city.replace("市", "");
+        }
+        request = new StringRequest(Request.Method.GET, "http://apis.baidu.com/apistore/weatherservice/cityname?cityname=" + city, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                com.alibaba.fastjson.JSONObject loginData = com.alibaba.fastjson.JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
+                map.put("apikey", "cf6c07fa8370f23992c759aeffda5101");
+                return map;
+            }
+        };
+        addToRequestQueue(request, true);
     }
 
     @Override
@@ -538,5 +563,26 @@ public class QMessageFragment extends QBaseFragment {
                 startActivity(intent);
             }
         }
+    }
+
+    @Override
+    public void onResponse(Object response) {
+        getProgressDialog().dismiss();
+        com.alibaba.fastjson.JSONObject data = com.alibaba.fastjson.JSONObject.parseObject(response.toString());
+        if (data.getInteger("errNum") == 0) {
+            com.alibaba.fastjson.JSONObject retData = data.getJSONObject("retData");
+            weather.setText(retData.getString("city") + "："
+                    + retData.getString("l_tmp") + "c/"
+                    + retData.getString("h_tmp") + "c"
+                    + " " + retData.getString("weather"));
+        } else {
+            ((QBaseActivity) getActivity()).alertDialog(data.getString("errMsg"), null);
+        }
+
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        super.onErrorResponse(error);
     }
 }

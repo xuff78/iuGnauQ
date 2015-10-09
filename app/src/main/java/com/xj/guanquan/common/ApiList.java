@@ -32,6 +32,7 @@ public class ApiList {
     public static String CONTACT_FANS_LIST = BASE_API + "1/relation/fansList";
     public static String USER_DETAIL = BASE_API + "1/user/detail";
     public static String FRIEND_ADD = BASE_API + "1/friend/add";
+    public static String BLACK_USER_ADD = BASE_API + "1/user/addBlackUser";
 
     //推送
     public static String PUSH_Bind = BASE_API + "1/user/bind"; //clientId

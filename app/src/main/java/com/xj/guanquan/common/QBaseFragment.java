@@ -72,7 +72,7 @@ public class QBaseFragment extends Fragment implements Response.Listener, Respon
 
     protected void doResponse(Object response) {}
 
-    private CustomProgressDialog getProgressDialog() {
+    public CustomProgressDialog getProgressDialog() {
         if (progressDialog == null) {
             progressDialog = ProgressUtil.getProgressDialog(getActivity());
         }

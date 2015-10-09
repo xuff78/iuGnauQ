@@ -87,6 +87,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private StringRequest request;
     private StringRequest requestFollow;
     private StringRequest requestCancelFollow;
+    private StringRequest requestBlackAdd;
     private String huanxinName;
     JSONObject content;
     private NoteInfo noteinfo;
@@ -123,7 +124,8 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                         defriend.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                request = requestBlackAdd;
+                                addToRequestQueue(requestBlackAdd, ApiList.BLACK_USER_ADD, true);
                             }
                         });
                         cancel.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +232,24 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("userId", String.valueOf(userInfo.getUserId()));
+                map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
+                return map;
+            }
+        };
+        requestBlackAdd = new StringRequest(Request.Method.POST, ApiList.BLACK_USER_ADD, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QUserDetailActivity.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("blackUserId", String.valueOf(userInfo.getUserId()));
                 map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
                 map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
                 return map;
@@ -344,7 +364,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
     @Override
     public void onResponse(Object response) {
-        super.onResponse(response);
+        getProgressDialog().dismiss();
         final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             if (StringUtils.isEquals(request.getTag().toString(), ApiList.USER_DETAIL)) {
@@ -428,6 +448,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 alertDialog(result.getMsg(), null);
                 attentionBtn.setSelected(false);
                 attentionBtn.setText("关注");
+            } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.BLACK_USER_ADD)) {
+                alertDialog(result.getMsg(), null);
+                popup.dismiss();
             }
         } else {
             alertDialog(result.getMsg(), new View.OnClickListener() {
