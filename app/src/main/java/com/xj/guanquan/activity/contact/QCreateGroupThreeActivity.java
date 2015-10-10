@@ -2,7 +2,6 @@ package com.xj.guanquan.activity.contact;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -70,7 +69,7 @@ public class QCreateGroupThreeActivity extends QBaseActivity implements View.OnC
         params = new HashMap<String, String>();
         params.put("name", circleInfo.getName());
         params.put("description", circleInfo.getDescription());
-        params.put("address", "北京");
+        params.put("address", circleInfo.getAddress());
         params.put("lng", PreferencesUtils.getString(QCreateGroupThreeActivity.this, "lng"));
         params.put("lat", PreferencesUtils.getString(QCreateGroupThreeActivity.this, "lat"));
         List<File> fileList = new ArrayList<File>();
