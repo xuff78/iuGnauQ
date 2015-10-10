@@ -22,6 +22,11 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.poisearch.PoiItemDetail;
+import com.amap.api.services.poisearch.PoiResult;
+import com.amap.api.services.poisearch.PoiSearch;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -549,7 +554,9 @@ public class QPublishAct extends QBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK && requestCode == RequestAddress){
-            AddrEdt.setText(data.getStringExtra("addr"));
+            double lat = data.getDoubleExtra("lat", 0.0);
+            double lng = data.getDoubleExtra("lng", 0.0);
+            initSearch(lat, lng);
         }else if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
             final String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
             picPaths.add(picPath);
@@ -584,6 +591,39 @@ public class QPublishAct extends QBaseActivity {
 
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    private PoiSearch.Query query;
+    private void initSearch(Double lat, Double lng) {
+        query = new PoiSearch.Query("", "", PreferencesUtils.getString(this, "city_code"));
+        // keyWord表示搜索字符串，第二个参数表示POI搜索类型，默认为：生活服务、餐饮服务、商务住宅
+        //共分为以下20种：汽车服务|汽车销售|
+        //汽车维修|摩托车服务|餐饮服务|购物服务|生活服务|体育休闲服务|医疗保健服务|
+        //住宿服务|风景名胜|商务住宅|政府机构及社会团体|科教文化服务|交通设施服务|
+        //金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施
+        //cityCode表示POI搜索区域，（这里可以传空字符串，空字符串代表全国在全国范围内进行搜索）
+        query.setPageSize(10);// 设置每页最多返回多少条poiitem
+        query.setPageNum(1);//设置查第一页
+        PoiSearch poiSearch = new PoiSearch(this, query);
+        poiSearch.setBound(new PoiSearch.SearchBound(new LatLonPoint(lat, lng), 1000));//设置周边搜索的中心点以及区域
+        poiSearch.setOnPoiSearchListener(new PoiSearch.OnPoiSearchListener() {
+            @Override
+            public void onPoiSearched(PoiResult poiResult, int i) {
+                List<PoiItem> poiItemList = poiResult.getPois();
+                if (poiItemList.size() > 0) {
+                    PoiItem item = poiItemList.get(0);
+                    AddrEdt.setText(item.getCityName() + item.getAdName() + item.getTitle());
+                }
+            }
+
+            @Override
+            public void onPoiItemDetailSearched(PoiItemDetail poiItemDetail, int i) {
+
+            }
+        });//设置数据返回的监听器
+        poiSearch.searchPOIAsyn();//开始搜索
+        ToastUtils.show(this, "读取位置...");
     }
 
     public int getBitmapSize(Bitmap bitmap){

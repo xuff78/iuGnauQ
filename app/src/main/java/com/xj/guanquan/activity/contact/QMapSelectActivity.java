@@ -21,7 +21,6 @@ public class QMapSelectActivity extends QBaseActivity {
     private MarkerOptions markerOptions;
     private double lat;
     private double lng;
-    private String addr="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,6 @@ public class QMapSelectActivity extends QBaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
-                intent.putExtra("addr", addr);
                 setResult(RESULT_OK, intent);
                 QMapSelectActivity.this.finish();
             }
