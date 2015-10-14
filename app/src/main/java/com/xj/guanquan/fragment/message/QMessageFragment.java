@@ -261,7 +261,7 @@ public class QMessageFragment extends QBaseFragment {
     }
 
     private void initialize(View view) {
-        limitNum = (TextView) view.findViewById(R.id.limitNum);
+        //limitNum = (TextView) view.findViewById(R.id.limitNum);
         weather = (TextView) view.findViewById(R.id.weather);
         messageRecycler = (RecyclerView) view.findViewById(R.id.messageRecycler);
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);

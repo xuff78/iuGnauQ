@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -135,17 +136,30 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                     Uri uri = Uri.parse((String) data);
                     iv.setImageURI(uri);
                     return true;
+                } else if (data instanceof String && (StringUtils.isEquals("♂ ", data.toString()) || StringUtils.isEquals("♀ ", data.toString()))) {
+                    ((TextView) view).setText(data.toString());
+                    if (StringUtils.isEquals("♂ ", data.toString())) {
+                        ((LinearLayout) view.getParent()).setBackgroundResource(R.drawable.age_female_border_conner);
+                    } else {
+                        ((LinearLayout) view.getParent()).setBackgroundResource(R.drawable.age_sex_border_conner);
+                    }
+                    return true;
                 }
                 return false;
-            }
+            }      //设置通用的Holder
+
         });
-        //设置通用的Holder
-        mAdapter.setViewHolderHelper(new RecyclerViewAdapter.ViewHolderHelper() {
-            @Override
-            public RecyclerView.ViewHolder bindItemViewHolder(View view) {
-                return new ItemViewHolder(view);
-            }
-        });
+        mAdapter.setViewHolderHelper(new RecyclerViewAdapter.ViewHolderHelper()
+
+                                     {
+                                         @Override
+                                         public RecyclerView.ViewHolder bindItemViewHolder(View view) {
+                                             return new ItemViewHolder(view);
+                                         }
+                                     }
+
+        );
+
 
         findRecyclerView.setAdapter(mAdapter);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

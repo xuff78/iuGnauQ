@@ -71,7 +71,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/cn.smssdk/SMSSDK/0.0.2-SNAPSHOT/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/cn.smssdk/SMSSDK/0.0.3-SNAPSHOT/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars" />
@@ -104,6 +104,7 @@
     <orderEntry type="library" exported="" name="httpcore-4.2.1" level="project" />
     <orderEntry type="library" exported="" name="ebaselibrary-0.0.7-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="location-1.3.3" level="project" />
+    <orderEntry type="library" exported="" name="SMSSDK-0.0.3-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="niftydialogeffects-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="GetuiSDK2.6.1.0" level="project" />
     <orderEntry type="library" exported="" name="library-1.0.18" level="project" />
@@ -122,7 +123,6 @@
     <orderEntry type="library" exported="" name="imagepipeline-0.6.1" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
-    <orderEntry type="library" exported="" name="SMSSDK-0.0.2-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="maps-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="fresco-0.6.1" level="project" />
   </component>

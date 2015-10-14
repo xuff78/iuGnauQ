@@ -70,6 +70,7 @@ public class QRegistActivity extends QBaseActivity implements View.OnClickListen
 
             }
         });
+        phoneText.requestFocus();
     }
 
     @Override

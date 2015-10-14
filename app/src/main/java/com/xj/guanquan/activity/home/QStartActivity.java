@@ -3,16 +3,17 @@ package com.xj.guanquan.activity.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
-
 import com.igexin.sdk.PushManager;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.user.QLoginActivity;
@@ -134,11 +135,35 @@ public class QStartActivity extends QBaseActivity {
                         @Override
                         public void run() {
                             getProgressDialog().dismiss();
-                            alertDialog("登陆聊天服务器失败！错误信息：" + message, null);
+                            alertDialog("登陆聊天服务器失败！错误信息：" + message, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putBoolean("isStart", true);
+                                    toActivity(QLoginActivity.class, bundle);
+                                    QStartActivity.this.finish();
+                                }
+                            });
                         }
                     });
                 }
             });
         }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        if (getProgressDialog().isShowing())
+            getProgressDialog().dismiss();
+        alertDialog(error.toString(), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isStart", true);
+                toActivity(QLoginActivity.class, bundle);
+                QStartActivity.this.finish();
+            }
+        });
+
     }
 }

@@ -2,6 +2,7 @@ package com.xj.guanquan.activity.user;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.xj.guanquan.R;
+import com.xj.guanquan.Utils.TimeCount;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
@@ -19,6 +21,8 @@ import com.xj.guanquan.common.ResponseResult;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
 
@@ -51,6 +55,20 @@ public class QFindPwdActivity extends QBaseActivity implements OnClickListener {
 
     @Override
     protected void initHandler() {
+        EventHandler eh = new EventHandler() {
+
+            @Override
+            public void afterEvent(int event, int result, Object data) {
+
+                Message msg = new Message();
+                msg.arg1 = event;
+                msg.arg2 = result;
+                msg.obj = data;
+                handler.sendMessage(msg);
+            }
+
+        };
+        SMSSDK.registerEventHandler(eh);
         request = new StringRequest(Request.Method.POST, ApiList.ACCOUNT_FIND_PWD, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -75,14 +93,12 @@ public class QFindPwdActivity extends QBaseActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == sendSms) {
-            showToastShort("验证码已发送，请注意查收");
-            sendSms.setEnabled(false);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    sendSms.setEnabled(true);
-                }
-            }, 10000);
+            if (StringUtils.isEmpty(phoneText.getText().toString().trim()) || phoneText.getText().toString().length() != 11) {
+                showToastShort("请输入正确的手机号码！");
+                return;
+            }
+            SMSSDK.getVerificationCode("86", phoneText.getText().toString());
+            getProgressDialog().show();
         } else if (v == loginbtn) {
             if (StringUtils.isEmpty(phoneText.getText().toString())) {
                 showToastShort("手机号不能为空！");
@@ -96,7 +112,8 @@ public class QFindPwdActivity extends QBaseActivity implements OnClickListener {
                 showToastShort("两次密码输入不一致，请重新输入密码！");
                 return;
             }
-            addToRequestQueue(request, true);
+            SMSSDK.submitVerificationCode("86", phoneText.getText().toString(), codeText.getText().toString());
+            getProgressDialog().show();
         }
     }
 
@@ -123,4 +140,34 @@ public class QFindPwdActivity extends QBaseActivity implements OnClickListener {
             alertDialog(result.getMsg(), null);
         }
     }
+
+    Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            int event = msg.arg1;
+            int result = msg.arg2;
+            Object data = msg.obj;
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                //短信注册成功后，返回MainActivity,然后提示新好友
+                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功
+                    getProgressDialog().dismiss();
+                    addToRequestQueue(request, true);
+                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                    getProgressDialog().dismiss();
+                    showToastShort("验证码已经发送");
+                    TimeCount time = TimeCount.getInstance(60000, 1000, sendSms, QFindPwdActivity.this);
+                    time.start();
+                }
+            } else {
+                getProgressDialog().dismiss();
+                ((Throwable) data).printStackTrace();
+                showToastShort("验证码错误");
+            }
+
+        }
+
+    };
 }

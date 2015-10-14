@@ -19,7 +19,8 @@ public class ApiList {
     public static String ACCOUNT_FIND_PWD = BASE_API + "1/findPassword";
     public static String ADD_FOLLOW = BASE_API + "1/relation/addFollow";
     public static String CANCE_FOLLOW = BASE_API + "1/relation/cancelFollow";
-    public static String GET_ALL = BASE_API + "/1/dict/getAll";
+    public static String GET_ALL = BASE_API + "1/dict/getAll";
+    public static String UPDATEPWD = BASE_API + "1/user/updatePassword";
 
 
     //发现

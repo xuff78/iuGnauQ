@@ -311,7 +311,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="未婚" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -342,7 +342,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="霸道副总裁" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -373,7 +373,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="174cm" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -404,7 +404,7 @@
                     android:layout_marginLeft="125dp"
                     android:layout_marginRight="20dp"
                     android:gravity="center_vertical"
-                    android:text="58kg" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -434,7 +434,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="暂无" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -457,7 +457,7 @@
                     android:layout_marginLeft="125dp"
                     android:layout_marginRight="20dp"
                     android:gravity="center_vertical"
-                    android:text="暂无" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -487,7 +487,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="土豪  (100-1000万)" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -565,7 +565,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="影视拍摄  逛街购物  交友  旅游  聚会唱歌 " />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -629,7 +629,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="不骄不躁，不好不坏，不胖不瘦，就是这么任性。" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -660,7 +660,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="自己/粉丝/关注/好友" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -691,7 +691,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="105dp"
                     android:gravity="center_vertical"
-                    android:text="2014-12-28" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"

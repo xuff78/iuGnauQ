@@ -126,6 +126,7 @@
         android:text="其他筛选" />
 
     <RelativeLayout
+        android:id="@+id/selectAge"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
@@ -153,7 +154,6 @@
             android:text="不限" />
 
         <ImageView
-            android:id="@+id/selectAge"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -163,6 +163,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/selectHeight"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
@@ -189,7 +190,6 @@
             android:text="不限" />
 
         <ImageView
-            android:id="@+id/selectHeight"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -199,6 +199,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/selectCar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
@@ -225,7 +226,6 @@
             android:text="不限" />
 
         <ImageView
-            android:id="@+id/selectCar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

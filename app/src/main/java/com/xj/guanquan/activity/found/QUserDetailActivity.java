@@ -381,6 +381,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 height.setText(content.getString("height"));
                 marriage.setText(content.getString("feelingStatus"));
                 huanxinName = content.getString("huanxinName");
+                if (content.getInteger("sex") == 1) {
+                    sexAgeArea.setBackgroundResource(R.drawable.age_female_border_conner);
+                }
                 if (content.getJSONArray("car") != null) {
                     List<String> cars = JSONArray.parseArray(content.getJSONArray("car").toJSONString(), String.class);
                     if (cars.size() > 0) {

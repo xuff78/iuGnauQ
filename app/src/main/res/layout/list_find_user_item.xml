@@ -43,6 +43,7 @@
             android:text="暂无" />
 
         <LinearLayout
+            android:id="@+id/sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/age_sex_border_conner"

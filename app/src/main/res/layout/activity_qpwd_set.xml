@@ -31,6 +31,7 @@
             android:background="@null"
             android:gravity="center_vertical"
             android:hint="请输入旧密码"
+            android:inputType="textPassword"
             android:textColorHint="@color/title_text_color" />
     </RelativeLayout>
 
@@ -59,6 +60,7 @@
             android:background="@null"
             android:gravity="center_vertical"
             android:hint="请输入新密码"
+            android:inputType="textPassword"
             android:textColorHint="@color/title_text_color" />
     </RelativeLayout>
 
@@ -87,7 +89,26 @@
             android:background="@null"
             android:gravity="center_vertical"
             android:hint="请输入确认密码"
+            android:inputType="textPassword"
             android:textColorHint="@color/title_text_color" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/confirm_btn"
+            style="@style/text_16_white"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_below="@+id/forget_password"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/login_button_seletor"
+            android:onClick="onClick"
+            android:text="确  定"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>

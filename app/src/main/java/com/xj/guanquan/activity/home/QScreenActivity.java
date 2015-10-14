@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -34,11 +35,11 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private TextView oneDay;
     private TextView moreDay;
     private TextView ageText;
-    private ImageView selectAge;
+    private LinearLayout selectAge;
     private TextView heightText;
-    private ImageView selectHeight;
+    private LinearLayout selectHeight;
     private TextView car;
-    private ImageView selectCar;
+    private LinearLayout selectCar;
     private Button confirmBtn;
 
     private Integer sex;
@@ -185,11 +186,11 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         oneDay = (TextView) findViewById(R.id.oneDay);
         moreDay = (TextView) findViewById(R.id.moreDay);
         ageText = (TextView) findViewById(R.id.age);
-        selectAge = (ImageView) findViewById(R.id.selectAge);
+        selectAge = (LinearLayout) findViewById(R.id.selectAge);
         heightText = (TextView) findViewById(R.id.heightTxt);
-        selectHeight = (ImageView) findViewById(R.id.selectHeight);
+        selectHeight = (LinearLayout) findViewById(R.id.selectHeight);
         car = (TextView) findViewById(R.id.car);
-        selectCar = (ImageView) findViewById(R.id.selectCar);
+        selectCar = (LinearLayout) findViewById(R.id.selectCar);
         confirmBtn = (Button) findViewById(R.id.confirmBtn);
     }
 

@@ -121,7 +121,11 @@
                 android:layout_width="81dp"
                 android:layout_height="28dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/send_msg_button_seletor" />
+                android:layout_marginTop="21dp"
+                android:background="@drawable/sms_border_send_conner"
+                android:onClick="onClick"
+                android:text="发送验证码"
+                android:textColor="@color/yellow" />
 
             <EditText
                 android:id="@+id/codeText"

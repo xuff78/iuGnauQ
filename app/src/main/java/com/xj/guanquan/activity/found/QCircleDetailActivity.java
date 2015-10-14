@@ -27,6 +27,7 @@ import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.CircleInfo;
 import com.xj.guanquan.model.ExpandMsgInfo;
 import com.xj.guanquan.model.PictureInfo;
+import com.xj.guanquan.model.UserInfo;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView.OnTurnListener;
 
@@ -123,6 +124,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
         userPhotos.setAdapter(mAdapter);
         roastMore.setOnClickListener(this);
         circleMorePhoto.setOnClickListener(this);
+        masterImage.setOnClickListener(this);
     }
 
     private void initData() {
@@ -191,6 +193,12 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             startActivity(intent);
         } else if (v == joinCircleBtn) {
             addToRequestQueue(requestJoin, ApiList.GROUP_JOIN, true);
+        } else if (v == masterImage) {
+            Bundle bundle = new Bundle();
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(content.getInteger("ownerId"));
+            bundle.putSerializable("userInfo", userInfo);
+            toActivity(QUserDetailActivity.class, bundle);
         }
     }
 
