@@ -41,6 +41,7 @@ import com.xj.guanquan.common.MultipartRequest;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.fragment.roast.Photo9Layout;
+import com.xj.guanquan.fragment.roast.PhotoLineLayout;
 import com.xj.guanquan.fragment.roast.TucaoMianFrg;
 import com.xj.guanquan.model.NoteInfo;
 
@@ -88,8 +89,8 @@ public class QPublishAct extends QBaseActivity {
     private List<String> picPaths = new ArrayList<String>();
     private EditText editText, complainPhoneEdt, complainEmailEdt, titleEdt;
     private TextView AddrEdt;
-    private LinearLayout photoLayout, dateLayout, complainLayout;
-    private RelativeLayout copyLayout, roleSelectLayout, shareLayout, timePickerLayout;
+    private LinearLayout photoLayout, dateLayout, complainLayout, roleSelectLayout, roleLayout;
+    private RelativeLayout copyLayout, shareLayout, timePickerLayout;
 
     private int PageType = 0;
     public static final int TypeTucao = 0;
@@ -206,7 +207,8 @@ public class QPublishAct extends QBaseActivity {
         dateLayout = (LinearLayout) findViewById(R.id.dateLayout);
         shareLayout = (RelativeLayout) findViewById(R.id.shareLayout);
         copyLayout = (RelativeLayout) findViewById(R.id.copyLayout);
-        roleSelectLayout = (RelativeLayout) findViewById(R.id.roleSelectLayout);
+        roleSelectLayout = (LinearLayout) findViewById(R.id.roleSelectLayout);
+        roleLayout = (LinearLayout) findViewById(R.id.roleSelectLayout);
         complainLayout = (LinearLayout) findViewById(R.id.complainLayout);
         timePickerLayout = (RelativeLayout) findViewById(R.id.timePickerLayout);
     }
@@ -241,13 +243,12 @@ public class QPublishAct extends QBaseActivity {
             for (int i = 0; i < array.size(); i++) {
                 avatarImgs[i] = array.getString(i);
             }
-            int width = (int) ScreenUtils.dpToPx(this, 200);
-            RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(width, -2);
-            rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            Photo9Layout roles = new Photo9Layout(this, width, avatarImgs);
+            int width = (int) ScreenUtils.dpToPx(this, 320);
+            LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(-1, -2);
+            PhotoLineLayout roles = new PhotoLineLayout(this, width, avatarImgs);
             roles.setLayoutParams(rlp);
-            roleSelectLayout.addView(roles);
-            roles.setImgCallback(new Photo9Layout.ClickListener() {
+            roleLayout.addView(roles);
+            roles.setImgCallback(new PhotoLineLayout.ClickListener() {
 
                 @Override
                 public void onClick(View v, int position) {
