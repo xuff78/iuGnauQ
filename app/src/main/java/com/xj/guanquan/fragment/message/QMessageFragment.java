@@ -45,6 +45,8 @@ import com.xj.guanquan.model.UserInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -239,16 +241,20 @@ public class QMessageFragment extends QBaseFragment {
         if (city.contains("市")) {
             city = city.replace("市", "");
         }
-        request = new StringRequest(Request.Method.GET, "http://apis.baidu.com/apistore/weatherservice/cityname?cityname=" + city, this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                com.alibaba.fastjson.JSONObject loginData = com.alibaba.fastjson.JSONObject.parseObject(PreferencesUtils.getString(getActivity(), "loginData"));
-                map.put("apikey", "cf6c07fa8370f23992c759aeffda5101");
-                return map;
-            }
-        };
-        addToRequestQueue(request, true);
+        try {
+            request = new StringRequest(Request.Method.GET, "http://apis.baidu.com/apistore/weatherservice/cityname?cityname=" + URLEncoder.encode(city, "UTF8"), this, this) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("apikey", "cf6c07fa8370f23992c759aeffda5101");
+                    return map;
+                }
+            };
+            addToRequestQueue(request, true);
+        } catch (UnsupportedEncodingException e) {
+            ((QBaseActivity) getActivity()).alertDialog("城市名称编码错误！", null);
+        }
+
     }
 
     @Override

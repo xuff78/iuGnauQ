@@ -442,6 +442,16 @@ public abstract class QBaseActivity extends AppCompatActivity implements QBaseFr
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             doResponse(response);
+        } else if (StringUtils.isEquals(result.getCode(), "4100")) {
+            alertDialog(result.getMsg(), new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isStart", true);
+                    toActivity(QLoginActivity.class, bundle);
+                    QBaseActivity.this.finish();
+                }
+            });
         } else
             alertDialog(result.getMsg(), null);
     }
