@@ -6,6 +6,7 @@
     android:background="@color/black_title">
 
     <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/groupIcon"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginTop="2dp"
@@ -16,6 +17,7 @@
     </com.facebook.drawee.view.SimpleDraweeView>
 
     <TextView
+        android:id="@+id/groupName"
         style="@style/text_14_7f"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
