@@ -585,7 +585,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
                 @Override
                 public void onSuccess() {
-                    Log.e("onSuccess","onSuccess");
+                    Log.e("onSuccess", "onSuccess");
                 }
 
                 @Override

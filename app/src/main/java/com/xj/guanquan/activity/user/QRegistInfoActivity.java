@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -27,6 +28,9 @@ import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.KeyValue;
 import com.xj.guanquan.model.UserDetailInfo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -209,11 +213,38 @@ public class QRegistInfoActivity extends QBaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
-            String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
-            Bitmap bitmap = ImageUtils.getSmallBitmap(picPath);
+            final String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
+            final Bitmap bitmap = ImageUtils.getSmallBitmap(picPath, headImage.getWidth(), headImage.getHeight());
             headImage.setImageBitmap(bitmap);
             userDetailInfo.setFile_avatar(picPath);
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    int bitmapSize = getBitmapSize(bitmap);
+                    if (bitmapSize > 300000) {
+                        try {
+//                            float scale=300000f/bitmapSize;
+                            FileOutputStream out = new FileOutputStream(new File(picPath));
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);
+//                            bitmap.compress(Bitmap.CompressFormat.JPEG, (int)(100*scale), out);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }.start();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public int getBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {    //API 19
+            return bitmap.getAllocationByteCount();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
+            return bitmap.getByteCount();
+        }
+        return bitmap.getRowBytes() * bitmap.getHeight();                //earlier version
     }
 }
