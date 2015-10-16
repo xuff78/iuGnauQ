@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -218,7 +219,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 map.put("currentPage", String.valueOf(currentPage));
                 map.put("numPerPage", String.valueOf(numPerPage));
                 if (sex != null)
-                    map.put("sexTxt", String.valueOf(sex));
+                    map.put("sex", String.valueOf(sex));
                 if (age != null)
                     map.put("age", String.valueOf(age));
                 if (carCert != null)
@@ -226,9 +227,10 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 if (finallyTime != null)
                     map.put("finallyTime", String.valueOf(finallyTime));
                 if (!StringUtils.isEmpty(height))
-                    map.put("heightTxt", height);
+                    map.put("height", height);
                 map.put("lng", PreferencesUtils.getString(getActivity(), "lng"));
                 map.put("lat", PreferencesUtils.getString(getActivity(), "lat"));
+                Log.e("getParams", map.toString());
                 return map;
             }
         };
@@ -392,11 +394,11 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 111) {
-            sex = (Integer) data.getSerializableExtra("sexTxt");
+            sex = (Integer) data.getSerializableExtra("sex");
             age = (String) data.getSerializableExtra("age");
             finallyTime = (Integer) data.getSerializableExtra("finallyTime");
             carCert = data.getStringExtra("carCert");
-            height = data.getStringExtra("heightTxt");
+            height = data.getStringExtra("height");
             addToRequestQueue(request, true);
         }
     }

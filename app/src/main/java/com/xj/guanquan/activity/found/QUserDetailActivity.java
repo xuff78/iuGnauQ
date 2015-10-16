@@ -9,10 +9,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -29,10 +31,12 @@ import com.xj.guanquan.activity.roast.TucaoDetailAct;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.model.CircleInfo;
 import com.xj.guanquan.model.ExpandMsgInfo;
 import com.xj.guanquan.model.NoteInfo;
 import com.xj.guanquan.model.PictureInfo;
 import com.xj.guanquan.model.UserInfo;
+import com.xj.guanquan.views.WrapScrollListView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView.OnTurnListener;
 
@@ -41,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.eric.com.ebaselibrary.adapter.EBaseAdapter;
 import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
@@ -83,6 +88,8 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private TextView descript;
     private Button toMessageBtn;
     private TextView roastNum;
+    private WrapScrollListView groupList;
+    private RelativeLayout tucaoArea;
 
     private StringRequest request;
     private StringRequest requestFollow;
@@ -90,6 +97,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private StringRequest requestBlackAdd;
     private String huanxinName;
     JSONObject content;
+    private List<CircleInfo> circleInfoList;
     private NoteInfo noteinfo;
 
     private PopupWindow popup;
@@ -176,6 +184,15 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             }
         });
         userPhotos.setAdapter(mAdapter);
+        groupList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("circleInfo", circleInfoList.get(position));
+                toActivity(QCircleDetailActivity.class, bundle);
+            }
+        });
+        circleNum.setText(String.valueOf(userInfo.getUserId()));
     }
 
     @Override
@@ -321,6 +338,8 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         constellation = (TextView) findViewById(R.id.constellation);
         toMessageBtn = (Button) findViewById(R.id.toMessageBtn);
         roastNum = (TextView) findViewById(R.id.roastNum);
+        groupList = (WrapScrollListView) findViewById(R.id.groupList);
+        tucaoArea = (RelativeLayout) findViewById(R.id.tucaoArea);
 
         good.setOnClickListener(this);
         attentionBtn.setOnClickListener(this);
@@ -362,8 +381,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         }
     }
 
+
     @Override
-    public void onResponse(Object response) {
+    protected void doResponse(Object response) {
         getProgressDialog().dismiss();
         final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
@@ -381,6 +401,22 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 height.setText(content.getString("height"));
                 marriage.setText(content.getString("feelingStatus"));
                 huanxinName = content.getString("huanxinName");
+                circleInfoList = JSONArray.parseArray(content.getJSONArray("group").toJSONString(), CircleInfo.class);
+                EBaseAdapter adapter = new EBaseAdapter(QUserDetailActivity.this, circleInfoList, R.layout.list_join_group_item, new String[]{"logo", "name"},
+                        new int[]{R.id.groupIcon, R.id.groupName});
+                adapter.setViewBinder(new EBaseAdapter.ViewBinder() {
+                    @Override
+                    public boolean setViewValue(View view, Object o, String s) {
+                        if (view instanceof SimpleDraweeView) {
+                            SimpleDraweeView iv = (SimpleDraweeView) view;
+                            Uri uri = Uri.parse((String) o);
+                            iv.setImageURI(uri);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                groupList.setAdapter(adapter);
                 if (content.getInteger("sex") == 1) {
                     sexAgeArea.setBackgroundResource(R.drawable.age_female_border_conner);
                 }
@@ -422,12 +458,16 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 }
                 relation.setText(relationTxt);
                 JSONObject tucao = content.getJSONObject("tucao");
-                Uri uri = Uri.parse(tucao.getString("picture") == null ? "" : tucao.getString("picture").split(",")[0]);
-                headImage.setImageURI(uri);
-                roastContent.setText(tucao.getString("content"));
-                roastTime.setText(tucao.getString("time"));
-                roastDistance.setText(tucao.getString("tuCaoDistance"));
-                roastNum.setText(tucao.getString("commentNum"));
+                if (tucao.getInteger("id") == null) {
+                    tucaoArea.setVisibility(View.GONE);
+                } else {
+                    Uri uri = Uri.parse(tucao.getString("picture") == null ? "" : tucao.getString("picture").split(",")[0]);
+                    headImage.setImageURI(uri);
+                    roastContent.setText(tucao.getString("content"));
+                    roastTime.setText(tucao.getString("time"));
+                    roastDistance.setText(tucao.getString("tuCaoDistance"));
+                    roastNum.setText(tucao.getString("commentNum"));
+                }
                 if (!StringUtils.isEmpty(content.getString("picture"))) {
                     String[] pictures = content.getString("picture").split(",");
                     for (int i = 0; i < pictures.length; i++) {
@@ -455,14 +495,6 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 alertDialog(result.getMsg(), null);
                 popup.dismiss();
             }
-        } else {
-            alertDialog(result.getMsg(), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS))
-                        QUserDetailActivity.this.finish();
-                }
-            });
         }
 
     }

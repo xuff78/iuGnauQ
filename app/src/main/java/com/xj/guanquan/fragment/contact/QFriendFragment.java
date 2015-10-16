@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -90,6 +91,14 @@ public class QFriendFragment extends QBaseFragment {
                     SimpleDraweeView iv = (SimpleDraweeView) view;
                     Uri uri = Uri.parse((String) data);
                     iv.setImageURI(uri);
+                    return true;
+                } else if (data instanceof String && (StringUtils.isEquals("♂ ", data.toString()) || StringUtils.isEquals("♀ ", data.toString()))) {
+                    ((TextView) view).setText(data.toString());
+                    if (StringUtils.isEquals("♂ ", data.toString())) {
+                        ((LinearLayout) view.getParent()).setBackgroundResource(R.drawable.age_female_border_conner);
+                    } else {
+                        ((LinearLayout) view.getParent()).setBackgroundResource(R.drawable.age_sex_border_conner);
+                    }
                     return true;
                 }
                 return false;

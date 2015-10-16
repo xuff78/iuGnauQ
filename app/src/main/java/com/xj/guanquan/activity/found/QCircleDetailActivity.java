@@ -189,7 +189,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             intent.putExtra("groupId", huanxinGroupId);
             intent.putExtra("groupInfo", circleInfo);
             intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, circleInfo.getName(),
-                    circleInfo.getPicture(), String.valueOf(circleInfo.getId())));
+                    circleInfo.getLogo(), String.valueOf(circleInfo.getId())));
             startActivity(intent);
         } else if (v == joinCircleBtn) {
             addToRequestQueue(requestJoin, ApiList.GROUP_JOIN, true);

@@ -179,6 +179,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/tucaoArea"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp">
@@ -499,7 +500,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:background="@color/black_title"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp">
@@ -511,36 +512,22 @@
                     android:gravity="center_vertical|right"
                     android:text="加入群组" />
 
-                <include
-                    layout="@layout/list_join_group_item"
+                <com.xj.guanquan.views.WrapScrollListView
+                    android:id="@+id/groupList"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="105dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="105dp"
-                    android:background="@color/black_deep" />
-            </RelativeLayout>
+                    android:divider="@color/black_deep"
+                    android:dividerHeight="1dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/black_title">
-
-                <include
-                    layout="@layout/list_join_group_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="125dp"
-                    android:layout_marginRight="20dp" />
+                </com.xj.guanquan.views.WrapScrollListView>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
+                    android:layout_below="@id/groupList"
+                    android:layout_marginLeft="105dp"
                     android:background="@color/black_deep" />
             </RelativeLayout>
 
@@ -589,16 +576,16 @@
                     android:gravity="center_vertical|right"
                     android:text="社交网络" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/socialImage"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_marginLeft="105dp"
-                    android:padding="4dp"
-                    fresco:placeholderImage="@mipmap/default_head_img"
-                    fresco:placeholderImageScaleType="fitXY">
+                <!--<com.facebook.drawee.view.SimpleDraweeView-->
+                    <!--android:id="@+id/socialImage"-->
+                    <!--android:layout_width="42dp"-->
+                    <!--android:layout_height="42dp"-->
+                    <!--android:layout_marginLeft="105dp"-->
+                    <!--android:padding="4dp"-->
+                    <!--fresco:placeholderImage="@mipmap/default_head_img"-->
+                    <!--fresco:placeholderImageScaleType="fitXY">-->
 
-                </com.facebook.drawee.view.SimpleDraweeView>
+                <!--</com.facebook.drawee.view.SimpleDraweeView>-->
 
                 <View
                     android:layout_width="match_parent"

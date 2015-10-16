@@ -10,9 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -21,6 +20,7 @@ import com.xj.guanquan.R;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.KeyValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
@@ -35,11 +35,11 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private TextView oneDay;
     private TextView moreDay;
     private TextView ageText;
-    private LinearLayout selectAge;
+    private RelativeLayout selectAge;
     private TextView heightText;
-    private LinearLayout selectHeight;
+    private RelativeLayout selectHeight;
     private TextView car;
-    private LinearLayout selectCar;
+    private RelativeLayout selectCar;
     private Button confirmBtn;
 
     private Integer sex;
@@ -186,11 +186,11 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
         oneDay = (TextView) findViewById(R.id.oneDay);
         moreDay = (TextView) findViewById(R.id.moreDay);
         ageText = (TextView) findViewById(R.id.age);
-        selectAge = (LinearLayout) findViewById(R.id.selectAge);
+        selectAge = (RelativeLayout) findViewById(R.id.selectAge);
         heightText = (TextView) findViewById(R.id.heightTxt);
-        selectHeight = (LinearLayout) findViewById(R.id.selectHeight);
+        selectHeight = (RelativeLayout) findViewById(R.id.selectHeight);
         car = (TextView) findViewById(R.id.car);
-        selectCar = (LinearLayout) findViewById(R.id.selectCar);
+        selectCar = (RelativeLayout) findViewById(R.id.selectCar);
         confirmBtn = (Button) findViewById(R.id.confirmBtn);
     }
 
@@ -228,15 +228,15 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     private void backPressed() {
         Intent intent = new Intent();
         intent.putExtra("sex", sex);
-        intent.putExtra("age", StringUtils.isEquals(ageText.getText().toString(), "不限") ? null : ageText.getText().toString());
-        intent.putExtra("height", StringUtils.isEquals(heightText.getText().toString(), "不限") ? null : heightText.getText().toString());
-        intent.putExtra("carCert", StringUtils.isEquals(car.getText().toString(), "不限") ? null : car.getText().toString());
+        intent.putExtra("age", StringUtils.isEquals(ageText.getText().toString(), "不限") ? null : age);
+        intent.putExtra("height", StringUtils.isEquals(heightText.getText().toString(), "不限") ? null : height);
+        intent.putExtra("carCert", StringUtils.isEquals(car.getText().toString(), "不限") ? null : carCert);
         intent.putExtra("finallyTime", finallyTime);
         setResult(111, intent);
         this.finish();
     }
 
-    private void initAlertDialog(String message, View v) {
+    private void initAlertDialog(final String message, View v) {
         if (selectDialog != null && selectDialog.isShowing()) {
             selectDialog.dismiss();
         }
@@ -247,6 +247,13 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         selectView.setText(keyValue.getValue());
+                        if (message.equals("请选择年龄")) {
+                            age = keyValue.getKey();
+                        } else if (message.equals("请选择车认证")) {
+                            carCert = keyValue.getKey();
+                        } else if (message.equals("请选择身高")) {
+                            height = keyValue.getKey();
+                        }
                         selectDialog.cancel();
                     }
                 }).create();
@@ -257,8 +264,14 @@ public class QScreenActivity extends QBaseActivity implements View.OnClickListen
     }
 
     private void initSelectPicker(String type) {
-        JSONObject content = JSONObject.parseObject(PreferencesUtils.getString(this, "data_dict"));
-        valueList = JSONArray.parseArray(content.getJSONArray(type).toJSONString(), KeyValue.class);
+        if (type.equals("configuration")) {
+            valueList = new ArrayList<KeyValue>();
+            valueList.add(new KeyValue("0", "未认证"));
+            valueList.add(new KeyValue("1", "已认证"));
+        } else {
+            JSONObject content = JSONObject.parseObject(PreferencesUtils.getString(this, "data_dict"));
+            valueList = JSONArray.parseArray(content.getJSONArray(type).toJSONString(), KeyValue.class);
+        }
         String[] values = new String[valueList.size()];
         for (int i = 0; i < valueList.size(); i++) {
             values[i] = valueList.get(i).getValue();
