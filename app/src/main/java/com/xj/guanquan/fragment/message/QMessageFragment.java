@@ -238,6 +238,8 @@ public class QMessageFragment extends QBaseFragment {
 
     private void initHandler() {
         String city = PreferencesUtils.getString(getActivity(), "city");
+        if (StringUtils.isEmpty(city))
+            city = "北京市";
         if (city.contains("市")) {
             city = city.replace("市", "");
         }
