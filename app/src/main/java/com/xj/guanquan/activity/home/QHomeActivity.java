@@ -163,7 +163,6 @@ public class QHomeActivity extends QBaseActivity implements OnClickListener, EME
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showToastShort("正在退出贵圈...");
                             }
                         });
                     }

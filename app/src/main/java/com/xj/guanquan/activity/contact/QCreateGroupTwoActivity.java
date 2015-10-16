@@ -3,6 +3,7 @@ package com.xj.guanquan.activity.contact;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,9 @@ import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.model.CircleInfo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +81,24 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
             }
         });
 
-        Bitmap bmp = ImageUtils.getSmallBitmap(circleInfo.getFile_logo());
+        final Bitmap bmp = ImageUtils.getSmallBitmap(circleInfo.getFile_logo(), groupImage.getWidth(), groupImage.getHeight());
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                int bitmapSize = getBitmapSize(bmp);
+                if (bitmapSize > 300000) {
+                    try {
+//                            float scale=300000f/bitmapSize;
+                        FileOutputStream out = new FileOutputStream(new File(circleInfo.getFile_logo()));
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 40, out);
+//                            bitmap.compress(Bitmap.CompressFormat.JPEG, (int)(100*scale), out);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
         groupImage.setImageBitmap(bmp);
         poiItemList = new ArrayList<PoiItem>();
         adapter = new SearchPoiAdapter(poiItemList, this);
@@ -208,6 +229,16 @@ public class QCreateGroupTwoActivity extends QBaseActivity implements View.OnCli
             distance.setText(poiItem.getDistance() + "m");
             return convertView;
         }
+    }
+
+    public int getBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {    //API 19
+            return bitmap.getAllocationByteCount();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
+            return bitmap.getByteCount();
+        }
+        return bitmap.getRowBytes() * bitmap.getHeight();                //earlier version
     }
 
 }

@@ -6,10 +6,12 @@
     tools:context="com.xj.guanquan.activity.found.QCircleMemberActivity">
 
     <LinearLayout
+        android:id="@+id/searchViewArea"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/search_view_backgroud"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <SearchView
             android:id="@+id/searchView"
@@ -28,9 +30,9 @@
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/searchViewArea"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="45dp">
+        android:layout_marginRight="20dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/circleNumRecycler"

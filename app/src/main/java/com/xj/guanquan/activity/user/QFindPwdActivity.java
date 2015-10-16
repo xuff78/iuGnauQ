@@ -71,14 +71,6 @@ public class QFindPwdActivity extends QBaseActivity implements OnClickListener {
         SMSSDK.registerEventHandler(eh);
         request = new StringRequest(Request.Method.POST, ApiList.ACCOUNT_FIND_PWD, this, this) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QFindPwdActivity.this, "loginData"));
-                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
-                return map;
-            }
-
-            @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("phone", phoneText.getText().toString());

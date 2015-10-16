@@ -26,6 +26,7 @@ public class ApiList {
     //发现
     public static String FIND_USER_LIST = BASE_API + "1/find/userList";
     public static String FIND_GROUP_LIST = BASE_API + "1/find/groupList";
+    public static String ADD_LIKE = BASE_API + "1/user/addLike";
 
     //联系人
     public static String CONTACT_FRIEND_LIST = BASE_API + "1/friend/list";
