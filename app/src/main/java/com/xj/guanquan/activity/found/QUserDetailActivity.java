@@ -90,11 +90,13 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private TextView roastNum;
     private WrapScrollListView groupList;
     private RelativeLayout tucaoArea;
+    private TextView praise;
 
     private StringRequest request;
     private StringRequest requestFollow;
     private StringRequest requestCancelFollow;
     private StringRequest requestBlackAdd;
+    private StringRequest requestAddLike;
     private String huanxinName;
     JSONObject content;
     private List<CircleInfo> circleInfoList;
@@ -272,13 +274,33 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 return map;
             }
         };
+        requestAddLike = new StringRequest(Request.Method.POST, ApiList.ADD_LIKE, this, this) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QUserDetailActivity.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", String.valueOf(userInfo.getUserId()));
+                map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
+                map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
+                return map;
+            }
+        };
         addToRequestQueue(request, ApiList.USER_DETAIL, true);
     }
 
     @Override
     public void onClick(View v) {
-        if (v == good) {
-            good.setSelected(!good.isSelected());
+        if (v == good && !good.isSelected()) {
+            good.setSelected(true);
+            request = requestAddLike;
+            addToRequestQueue(request, ApiList.ADD_LIKE, true);
         } else if (v == attentionBtn) {
             if (attentionBtn.isSelected()) {
                 request = requestCancelFollow;
@@ -323,10 +345,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         interest = (TextView) findViewById(R.id.interest);
         age = (TextView) findViewById(R.id.age);
         marriage = (TextView) findViewById(R.id.marriage);
-        socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
+//        socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
         weight = (TextView) findViewById(R.id.weightTxt);
         roastTime = (TextView) findViewById(R.id.roastTime);
-        socialImage = (SimpleDraweeView) findViewById(R.id.socialImage);
         career = (TextView) findViewById(R.id.career);
         headImage = (SimpleDraweeView) findViewById(R.id.avatar);
         height = (TextView) findViewById(R.id.heightTxt);
@@ -340,6 +361,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         roastNum = (TextView) findViewById(R.id.roastNum);
         groupList = (WrapScrollListView) findViewById(R.id.groupList);
         tucaoArea = (RelativeLayout) findViewById(R.id.tucaoArea);
+        praise = (TextView) findViewById(R.id.praise);
 
         good.setOnClickListener(this);
         attentionBtn.setOnClickListener(this);
@@ -401,6 +423,11 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 height.setText(content.getString("height"));
                 marriage.setText(content.getString("feelingStatus"));
                 huanxinName = content.getString("huanxinName");
+                praise.setText("已赞 " + content.getString("likeNum"));
+                if (content.getInteger("isLike") == 1) {
+                    good.setSelected(true);
+                    good.setEnabled(false);
+                }
                 circleInfoList = JSONArray.parseArray(content.getJSONArray("group").toJSONString(), CircleInfo.class);
                 EBaseAdapter adapter = new EBaseAdapter(QUserDetailActivity.this, circleInfoList, R.layout.list_join_group_item, new String[]{"logo", "name"},
                         new int[]{R.id.groupIcon, R.id.groupName});
@@ -494,6 +521,10 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.BLACK_USER_ADD)) {
                 alertDialog(result.getMsg(), null);
                 popup.dismiss();
+            } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_LIKE)) {
+                String txt = praise.getText().toString();
+                praise.setText("已赞 " + (Integer.valueOf(txt.split(" ")[1]) + 1));
+                alertDialog(result.getMsg(), null);
             }
         }
 

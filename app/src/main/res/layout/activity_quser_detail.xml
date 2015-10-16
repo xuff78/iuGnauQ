@@ -50,6 +50,16 @@
                     android:scaleType="fitXY" />
 
                 <TextView
+                    android:id="@+id/praise"
+                    style="@style/text_14_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/good"
+                    android:layout_marginRight="10dp"
+                    android:text="已赞 0" />
+
+                <TextView
                     android:id="@+id/descript"
                     style="@style/text_14_white"
                     android:layout_width="wrap_content"
@@ -175,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:gravity="right"
-                        android:text="126" />
+                        android:text="0" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -577,22 +587,22 @@
                     android:text="社交网络" />
 
                 <!--<com.facebook.drawee.view.SimpleDraweeView-->
-                    <!--android:id="@+id/socialImage"-->
-                    <!--android:layout_width="42dp"-->
-                    <!--android:layout_height="42dp"-->
-                    <!--android:layout_marginLeft="105dp"-->
-                    <!--android:padding="4dp"-->
-                    <!--fresco:placeholderImage="@mipmap/default_head_img"-->
-                    <!--fresco:placeholderImageScaleType="fitXY">-->
+                <!--android:id="@+id/socialImage"-->
+                <!--android:layout_width="42dp"-->
+                <!--android:layout_height="42dp"-->
+                <!--android:layout_marginLeft="105dp"-->
+                <!--android:padding="4dp"-->
+                <!--fresco:placeholderImage="@mipmap/default_head_img"-->
+                <!--fresco:placeholderImageScaleType="fitXY">-->
 
                 <!--</com.facebook.drawee.view.SimpleDraweeView>-->
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignBottom="@+id/socialImage"
-                    android:layout_marginLeft="105dp"
-                    android:background="@color/black_deep" />
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_alignBottom="@id/socialImage"-->
+                    <!--android:layout_marginLeft="105dp"-->
+                    <!--android:background="@color/black_deep" />-->
             </RelativeLayout>
 
             <RelativeLayout
