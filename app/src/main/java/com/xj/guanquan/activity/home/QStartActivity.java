@@ -99,57 +99,76 @@ public class QStartActivity extends QBaseActivity {
     }
 
     @Override
-    protected void doResponse(Object response) {
+    public void onResponse(Object response) {
         ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
-        if (StringUtils.isEquals(requestMethod, ApiList.GET_ALL)) {
-            PreferencesUtils.putString(this, "data_dict", result.getData().getJSONObject("content").toJSONString());
-            if (autoLogin()) {
-                addToRequestQueue(requestLogin, ApiList.ACCOUNT_AUTO_LOGIN, true);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isStart", true);
-                toActivity(QLoginActivity.class, bundle);
-                QStartActivity.this.finish();
+        if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+            if (StringUtils.isEquals(requestMethod, ApiList.GET_ALL)) {
+                getProgressDialog().dismiss();
+                PreferencesUtils.putString(this, "data_dict", result.getData().getJSONObject("content").toJSONString());
+                if (autoLogin()) {
+                    addToRequestQueue(requestLogin, ApiList.ACCOUNT_AUTO_LOGIN, true);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isStart", true);
+                    toActivity(QLoginActivity.class, bundle);
+                    QStartActivity.this.finish();
+                }
+            } else if (StringUtils.isEquals(requestMethod, ApiList.ACCOUNT_AUTO_LOGIN)) {
+                PushManager.getInstance().initialize(this.getApplicationContext());
+                EMChatManager.getInstance().login(userInfoJson.getString("huanxinName"), userInfoJson.getString("huanxinPassword"), new EMCallBack() {//回调
+                    @Override
+                    public void onSuccess() {
+                        getProgressDialog().dismiss();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                toActivity(QHomeActivity.class);
+                                QStartActivity.this.finish();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+
+                    @Override
+                    public void onError(int code, final String message) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getProgressDialog().dismiss();
+                                alertDialog("登陆聊天服务器失败！错误信息：" + message, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Bundle bundle = new Bundle();
+                                        bundle.putBoolean("isStart", true);
+                                        toActivity(QLoginActivity.class, bundle);
+                                        QStartActivity.this.finish();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
-        } else if (StringUtils.isEquals(requestMethod, ApiList.ACCOUNT_AUTO_LOGIN)) {
-            PushManager.getInstance().initialize(this.getApplicationContext());
-            EMChatManager.getInstance().login(userInfoJson.getString("huanxinName"), userInfoJson.getString("huanxinPassword"), new EMCallBack() {//回调
+        } else if (StringUtils.isEquals(result.getCode(), "4100")) {
+            getProgressDialog().dismiss();
+            alertDialog(result.getMsg(), new View.OnClickListener() {
                 @Override
-                public void onSuccess() {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            toActivity(QHomeActivity.class);
-                            QStartActivity.this.finish();
-                        }
-                    });
-                }
-
-                @Override
-                public void onProgress(int progress, String status) {
-
-                }
-
-                @Override
-                public void onError(int code, final String message) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getProgressDialog().dismiss();
-                            alertDialog("登陆聊天服务器失败！错误信息：" + message, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putBoolean("isStart", true);
-                                    toActivity(QLoginActivity.class, bundle);
-                                    QStartActivity.this.finish();
-                                }
-                            });
-                        }
-                    });
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isStart", true);
+                    toActivity(QLoginActivity.class, bundle);
+                    QStartActivity.this.finish();
                 }
             });
+        } else {
+            getProgressDialog().dismiss();
+            alertDialog(result.getMsg(), null);
         }
     }
+
 
     @Override
     public void onErrorResponse(VolleyError error) {
