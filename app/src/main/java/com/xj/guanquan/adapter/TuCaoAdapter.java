@@ -98,7 +98,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 			}
 			vh.userAge.setText(sex+datalist.get(position).getAge());
 			vh.usrComment.setText(datalist.get(position).getContent());
-			vh.favorBtn.setText(datalist.get(position).getIsLike()+"");
+			vh.favorBtn.setText(datalist.get(position).getLikeNum()+"");
 			vh.replyNums.setText(datalist.get(position).getCommentNum()+"");
 			vh.userName.setText(datalist.get(position).getNickName());
 			if (datalist.get(position).getIsLike() == 0) {

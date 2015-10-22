@@ -134,6 +134,12 @@ public class TucaoDetailAct extends QBaseActivity {
             }
 
         });
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCommentList();
+            }
+        });
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -230,6 +236,11 @@ public class TucaoDetailAct extends QBaseActivity {
                         mAdapter.notifyDataSetChanged();
                     }
                     mAdapter.isLoadMore(false);
+                }else{
+                    swipeRefresh.setRefreshing(false);
+                    comments = new ArrayList<TucaoCommentInfo>();
+                    mAdapter = new TucaoCommentAdapter(this, comments, note, PageType, listener);
+                    recyclerList.setAdapter(mAdapter);
                 }
             }
         }

@@ -39,6 +39,7 @@ public class TucaoMianFrg extends QBaseFragment {
     private View selectedView=null;
     private ArrayList<TextView> menu=new ArrayList<TextView>();
     private int toPublish=0x22;
+    public static final int  toComment=0x21;
     public static final int publishSuccess=0x23;
     public ArrayList<TucaoListFrg> frgs=new ArrayList<TucaoListFrg>();
 
@@ -162,6 +163,8 @@ public class TucaoMianFrg extends QBaseFragment {
                     frgs.get(PageType).refreshPage();
                 }
             },500);
+        }else if(requestCode==toComment&&resultCode==publishSuccess){
+            frgs.get(PageType).addCommentNum();
         }
     }
 }
