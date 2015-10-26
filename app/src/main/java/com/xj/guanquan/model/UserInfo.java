@@ -13,8 +13,8 @@ public class UserInfo extends EBaseModel {
     private String phone;
     private int sex;
     private int age;
-    private int height;
-    private int weight;
+    private String height;
+    private String weight;
     private String car;
     private String dating;
     private String signature;
@@ -78,22 +78,20 @@ public class UserInfo extends EBaseModel {
         this.age = age;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
-        heightTxt = height + "cm";
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
-        weightTxt = weight + "kg";
     }
 
     public String getCar() {
@@ -159,28 +157,15 @@ public class UserInfo extends EBaseModel {
     }
 
     public String getHeightTxt() {
-        if (StringUtils.isEmpty(heightTxt))
-            heightTxt = "0cm";
-        return heightTxt;
+        return height;
     }
 
     public String getWeightTxt() {
-        if (StringUtils.isEmpty(weightTxt))
-            weightTxt = "0kg";
-        return weightTxt;
+        return weight;
     }
 
     public void setSexTxt(String sexTxt) {
         this.sexTxt = sexTxt;
-    }
-
-    public void setHeightTxt(String heightTxt) {
-        this.heightTxt = heightTxt;
-    }
-
-    public void setWeightTxt(String weightTxt) {
-
-        this.weightTxt = weightTxt;
     }
 
     public String getPhone() {

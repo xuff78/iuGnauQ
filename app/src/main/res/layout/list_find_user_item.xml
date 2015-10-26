@@ -39,7 +39,7 @@
             style="@style/text_15_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="15dp"
             android:text="暂无" />
 
         <LinearLayout
