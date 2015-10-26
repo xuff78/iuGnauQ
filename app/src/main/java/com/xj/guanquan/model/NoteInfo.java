@@ -18,9 +18,18 @@ public class NoteInfo extends EBaseModel {
     private String commentNum="";
     private Integer userId=-1;
     private Integer isLike=-1;
+    private Integer likeNum=0;
     private String content="";
     private Integer sex=-1;
     private String picture="";
+
+    public Integer getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(Integer likeNum) {
+        this.likeNum = likeNum;
+    }
 
     public Integer getId() {
         return id;

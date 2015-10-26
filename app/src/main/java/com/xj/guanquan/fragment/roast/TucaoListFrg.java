@@ -57,6 +57,7 @@ public class TucaoListFrg extends QBaseFragment {
     private int numPerPage = 20;
     private boolean notNear = true;
     private boolean loadComplete = false;
+    int usedItemPos=-1;
 
     public static TucaoListFrg newInstance(int PageType) {
         TucaoListFrg fragment = new TucaoListFrg();
@@ -154,11 +155,21 @@ public class TucaoListFrg extends QBaseFragment {
         doRequest(true);
     }
 
+    public void addCommentNum() {
+        if(usedItemPos!=-1){
+            int num=Integer.valueOf(notes.get(usedItemPos).getCommentNum())+1;
+            notes.get(usedItemPos).setCommentNum(num+"");
+            mAdapter.notifyDataSetChanged();
+        }
+        usedItemPos=-1;
+    }
+
     View.OnClickListener listBtnListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             final int position = (int) v.getTag();
+            usedItemPos=position;
             Intent intent = null;
             switch (v.getId()) {
                 case R.id.favorBtn:
@@ -183,8 +194,7 @@ public class TucaoListFrg extends QBaseFragment {
                     intent.putExtra("NoteInfo", notes.get(position));
                     intent.putExtra("PageType", PageType);
                     intent.putExtra("RequestType", QPublishAct.RequestAddComment);
-//                    startActivityForResult(intent, 888);
-                    startActivity(intent);
+                    startActivityForResult(intent, TucaoMianFrg.toComment);
                     break;
                 case R.id.shareBtn:
                     break;
@@ -367,6 +377,8 @@ public class TucaoListFrg extends QBaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 888) {
             refreshPage();
+        }else if(requestCode==TucaoMianFrg.toComment&&resultCode==TucaoMianFrg.publishSuccess){
+            addCommentNum();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

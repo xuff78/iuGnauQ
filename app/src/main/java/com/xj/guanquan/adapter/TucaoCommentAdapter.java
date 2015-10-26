@@ -102,7 +102,7 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
                 }
                 vh.userAge.setText(sex+note.getAge());
                 vh.usrComment.setText(note.getContent());
-                vh.favorBtn.setText(note.getIsLike() + "");
+                vh.favorBtn.setText(note.getLikeNum() + "");
                 vh.replyNums.setText(note.getCommentNum() + "");
                 vh.userName.setText(note.getNickName());
                 if (note.getIsLike() == 0) {
