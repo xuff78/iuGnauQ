@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.roast.QPublishAct;
@@ -30,9 +31,11 @@ import com.xj.guanquan.activity.roast.ViewPagerExampleActivity;
 import com.xj.guanquan.fragment.roast.Photo9Layout;
 import com.xj.guanquan.model.DateInfo;
 import com.xj.guanquan.model.NoteInfo;
+import com.xj.guanquan.model.UserInfo;
 
 import java.util.ArrayList;
 
+import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.ScreenUtils;
 
 public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -42,6 +45,7 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	int width = 0;
 	TextView footer;
 	int PageType=0;
+	String nickName="";
 	private View.OnClickListener listener;
 
 	public int getItemCount() {
@@ -55,6 +59,8 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	LayoutInflater listInflater;
 
 	public TuCaoAdapter(Activity act, ArrayList<NoteInfo> datalist, int PageType, View.OnClickListener listener) {
+		JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(act, "loginData"));
+		nickName = JSONObject.parseObject(loginData.getJSONObject("data").toJSONString(), UserInfo.class).getNickName();
 		this.act = act;
 		this.PageType=PageType;
 		listInflater = LayoutInflater.from(act);
@@ -125,6 +131,8 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 				DateInfo dateinfo= (DateInfo) datalist.get(position);
 				vh.dateTime.setText(dateinfo.getBeginTime() + "");
 				vh.dateAddr.setText(dateinfo.getAddress());
+				if(nickName.equals(dateinfo.getNickName()))
+					vh.bookBtn.setVisibility(View.INVISIBLE);
 			}
 			vh.bookBtn.setOnClickListener(new OnClickListener() {
 				@Override

@@ -184,6 +184,7 @@ public class TucaoListFrg extends QBaseFragment {
                             startRequest(ApiList.SECRET_AddLike, params);
                         }
                         notes.get(position).setIsLike(1);
+                        notes.get(position).setLikeNum(notes.get(position).getLikeNum()+1);
                         mAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.show(getActivity(), "此条已赞");
