@@ -23,8 +23,6 @@ public class UserInfo extends EBaseModel {
     private String distance;
 
     private String sexTxt;
-    private String heightTxt;
-    private String weightTxt;
 
     //环信属性
     private Integer huanxinName;
@@ -154,14 +152,6 @@ public class UserInfo extends EBaseModel {
         if (StringUtils.isEmpty(sexTxt))
             sexTxt = "♂ ";
         return sexTxt;
-    }
-
-    public String getHeightTxt() {
-        return height;
-    }
-
-    public String getWeightTxt() {
-        return weight;
     }
 
     public void setSexTxt(String sexTxt) {

@@ -48,6 +48,7 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
+import com.easemob.chat.LocationMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
 import com.easemob.util.PathUtil;
@@ -293,7 +294,8 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-        _setHeaderTitle(getString(R.string.title_activity_qmsg_detail));
+        String title = getIntent().getStringExtra("title");
+        _setHeaderTitle(title);
         _setRightHomeGone();
 
         recordingContainer = findViewById(R.id.recording_container);
@@ -711,6 +713,35 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             }
             sendPicture(file.getAbsolutePath());
         }
+
+    }
+
+    /**
+     * 发送位置信息
+     *
+     * @param latitude
+     * @param longitude
+     * @param imagePath
+     * @param locationAddress
+     */
+    private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
+        EMMessage message = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
+        // 如果是群聊，设置chattype,默认是单聊
+        if (chatType == CHATTYPE_GROUP) {
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        } else if (chatType == CHATTYPE_CHATROOM) {
+            message.setChatType(EMMessage.ChatType.ChatRoom);
+        }
+        LocationMessageBody locBody = new LocationMessageBody(locationAddress, latitude, longitude);
+        message.addBody(locBody);
+        message.setReceipt(toChatUsername);
+        if (isRobot) {
+            message.setAttribute("em_robot_message", true);
+        }
+        conversation.addMessage(message);
+        mRecyclerView.setAdapter(adapter);
+        adapter.refreshSelectLast();
+        setResult(RESULT_OK);
 
     }
 

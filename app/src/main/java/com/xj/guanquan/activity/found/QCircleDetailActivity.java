@@ -70,6 +70,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
 
     private StringRequest request;
     private StringRequest requestJoin;
+    private StringRequest requestDetail;
     private String huanxinGroupId;
     JSONObject content;
 
@@ -133,7 +134,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
 
     @Override
     protected void initHandler() {
-        request = new StringRequest(Request.Method.POST, ApiList.GROUP_DETAIL, this, this) {
+        requestDetail = new StringRequest(Request.Method.POST, ApiList.GROUP_DETAIL, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -170,7 +171,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
                 return map;
             }
         };
-
+        request = requestDetail;
         addToRequestQueue(request, ApiList.GROUP_DETAIL, true);
     }
 
@@ -190,6 +191,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             intent.putExtra("groupInfo", circleInfo);
             intent.putExtra("messageInfo", new ExpandMsgInfo(null, null, null, circleInfo.getName(),
                     circleInfo.getLogo(), String.valueOf(circleInfo.getId())));
+            intent.putExtra("title", circleInfo.getName());
             startActivity(intent);
         } else if (v == joinCircleBtn) {
             addToRequestQueue(requestJoin, ApiList.GROUP_JOIN, true);
@@ -275,6 +277,8 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             if (avaratList.size() > 0) {
                 Uri uri1 = Uri.parse(avaratList.getJSONObject(0).getString("avatar"));
                 headImageOne.setImageURI(uri1);
+            } else {
+                headImageOne.setVisibility(View.GONE);
             }
             if (avaratList.size() > 1 && avaratList.getJSONObject(1) != null) {
                 Uri uri2 = Uri.parse(avaratList.getJSONObject(1).getString("avatar"));
@@ -298,6 +302,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             int isJoined = content.getInteger("isJoined");
             if (isJoined == 1) {
                 attentionArea.setVisibility(View.GONE);
+                toMessageBtn.setVisibility(View.VISIBLE);
             } else {
                 toMessageBtn.setVisibility(View.GONE);
             }
@@ -307,8 +312,8 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             alertDialog(result.getMsg(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    attentionArea.setVisibility(View.GONE);
-                    toMessageBtn.setVisibility(View.VISIBLE);
+                    request = requestDetail;
+                    addToRequestQueue(request, ApiList.GROUP_DETAIL, true);
                 }
             });
         }

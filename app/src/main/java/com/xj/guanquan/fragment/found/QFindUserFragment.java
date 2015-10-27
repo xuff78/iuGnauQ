@@ -128,7 +128,7 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
         findRecyclerView.setLayoutManager(mLayoutManager);
         findRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //通用adapter设置数据
-        mAdapter = new RecyclerViewAdapter(new String[]{"nickName", "age", "sexTxt", "avatar", "heightTxt", "weightTxt", "car", "dating"}, R.layout.list_find_user_item, userInfoList);
+        mAdapter = new RecyclerViewAdapter(new String[]{"nickName", "age", "sexTxt", "avatar", "height", "weight", "car", "dating"}, R.layout.list_find_user_item, userInfoList);
         mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -145,8 +145,10 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                         ((LinearLayout) view.getParent()).setBackgroundResource(R.drawable.age_sex_border_conner);
                     }
                     return true;
+                } else {
+                    return false;
                 }
-                return false;
+
             }      //设置通用的Holder
 
         });
@@ -257,8 +259,8 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
         private TextView sexTxt;
         private SimpleDraweeView avatar;
         private TextView age;
-        private TextView heightTxt;
-        private TextView weightTxt;
+        private TextView height;
+        private TextView weight;
         private TextView car;
         private TextView dating;
 
@@ -301,20 +303,20 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
             this.age = age;
         }
 
-        public TextView getHeightTxt() {
-            return heightTxt;
+        public TextView getHeight() {
+            return height;
         }
 
-        public void setHeightTxt(TextView heightTxt) {
-            this.heightTxt = heightTxt;
+        public void setHeight(TextView height) {
+            this.height = height;
         }
 
-        public TextView getWeightTxt() {
-            return weightTxt;
+        public TextView getWeight() {
+            return weight;
         }
 
-        public void setWeightTxt(TextView weightTxt) {
-            this.weightTxt = weightTxt;
+        public void setWeight(TextView weight) {
+            this.weight = weight;
         }
 
         public TextView getCar() {
@@ -338,8 +340,8 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
             avatar = (SimpleDraweeView) itemView.findViewById(R.id.avatar);
             sexTxt = (TextView) itemView.findViewById(R.id.sexTxt);
             age = (TextView) itemView.findViewById(R.id.age);
-            heightTxt = (TextView) itemView.findViewById(R.id.heightTxt);
-            weightTxt = (TextView) itemView.findViewById(R.id.weightTxt);
+            height = (TextView) itemView.findViewById(R.id.height);
+            weight = (TextView) itemView.findViewById(R.id.weight);
             car = (TextView) itemView.findViewById(R.id.carDescript);
             dating = (TextView) itemView.findViewById(R.id.dateDescript);
         }
@@ -373,10 +375,14 @@ public class QFindUserFragment extends QBaseFragment implements OnClickListener 
                 PageInfo pageInfo = JSONObject.parseObject(result.getData().getJSONObject("page").toJSONString(), PageInfo.class);
                 if (userInfoList.size() < pageInfo.getTotalCount()) {
                     isLoadMore = true;
+                } else {
+                    isLoadMore = false;
                 }
             }
+//            userInfoList.add(userInfoList.get(6));
+//            userInfoList.remove(5);
             mAdapter.setData(userInfoList);
-            mAdapter.isLoadMore(false);
+            mAdapter.isLoadMore(isLoadMore);
             mAdapter.notifyDataSetChanged();
         } else if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_LOGIN)) {
             ((QBaseActivity) getActivity()).alertDialog(result.getMsg(), null);

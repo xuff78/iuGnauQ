@@ -94,6 +94,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
     private StringRequest request;
     private StringRequest requestFollow;
+    private StringRequest requestDetail;
     private StringRequest requestCancelFollow;
     private StringRequest requestBlackAdd;
     private StringRequest requestAddLike;
@@ -199,7 +200,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
     @Override
     protected void initHandler() {
-        request = new StringRequest(Request.Method.POST, ApiList.USER_DETAIL, this, this) {
+        requestDetail = new StringRequest(Request.Method.POST, ApiList.USER_DETAIL, this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -240,9 +241,6 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QUserDetailActivity.this, "loginData"));
-                map.put("followId", String.valueOf(userInfo.getUserId()));
-                map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
-                map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
                 map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
                 return map;
             }
@@ -250,7 +248,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", String.valueOf(userInfo.getUserId()));
+                map.put("followId", String.valueOf(userInfo.getUserId()));
                 map.put("lng", PreferencesUtils.getString(QUserDetailActivity.this, "lng"));
                 map.put("lat", PreferencesUtils.getString(QUserDetailActivity.this, "lat"));
                 return map;
@@ -292,6 +290,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 return map;
             }
         };
+        request = requestDetail;
         addToRequestQueue(request, ApiList.USER_DETAIL, true);
     }
 
@@ -315,6 +314,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             intent.putExtra("userId", huanxinName);
             intent.putExtra("messageInfo", new ExpandMsgInfo(content.getString("nickName"),
                     content.getString("avatar"), content.getString("huanxinName"), null, null, null));
+            intent.putExtra("title", content.getString("nickName"));
             startActivity(intent);
         } else if (v == roastMore) {
             Intent intent = new Intent(this, TucaoDetailAct.class);
@@ -511,13 +511,21 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 noteinfo.setId(tucao.getInteger("id"));
                 noteinfo.setPicture(tucao.getString("picture"));
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
-                alertDialog(result.getMsg(), null);
-                attentionBtn.setSelected(true);
-                attentionBtn.setText("取消关注");
+                alertDialog(result.getMsg(), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        request = requestDetail;
+                        addToRequestQueue(request, ApiList.USER_DETAIL, true);
+                    }
+                });
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.CANCE_FOLLOW)) {
-                alertDialog(result.getMsg(), null);
-                attentionBtn.setSelected(false);
-                attentionBtn.setText("关注");
+                alertDialog(result.getMsg(), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        request = requestDetail;
+                        addToRequestQueue(request, ApiList.USER_DETAIL, true);
+                    }
+                });
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.BLACK_USER_ADD)) {
                 alertDialog(result.getMsg(), null);
                 popup.dismiss();

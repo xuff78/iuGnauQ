@@ -538,6 +538,7 @@ public class QMessageFragment extends QBaseFragment {
             } else {
                 // 进入聊天页面
                 Intent intent = new Intent(getActivity(), QMsgDetailActivity.class);
+                intent.putExtra("title", messageInfo.getName());
                 if (conversation.isGroup()) {
                     if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
                         // it is group chat
