@@ -20,6 +20,7 @@ import com.xj.guanquan.adapter.TucaoCommentAdapter;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
+import com.xj.guanquan.model.JoinedMember;
 import com.xj.guanquan.model.NoteInfo;
 import com.xj.guanquan.model.TucaoCommentInfo;
 
@@ -218,6 +219,12 @@ public class TucaoDetailAct extends QBaseActivity {
         if (requestMethod.startsWith(ApiList.TUCAO_Delete) || requestMethod.startsWith(ApiList.DATE_Delete) || requestMethod.startsWith(ApiList.SECRET_Delete)) {
             ToastUtils.show(this, "删除成功");
             finish();
+        }else if(requestMethod.equals(ApiList.DATE_JoinedList)){
+            ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
+            if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
+                List<JoinedMember> resultData = JSONArray.parseArray(result.getData().getJSONArray("content").toJSONString(), JoinedMember.class);
+                mAdapter.setJoinList(resultData);
+            }
         }else {
             ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
             if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
@@ -230,6 +237,11 @@ public class TucaoDetailAct extends QBaseActivity {
                         comments.addAll(resultData);
                         mAdapter = new TucaoCommentAdapter(this, comments, note, PageType, listener);
                         recyclerList.setAdapter(mAdapter);
+                        if(PageType==QPublishAct.TypeDate) {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("id", note.getId() + "");
+                            startRequest(ApiList.DATE_JoinedList, params);
+                        }
                     } else {
                         comments.addAll(resultData);
                         mAdapter.isLoadMore(false);

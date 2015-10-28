@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +24,13 @@ import com.xj.guanquan.activity.roast.QPublishAct;
 import com.xj.guanquan.activity.roast.ViewPagerExampleActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.fragment.roast.Photo9Layout;
+import com.xj.guanquan.model.JoinedMember;
 import com.xj.guanquan.model.NoteInfo;
 import com.xj.guanquan.model.TucaoCommentInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import common.eric.com.ebaselibrary.util.ScreenUtils;
@@ -46,6 +49,8 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
     NoteInfo note;
     TextView favorBtnSingle;
     View.OnClickListener listener;
+    List<JoinedMember> joinList=new ArrayList<>();
+    int imagePadding=0, imageHeight=0;
 
     public int getItemCount() {
         return datalist.size() + 3;
@@ -60,6 +65,8 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
     public TucaoCommentAdapter(Activity act, ArrayList<TucaoCommentInfo> datalist, NoteInfo note, int PageType, View.OnClickListener listener) {
         this.act = act;
         this.PageType=PageType;
+        imagePadding=(int)ScreenUtils.dpToPx(act,10);
+        imageHeight=(int)ScreenUtils.dpToPx(act,50);
         listInflater = LayoutInflater.from(act);
         this.datalist = datalist;
         this.note=note;
@@ -68,6 +75,11 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
         width = wm.getDefaultDisplay().getWidth();
         int height = wm.getDefaultDisplay().getHeight();
 //        this.imgWidth=(ConstantUtil.getWidth(act)-ImageUtil.dip2px(act, 30))/2;
+    }
+
+    public void setJoinList(List<JoinedMember> resultData){
+        joinList=resultData;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -81,6 +93,10 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
             holder = new FooterViewHolder(footer);
         } else if (position == 1) {
             View v = listInflater.from(act).inflate(R.layout.tucao_joinmember, null);
+            if(PageType!=QPublishAct.TypeDate) {
+                RecyclerView.LayoutParams rlp = new RecyclerView.LayoutParams(-1, 1);
+                v.setLayoutParams(rlp);
+            }
             holder=new JoinHolder(v);
         }else {
             View v = listInflater.from(act).inflate(R.layout.tucao_item_detail, null);
@@ -97,9 +113,33 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
         } else if (position == 1) {
             JoinHolder jh = (JoinHolder)viewHolder;
             if(PageType==QPublishAct.TypeDate){
-
-            }else
+                if(joinList.size()>0){
+                    jh.imgsLayout.setVisibility(View.VISIBLE);
+                    jh.joinNum.setText("参加人数："+joinList.size());
+                    for(int i=0;i<joinList.size();i++){
+                        LinearLayout ll=new LinearLayout(act);
+                        ll.setOrientation(LinearLayout.VERTICAL);
+                        ll.setPadding(0, 0, imagePadding, imagePadding);
+                        SimpleDraweeView userImg=new SimpleDraweeView(act);
+                        userImg.setImageURI(Uri.parse(joinList.get(i).getAvatar()));
+                        LinearLayout.LayoutParams llpimg=new LinearLayout.LayoutParams(imageHeight, imageHeight);
+                        ll.addView(userImg, llpimg);
+                        TextView txt=new TextView(act);
+                        txt.setTextSize(12);
+                        txt.setTextColor(Color.WHITE);
+                        txt.setSingleLine();
+                        txt.setGravity(Gravity.CENTER);
+                        txt.setEllipsize(TextUtils.TruncateAt.END);
+                        txt.setText(joinList.get(i).getNickName());
+                        LinearLayout.LayoutParams llptxt=new LinearLayout.LayoutParams(imageHeight, -2);
+                        llptxt.topMargin=5;
+                        ll.addView(txt, llptxt);
+                        jh.imgsLayout.addView(ll);
+                    }
+                }
+            }else {
                 jh.itemView.setVisibility(View.GONE);
+            }
         } else {
             if (position == 0) {
                 NoteHolder vh = (NoteHolder) viewHolder;
