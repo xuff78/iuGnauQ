@@ -48,7 +48,7 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
     View.OnClickListener listener;
 
     public int getItemCount() {
-        return datalist.size() + 2;
+        return datalist.size() + 3;
     }
 
     public int getItemViewType(int position) {
@@ -79,7 +79,10 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
             footer.setGravity(Gravity.CENTER);
             footer.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, (int)(ScreenUtils.dpToPxInt(act, 30))));
             holder = new FooterViewHolder(footer);
-        } else {
+        } else if (position == 1) {
+            View v = listInflater.from(act).inflate(R.layout.tucao_joinmember, null);
+            holder=new JoinHolder(v);
+        }else {
             View v = listInflater.from(act).inflate(R.layout.tucao_item_detail, null);
             v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             holder = new NoteHolder(v, position);
@@ -91,6 +94,8 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         if (viewHolder instanceof FooterViewHolder) {
             return;
+        } else if (position == 1) {
+            JoinHolder jh = (JoinHolder)viewHolder;
         } else {
             if (position == 0) {
                 NoteHolder vh = (NoteHolder) viewHolder;
@@ -136,7 +141,7 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
                     }
                 });
             }else{
-                TucaoCommentInfo info=datalist.get(position-1); //因为第一个是原帖
+                TucaoCommentInfo info=datalist.get(position-2); //因为第一个是原帖
                 NoteHolder vh = (NoteHolder) viewHolder;
                 vh.userImg.setImageURI(Uri.parse(info.getAvatar()));
                 vh.createTime.setText(info.getTime());
@@ -154,6 +159,19 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
     public class FooterViewHolder extends RecyclerView.ViewHolder {
         public FooterViewHolder(View v) {
             super(v);
+        }
+    }
+
+    public class JoinHolder extends RecyclerView.ViewHolder {
+
+        SimpleDraweeView userImg;
+        TextView joinNum;
+        LinearLayout imgsLayout;
+
+        public JoinHolder(View v) {
+            super(v);
+            joinNum=(TextView)v.findViewById(R.id.joinNum);
+            imgsLayout=(LinearLayout)v.findViewById(R.id.imgsLayout);
         }
     }
 
