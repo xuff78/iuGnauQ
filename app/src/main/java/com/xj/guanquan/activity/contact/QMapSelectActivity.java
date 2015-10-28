@@ -21,6 +21,7 @@ public class QMapSelectActivity extends QBaseActivity {
     private MarkerOptions markerOptions;
     private double lat;
     private double lng;
+    private Boolean isChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +32,25 @@ public class QMapSelectActivity extends QBaseActivity {
 
     @Override
     protected void initView() {
-        _setHeaderTitle(getString(R.string.title_activity_qmap_select));
-        _setRightHomeGone();
-        _setRightHomeText("保存地点", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("lat", lat);
-                intent.putExtra("lng", lng);
-                setResult(RESULT_OK, intent);
-                QMapSelectActivity.this.finish();
-            }
-        });
+        isChat = getIntent().getBooleanExtra("isChat", false);
+        if (isChat) {
+            _setHeaderTitle("位置信息");
+            _setRightHomeGone();
+        } else {
+            _setHeaderTitle(getString(R.string.title_activity_qmap_select));
+            _setRightHomeGone();
+            _setRightHomeText("保存地点", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra("lat", lat);
+                    intent.putExtra("lng", lng);
+                    setResult(RESULT_OK, intent);
+                    QMapSelectActivity.this.finish();
+                }
+            });
+        }
+
         mapView = (MapView) findViewById(R.id.map);
 
         mapView.onCreate(bundle);// 必须要写
