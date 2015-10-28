@@ -357,6 +357,17 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
             selectPicFromCamera();// 点击照相图标
         } else if (v == btnpicture) {
             selectPicFromLocal(); // 点击图片图标
+        } else if (v == btnlocation) {
+            double latitude = Double.valueOf(PreferencesUtils.getString(this, "lat"));
+            double longitude = Double.valueOf(PreferencesUtils.getString(this, "lng"));
+            String locationAddress = PreferencesUtils.getString(this, "address");
+            if (locationAddress != null && !locationAddress.equals("")) {
+                toggleMore(more);
+                sendLocationMsg(latitude, longitude, locationAddress);
+            } else {
+                String st = getResources().getString(R.string.unable_to_get_loaction);
+                showToastShort(st);
+            }
         }
     }
 
@@ -724,7 +735,7 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
      * @param imagePath
      * @param locationAddress
      */
-    private void sendLocationMsg(double latitude, double longitude, String imagePath, String locationAddress) {
+    private void sendLocationMsg(double latitude, double longitude, String locationAddress) {
         EMMessage message = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
         // 如果是群聊，设置chattype,默认是单聊
         if (chatType == CHATTYPE_GROUP) {
@@ -732,8 +743,10 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
         } else if (chatType == CHATTYPE_CHATROOM) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
+        message.setReceipt(toChatUsername);
         LocationMessageBody locBody = new LocationMessageBody(locationAddress, latitude, longitude);
         message.addBody(locBody);
+        initExpandMsg(message);
         message.setReceipt(toChatUsername);
         if (isRobot) {
             message.setAttribute("em_robot_message", true);

@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps2d.model.LatLng;
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
@@ -30,6 +31,7 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.FileMessageBody;
 import com.easemob.chat.ImageMessageBody;
+import com.easemob.chat.LocationMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VoiceMessageBody;
 import com.easemob.exceptions.EaseMobException;
@@ -38,6 +40,7 @@ import com.easemob.util.EMLog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
+import com.xj.guanquan.activity.contact.QMapSelectActivity;
 import com.xj.guanquan.activity.found.QUserDetailActivity;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.common.Constant;
@@ -232,6 +235,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                 holder = new ImageHolder(v);
                 break;
+            case MESSAGE_TYPE_SENT_LOCATION:
+                v = listInflater.from(act).inflate(R.layout.row_sent_location, null);
+                v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                holder = new LocationHolder(v);
+                break;
+            case MESSAGE_TYPE_RECV_LOCATION:
+                v = listInflater.from(act).inflate(R.layout.row_received_location, null);
+                v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                holder = new LocationHolder(v);
+                break;
             case -1:
                 footer = new TextView(act);
                 footer.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -257,6 +270,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } else if (message.getType() == EMMessage.Type.IMAGE) {
                 ImageHolder vh = (ImageHolder) viewHolder;
                 handleImageMessage(message, vh, position);
+            } else if (message.getType() == EMMessage.Type.LOCATION) {
+                LocationHolder lh = (LocationHolder) viewHolder;
+                handleLocationMessage(message, lh, position);
             }
 
             TextView timestamp = (TextView) viewHolder.itemView.findViewById(R.id.timestamp);
@@ -300,14 +316,17 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class MessageHolder extends RecyclerView.ViewHolder {
-        SimpleDraweeView userImg;
-        TextView userMsg, tv_userid;
+        ImageView iv_avatar, staus_iv;
+        TextView tv, userMsg, tv_usernick;
+        ProgressBar pb;
 
         public MessageHolder(View itemView) {
             super(itemView);
-            userImg = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
+            iv_avatar = (SimpleDraweeView) itemView.findViewById(R.id.userImg);
             userMsg = (TextView) itemView.findViewById(R.id.userMsg);
-            tv_userid = (TextView) itemView.findViewById(R.id.tv_userid);
+            tv_usernick = (TextView) itemView.findViewById(R.id.tv_userid);
+            pb = (ProgressBar) itemView.findViewById(R.id.progressBar);
+            staus_iv = (ImageView) itemView.findViewById(R.id.msg_status);
         }
     }
 
@@ -331,7 +350,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public class VoiceHolder extends RecyclerView.ViewHolder {
+    public class VoiceHolder extends MessageHolder {
         ImageView iv, staus_iv, iv_read_status;
         SimpleDraweeView iv_avatar;
         TextView tv, tv_usernick;
@@ -346,6 +365,25 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
             tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
             iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
+        }
+    }
+
+    public class LocationHolder extends MessageHolder {
+        ImageView staus_iv, iv_read_status;
+        SimpleDraweeView iv_avatar;
+        TextView iv, tv, tv_usernick, tv_location;
+        ProgressBar pb;
+
+        public LocationHolder(View convertView) {
+            super(convertView);
+            iv = ((TextView) convertView.findViewById(R.id.tv_location));
+            iv_avatar = (SimpleDraweeView) convertView.findViewById(R.id.iv_userhead);
+            tv = (TextView) convertView.findViewById(R.id.tv_length);
+            pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
+            staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
+            tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+            iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
+            tv_location = (TextView) convertView.findViewById(R.id.tv_location);
         }
     }
 
@@ -405,10 +443,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         try {
             JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
             uri = Uri.parse(jsonObject.getString("userIcon"));
-            holder.userImg.setImageURI(uri);
-            holder.tv_userid.setText(jsonObject.getString("userName"));
+            holder.iv_avatar.setImageURI(uri);
+            holder.tv_usernick.setText(jsonObject.getString("userName"));
             final Integer userId = jsonObject.getInt("userId");
-            holder.userImg.setOnClickListener(new View.OnClickListener() {
+            holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
@@ -423,25 +461,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } catch (EaseMobException e) {
             e.printStackTrace();
         }
-//        if (message.direct == EMMessage.Direct.SEND) {
-//            switch (message.status) {
-//                case SUCCESS: // 发送成功
-//                    holder.pb.setVisibility(View.GONE);
-//                    holder.staus_iv.setVisibility(View.GONE);
-//                    break;
-//                case FAIL: // 发送失败
-//                    holder.pb.setVisibility(View.GONE);
-//                    holder.staus_iv.setVisibility(View.VISIBLE);
-//                    break;
-//                case INPROGRESS: // 发送中
-//                    holder.pb.setVisibility(View.VISIBLE);
-//                    holder.staus_iv.setVisibility(View.GONE);
-//                    break;
-//                default:
-//                    // 发送消息
-//                    sendMsgInBackground(message, holder);
-//            }
-//        }
     }
 
     /**
@@ -565,7 +584,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     // message.setProgress(0);
                                     holder.staus_iv.setVisibility(View.VISIBLE);
                                     Toast.makeText(act,
-                                            act.getString(R.string.send_fail) + act.getString(R.string.connect_failuer_toast), 0)
+                                            act.getString(R.string.send_fail) + act.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
                                             .show();
                                     timer.cancel();
                                 }
@@ -720,6 +739,65 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    /**
+     * 处理位置消息
+     *
+     * @param message
+     * @param holder
+     * @param position
+     * @param convertView
+     */
+    private void handleLocationMessage(final EMMessage message, final LocationHolder holder, final int position) {
+        LocationMessageBody locBody = (LocationMessageBody) message.getBody();
+
+        Uri uri = null;
+        try {
+            final JSONObject jsonObject = message.getJSONObjectAttribute("fromUserInfo");
+            uri = Uri.parse(jsonObject.getString("userIcon"));
+            holder.iv_avatar.setImageURI(uri);
+            holder.tv_usernick.setText(jsonObject.getString("userName"));
+            final Integer userId = jsonObject.getInt("userId");
+            holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setUserId(userId);
+                    bundle.putSerializable("userInfo", userInfo);
+                    ((QBaseActivity) act).toActivity(QUserDetailActivity.class, bundle);
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (EaseMobException e) {
+            e.printStackTrace();
+        }
+
+        holder.tv_location.setText(locBody.getAddress());
+        LatLng loc = new LatLng(locBody.getLatitude(), locBody.getLongitude());
+        holder.tv_location.setOnClickListener(new MapClickListener(loc, locBody.getAddress()));
+
+        if (message.direct == EMMessage.Direct.RECEIVE) {
+            return;
+        }
+        // deal with send message
+        switch (message.status) {
+            case SUCCESS:
+                holder.pb.setVisibility(View.GONE);
+                holder.staus_iv.setVisibility(View.GONE);
+                break;
+            case FAIL:
+                holder.pb.setVisibility(View.GONE);
+                holder.staus_iv.setVisibility(View.VISIBLE);
+                break;
+            case INPROGRESS:
+                holder.pb.setVisibility(View.VISIBLE);
+                break;
+            default:
+                sendMsgInBackground(message, holder);
+        }
+    }
+
     private void sendPictureMessage(final EMMessage message, final ImageHolder holder) {
         try {
             String to = message.getTo();
@@ -756,7 +834,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             // message.setSendingStatus(Message.SENDING_STATUS_FAIL);
                             holder.staus_iv.setVisibility(View.VISIBLE);
                             Toast.makeText(act,
-                                    act.getString(R.string.send_fail) + act.getString(R.string.connect_failuer_toast), 0).show();
+                                    act.getString(R.string.send_fail) + act.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -825,6 +903,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
     }
 
+    VoiceHolder voiceHolder = null;
+    LocationHolder locationHolder = null;
+
     /**
      * 发送消息
      *
@@ -832,9 +913,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param holder
      * @param position
      */
-    public void sendMsgInBackground(final EMMessage message, final VoiceHolder holder) {
-        holder.staus_iv.setVisibility(View.GONE);
-        holder.pb.setVisibility(View.VISIBLE);
+    public void sendMsgInBackground(final EMMessage message, final MessageHolder holder) {
+
+        if (holder instanceof VoiceHolder) {
+            voiceHolder = (VoiceHolder) holder;
+        } else if (holder instanceof LocationHolder) {
+            locationHolder = (LocationHolder) holder;
+        }
+        if (voiceHolder == null) {
+            locationHolder.staus_iv.setVisibility(View.GONE);
+            locationHolder.pb.setVisibility(View.VISIBLE);
+        } else {
+            voiceHolder.staus_iv.setVisibility(View.GONE);
+            voiceHolder.pb.setVisibility(View.VISIBLE);
+        }
 
         final long start = System.currentTimeMillis();
         // 调用sdk发送异步发送方法
@@ -843,13 +935,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onSuccess() {
 
-                updateSendedView(message, holder);
+                updateSendedView(message, voiceHolder == null ? locationHolder : voiceHolder);
             }
 
             @Override
             public void onError(int code, String error) {
 
-                updateSendedView(message, holder);
+                updateSendedView(message, voiceHolder == null ? locationHolder : voiceHolder);
             }
 
             @Override
@@ -866,13 +958,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param message
      * @param holder
      */
-    private void updateSendedView(final EMMessage message, final VoiceHolder holder) {
+    private void updateSendedView(final EMMessage message, final MessageHolder holder) {
+        if (holder instanceof VoiceHolder) {
+            voiceHolder = (VoiceHolder) holder;
+        } else if (holder instanceof LocationHolder) {
+            locationHolder = (LocationHolder) holder;
+        }
         act.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // send success
                 if (message.getType() == EMMessage.Type.VIDEO) {
-                    holder.tv.setVisibility(View.GONE);
+                    (voiceHolder == null ? locationHolder : voiceHolder).tv.setVisibility(View.GONE);
                 }
                 EMLog.d(TAG, "message status : " + message.status);
                 if (message.status == EMMessage.Status.SUCCESS) {
@@ -893,13 +990,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     // holder.staus_iv.setVisibility(View.VISIBLE);
 
                     if (message.getError() == EMError.MESSAGE_SEND_INVALID_CONTENT) {
-                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.error_send_invalid_content), 0)
+                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.error_send_invalid_content), Toast.LENGTH_SHORT)
                                 .show();
                     } else if (message.getError() == EMError.MESSAGE_SEND_NOT_IN_THE_GROUP) {
-                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.error_send_not_in_the_group), 0)
+                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.error_send_not_in_the_group), Toast.LENGTH_SHORT)
                                 .show();
                     } else {
-                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.connect_failuer_toast), 0)
+                        Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
                                 .show();
                     }
                 }
@@ -913,7 +1010,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      *
      * @param thumbernailPath
      * @param iv
-     * @param position
      * @return the image exists or not
      */
     private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,
@@ -961,6 +1057,31 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, act, message);
             return true;
+        }
+
+    }
+
+    /*
+     * 点击地图消息listener
+	 */
+    class MapClickListener implements View.OnClickListener {
+
+        LatLng location;
+        String address;
+
+        public MapClickListener(LatLng loc, String address) {
+            location = loc;
+            this.address = address;
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent;
+            intent = new Intent(context, QMapSelectActivity.class);
+            intent.putExtra("lat", location.latitude);
+            intent.putExtra("lng", location.longitude);
+            context.startActivity(intent);
         }
 
     }
