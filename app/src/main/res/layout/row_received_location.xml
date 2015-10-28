@@ -30,6 +30,16 @@
             fresco:placeholderImage="@color/light_gray" />
 
         <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/iv_userhead"
+            android:layout_marginTop="5dp"
+            android:text="暂无" />
+
+        <TextView
             android:id="@+id/tv_location"
             style="@style/chat_content_date_style"
             android:layout_width="wrap_content"
