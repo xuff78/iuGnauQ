@@ -96,6 +96,10 @@ public class TucaoCommentAdapter  extends RecyclerView.Adapter<RecyclerView.View
             return;
         } else if (position == 1) {
             JoinHolder jh = (JoinHolder)viewHolder;
+            if(PageType==QPublishAct.TypeDate){
+
+            }else
+                jh.itemView.setVisibility(View.GONE);
         } else {
             if (position == 0) {
                 NoteHolder vh = (NoteHolder) viewHolder;
