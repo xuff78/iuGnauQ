@@ -147,4 +147,5 @@
     <string name="title_activity_qregist_car">车主认领</string>
     <string name="title_activity_qmap_select">选择地点</string>
     <string name="unable_to_get_loaction">无法获取到您的位置信息!</string>
+    <string name="title_activity_qself_modify">QSelfModifyActivity</string>
 </resources>

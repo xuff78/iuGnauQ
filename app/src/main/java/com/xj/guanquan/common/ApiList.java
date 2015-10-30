@@ -21,6 +21,7 @@ public class ApiList {
     public static String CANCE_FOLLOW = BASE_API + "1/relation/cancelFollow";
     public static String GET_ALL = BASE_API + "1/dict/getAll";
     public static String UPDATEPWD = BASE_API + "1/user/updatePassword";
+    public static String UPDATEUSERDETAIL = BASE_API + "1/user/updateDetail";
 
 
     //发现

@@ -28,6 +28,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.activity.roast.TucaoDetailAct;
+import com.xj.guanquan.activity.user.QSelfModifyActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
@@ -461,6 +462,14 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                         relationTxt = "自己";
                         toMessageBtn.setVisibility(View.GONE);
                         attentionArea.setVisibility(View.GONE);
+                        _setRightHomeText("编辑", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("userInfo", userInfo);
+                                toActivity(QSelfModifyActivity.class, bundle);
+                            }
+                        });
                         break;
                     case 1:
                         relationTxt = "粉丝";
