@@ -1,6 +1,12 @@
 package com.xj.guanquan.common;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +22,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
+import com.xj.guanquan.R;
+import com.xj.guanquan.activity.home.QStartActivity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import common.eric.com.ebaselibrary.common.EBaseApplication;
@@ -52,13 +61,34 @@ public class PushDemoReceiver extends BroadcastReceiver {
                     String data = new String(payload);
 
                     Log.d("GetuiSdkDemo", "receiver payload : " + data);
-
-                    payloadData.append(data);
-                    payloadData.append("\n");
-
-//                    if (GetuiSdkDemoActivity.tLogView != null) {
-//                        GetuiSdkDemoActivity.tLogView.append(data + "\n");
-//                    }
+                    String message=null;
+                    int type=-1;
+                    try {
+                        org.json.JSONObject json=new org.json.JSONObject(data);
+                        type=json.getInt("type");
+                        message=json.getJSONObject("data").getString("message");
+                    }catch(Exception e){
+                        Log.d("GetuiSdkDemo", "json failure");
+                    }
+                    if(message!=null) {
+                        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0,
+                                new Intent(context, QStartActivity.class), 0);
+                        // 通过Notification.Builder来创建通知，注意API Level
+                        // API11之后才支持
+                        Notification notify2 = new Notification.Builder(context)
+                                .setSmallIcon(R.mipmap.logo)
+                                .setTicker(message)// 设置在status
+                                .setContentTitle("贵圈")
+                                .setContentText(message)// TextView中显示的详细内容
+//                                .setContentIntent(pendingIntent2) // 关联PendingIntent
+                                .getNotification(); // 需要注意build()是在API level
+                        // 16及之后增加的，在API11中可以使用getNotificatin()来代替
+                        if(!isTopActivy(context.getPackageName(), context))
+                            notify2.contentIntent=pendingIntent2;
+                        notify2.flags |= Notification.FLAG_AUTO_CANCEL;
+                        manager.notify(1, notify2);
+                    }
                 }
                 break;
 
@@ -134,4 +164,15 @@ public class PushDemoReceiver extends BroadcastReceiver {
 
         }
     };
+
+    public boolean isTopActivy(String cmdName, Context context){
+        ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
+        String cmpNameTemp = null;
+        if(null != runningTaskInfos){
+            cmpNameTemp=(runningTaskInfos.get(0).topActivity).toString();
+        }
+        if(null == cmpNameTemp)return false;
+        return cmpNameTemp.equals(cmdName);
+    }
 }
