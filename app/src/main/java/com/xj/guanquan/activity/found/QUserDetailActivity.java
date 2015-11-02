@@ -118,7 +118,6 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     protected void initView() {
         initialize();
         userInfo = (UserInfo) getIntent().getExtras().getSerializable("userInfo");
-        _setHeaderTitle(userInfo.getNickName());
         _setRightHomeGone();
         _setRightHomeText("投诉", new View.OnClickListener() {
             @Override
@@ -404,6 +403,17 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 99) {
+            boolean isUpdate = data.getBooleanExtra("isUpdate", false);
+            if (isUpdate) {
+                request = requestDetail;
+                addToRequestQueue(request, ApiList.USER_DETAIL, true);
+            }
+        }
+    }
 
     @Override
     protected void doResponse(Object response) {
@@ -412,6 +422,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         if (StringUtils.isEquals(result.getCode(), ApiList.REQUEST_SUCCESS)) {
             if (StringUtils.isEquals(request.getTag().toString(), ApiList.USER_DETAIL)) {
                 content = result.getData().getJSONObject("content");
+                _setHeaderTitle(content.getString("nickName"));
                 income.setText(content.getString("income"));
                 distance.setText(content.getString("distance"));
                 constellation.setText(content.getString("constellation"));
@@ -467,7 +478,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                             public void onClick(View v) {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("userInfo", userInfo);
-                                toActivity(QSelfModifyActivity.class, bundle);
+                                Intent intent = new Intent(QUserDetailActivity.this, QSelfModifyActivity.class);
+                                intent.putExtras(bundle);
+                                startActivityForResult(intent, 99);
                             }
                         });
                         break;

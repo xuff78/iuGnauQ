@@ -259,7 +259,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="5dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/icon_gray_arrow" />
                 </RelativeLayout>
@@ -598,11 +597,11 @@
                 <!--</com.facebook.drawee.view.SimpleDraweeView>-->
 
                 <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:layout_alignBottom="@id/socialImage"-->
-                    <!--android:layout_marginLeft="105dp"-->
-                    <!--android:background="@color/black_deep" />-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_alignBottom="@id/socialImage"-->
+                <!--android:layout_marginLeft="105dp"-->
+                <!--android:background="@color/black_deep" />-->
             </RelativeLayout>
 
             <RelativeLayout

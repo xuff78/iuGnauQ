@@ -55,8 +55,8 @@ public class QRegistInfoActivity extends QBaseActivity implements View.OnClickLi
     private AlertDialog selectDialog;
     private NumberPicker selectPicker;
     private List<KeyValue> valueList;
-    private UserDetailInfo userDetailInfo;
     private KeyValue starValue;
+    private UserDetailInfo userDetailInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
