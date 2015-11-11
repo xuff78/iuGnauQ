@@ -164,6 +164,8 @@ public class TucaoListFrg extends QBaseFragment {
         usedItemPos=-1;
     }
 
+    private int presspos=-1;
+
     View.OnClickListener listBtnListener = new View.OnClickListener() {
 
         @Override
@@ -187,8 +189,10 @@ public class TucaoListFrg extends QBaseFragment {
                         notes.get(position).setLikeNum(notes.get(position).getLikeNum()+1);
                         mAdapter.notifyDataSetChanged();
                     } else {
-                        ToastUtils.show(getActivity(), "此条已赞");
+                        if(presspos!=position)
+                            ToastUtils.show(getActivity(), "此条已赞");
                     }
+                    presspos=position;
                     break;
                 case R.id.replyNums:
                     intent = new Intent(getActivity(), QPublishAct.class);
@@ -273,7 +277,7 @@ public class TucaoListFrg extends QBaseFragment {
             return;
         swipeRefresh.setRefreshing(false);
         if (requestMethod.equals(ApiList.TUCAO_AddLike) || requestMethod.equals(ApiList.DATE_AddLike) || requestMethod.equals(ApiList.SECRET_AddLike)) {
-            ToastUtils.show(getActivity(), "赞一个");
+//            ToastUtils.show(getActivity(), "赞一个");
         } else if (requestMethod.startsWith(ApiList.TUCAO_Delete) || requestMethod.startsWith(ApiList.DATE_Delete) || requestMethod.startsWith(ApiList.SECRET_Delete)) {
             ToastUtils.show(getActivity(), "删除成功");
             currentPage = 1;
