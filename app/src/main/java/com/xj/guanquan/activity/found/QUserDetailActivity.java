@@ -316,7 +316,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                     content.getString("avatar"), content.getString("huanxinName"), null, null, null));
             intent.putExtra("title", content.getString("nickName"));
             startActivity(intent);
-        } else if (v == roastMore) {
+        } else if (v == roastMore.getParent()){
             Intent intent = new Intent(this, TucaoDetailAct.class);
             intent.putExtra("PageType", 0);
             intent.putExtra("NoteInfo", noteinfo);
@@ -365,7 +365,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
         good.setOnClickListener(this);
         attentionBtn.setOnClickListener(this);
-        roastMore.setOnClickListener(this);
+        ((RelativeLayout) roastMore.getParent()).setOnClickListener(this);
     }
 
     @Override
@@ -406,7 +406,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 99) {
+        if (requestCode == 99 && data != null) {
             boolean isUpdate = data.getBooleanExtra("isUpdate", false);
             if (isUpdate) {
                 request = requestDetail;

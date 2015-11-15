@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -123,9 +124,9 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
         });
         mAdapter.isLoadMore(false);
         userPhotos.setAdapter(mAdapter);
-        roastMore.setOnClickListener(this);
-        circleMorePhoto.setOnClickListener(this);
-        masterImage.setOnClickListener(this);
+        ((RelativeLayout) roastMore.getParent()).setOnClickListener(this);
+        ((RelativeLayout) circleMorePhoto.getParent()).setOnClickListener(this);
+        ((RelativeLayout) masterImage.getParent()).setOnClickListener(this);
     }
 
     private void initData() {
@@ -177,11 +178,11 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (v == roastMore) {
+        if (v == roastMore.getParent()) {
             Bundle bundle = new Bundle();
             bundle.putInt("circleId", circleInfo.getId());
             toActivity(QCircleMemberActivity.class, bundle);
-        } else if (v == circleMorePhoto) {
+        } else if (v == circleMorePhoto.getParent()) {
             toActivity(QCirclePhotosActivity.class);
         } else if (v == toMessageBtn) {
             // 进入聊天页面
@@ -195,7 +196,7 @@ public class QCircleDetailActivity extends QBaseActivity implements View.OnClick
             startActivity(intent);
         } else if (v == joinCircleBtn) {
             addToRequestQueue(requestJoin, ApiList.GROUP_JOIN, true);
-        } else if (v == masterImage) {
+        } else if (v == masterImage.getParent()) {
             Bundle bundle = new Bundle();
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(content.getInteger("ownerId"));
