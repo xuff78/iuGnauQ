@@ -211,7 +211,6 @@ public class QMsgDetailActivity extends QBaseActivity implements View.OnClickLis
     }
 
     private void initData() {
-
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE)).newWakeLock(
                 PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
         if (chatType == CHATTYPE_SINGLE) { // 单聊

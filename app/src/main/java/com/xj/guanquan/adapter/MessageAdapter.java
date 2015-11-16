@@ -496,9 +496,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.iv.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                act.startActivityForResult(
-                        (new Intent(act, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                                EMMessage.Type.IMAGE.ordinal()), QMsgDetailActivity.REQUEST_CODE_CONTEXT_MENU);
+//                act.startActivityForResult(
+//                        (new Intent(act, ContextMenu.class)).putExtra("position", position).putExtra("type",
+//                                EMMessage.Type.IMAGE.ordinal()), QMsgDetailActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -973,21 +973,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 EMLog.d(TAG, "message status : " + message.status);
                 if (message.status == EMMessage.Status.SUCCESS) {
-                    // if (message.getType() == EMMessage.Type.FILE) {
-                    // holder.pb.setVisibility(View.INVISIBLE);
-                    // holder.staus_iv.setVisibility(View.INVISIBLE);
-                    // } else {
-                    // holder.pb.setVisibility(View.GONE);
-                    // holder.staus_iv.setVisibility(View.GONE);
-                    // }
+                    if (message.getType() == EMMessage.Type.FILE) {
+                        ((LocationHolder) (voiceHolder == null ? locationHolder : voiceHolder)).pb.setVisibility(View.INVISIBLE);
+                        ((LocationHolder) (voiceHolder == null ? locationHolder : voiceHolder)).pb.setVisibility(View.INVISIBLE);
+                    } else {
+                        ((LocationHolder) (voiceHolder == null ? locationHolder : voiceHolder)).pb.setVisibility(View.GONE);
+                        ((LocationHolder) (voiceHolder == null ? locationHolder : voiceHolder)).pb.setVisibility(View.GONE);
+                    }
 
                 } else if (message.status == EMMessage.Status.FAIL) {
-                    // if (message.getType() == EMMessage.Type.FILE) {
-                    // holder.pb.setVisibility(View.INVISIBLE);
-                    // } else {
-                    // holder.pb.setVisibility(View.GONE);
-                    // }
-                    // holder.staus_iv.setVisibility(View.VISIBLE);
 
                     if (message.getError() == EMError.MESSAGE_SEND_INVALID_CONTENT) {
                         Toast.makeText(act, act.getString(R.string.send_fail) + act.getString(R.string.error_send_invalid_content), Toast.LENGTH_SHORT)
