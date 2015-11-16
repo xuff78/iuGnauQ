@@ -89,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/dateTime"
                 android:paddingTop="5dip"
+                android:paddingBottom="10dip"
                 android:text="活动地址：朝阳门" />
 
             <Button
@@ -106,8 +107,7 @@
         <RelativeLayout
             android:id="@+id/actionLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/moreBtn"

@@ -436,7 +436,7 @@ public class QPublishAct extends QBaseActivity {
                         params.put("address", AddrEdt.getText().toString());
                         params.put("title", titleEdt.getText().toString());
                         params.put("datingLng", datingLng);
-                        params.put("datingLat ", datingLat);
+                        params.put("datingLat", datingLat);
                         if (picPaths.size() > 0) {
                             requestURL = ApiList.DATE_Publish;
                             //handler.sendEmptyMessage(TO_UPLOAD_FILE);
