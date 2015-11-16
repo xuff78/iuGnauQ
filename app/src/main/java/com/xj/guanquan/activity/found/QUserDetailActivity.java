@@ -316,7 +316,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                     content.getString("avatar"), content.getString("huanxinName"), null, null, null));
             intent.putExtra("title", content.getString("nickName"));
             startActivity(intent);
-        } else if (v == roastMore.getParent()){
+        } else if (v == roastMore.getParent()) {
             Intent intent = new Intent(this, TucaoDetailAct.class);
             intent.putExtra("PageType", 0);
             intent.putExtra("NoteInfo", noteinfo);
@@ -532,6 +532,13 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 noteinfo.setTime(tucao.getString("time"));
                 noteinfo.setId(tucao.getInteger("id"));
                 noteinfo.setPicture(tucao.getString("picture"));
+                String[] photos = content.getString("avatar").split(",");
+                for (int i = 0; i < photos.length; i++) {
+                    pictureInfoList.add(new PictureInfo(photos[i]));
+                }
+                mAdapter.setData(pictureInfoList);
+                mAdapter.notifyDataSetChanged();
+
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
                 alertDialog(result.getMsg(), new View.OnClickListener() {
                     @Override
