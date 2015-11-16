@@ -113,6 +113,7 @@ public class QPublishAct extends QBaseActivity {
     public String requestURL = "";
     private MultipartRequest uploadRequest;
     private int screenHeight=0, screenWidth=0;
+    private String datingLng="", datingLat="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -434,6 +435,8 @@ public class QPublishAct extends QBaseActivity {
                         params.put("beginTime", timeTxt.getText().toString());
                         params.put("address", AddrEdt.getText().toString());
                         params.put("title", titleEdt.getText().toString());
+                        params.put("datingLng", datingLng);
+                        params.put("datingLat ", datingLat);
                         if (picPaths.size() > 0) {
                             requestURL = ApiList.DATE_Publish;
                             //handler.sendEmptyMessage(TO_UPLOAD_FILE);
@@ -557,6 +560,8 @@ public class QPublishAct extends QBaseActivity {
         if(resultCode == RESULT_OK && requestCode == RequestAddress){
             double lat = data.getDoubleExtra("lat", 0.0);
             double lng = data.getDoubleExtra("lng", 0.0);
+            datingLng=String.valueOf(lng);
+            datingLat=String.valueOf(lat);
             initSearch(lat, lng);
         }else if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
             final String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);

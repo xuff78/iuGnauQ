@@ -57,8 +57,13 @@ public class QMapSelectActivity extends QBaseActivity {
         aMap = mapView.getMap();
 
         markerOptions = new MarkerOptions();
-        lat = Double.valueOf(PreferencesUtils.getString(this, "lat"));
-        lng = Double.valueOf(PreferencesUtils.getString(this, "lng"));
+        if(getIntent().hasExtra("lng")&&getIntent().hasExtra("lat")){
+            lat = Double.valueOf(getIntent().getStringExtra("lat"));
+            lng = Double.valueOf(getIntent().getStringExtra("lng"));
+        }else {
+            lat = Double.valueOf(PreferencesUtils.getString(this, "lat"));
+            lng = Double.valueOf(PreferencesUtils.getString(this, "lng"));
+        }
         LatLng point = new LatLng(lat, lng);
         markerOptions.position(point);
         markerOptions.draggable(true);

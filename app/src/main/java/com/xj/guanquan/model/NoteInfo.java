@@ -22,6 +22,24 @@ public class NoteInfo extends EBaseModel {
     private String content="";
     private Integer sex=-1;
     private String picture="";
+    private String datingLng="";
+    private String datingLat="";
+
+    public String getDatingLng() {
+        return datingLng;
+    }
+
+    public void setDatingLng(String datingLng) {
+        this.datingLng = datingLng;
+    }
+
+    public String getDatingLat() {
+        return datingLat;
+    }
+
+    public void setDatingLat(String datingLat) {
+        this.datingLat = datingLat;
+    }
 
     public Integer getLikeNum() {
         return likeNum;

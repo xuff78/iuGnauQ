@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
+import com.xj.guanquan.activity.contact.QMapSelectActivity;
 import com.xj.guanquan.activity.roast.QPublishAct;
 import com.xj.guanquan.activity.roast.TucaoDetailAct;
 import com.xj.guanquan.activity.roast.ViewPagerExampleActivity;
@@ -128,11 +129,25 @@ public class TuCaoAdapter extends RecyclerView.Adapter<ViewHolder> {
 				});
 			}
 			if(PageType==QPublishAct.TypeDate){
-				DateInfo dateinfo= (DateInfo) datalist.get(position);
+				final DateInfo dateinfo= (DateInfo) datalist.get(position);
 				vh.dateTime.setText(dateinfo.getBeginTime() + "");
 				vh.dateAddr.setText(dateinfo.getAddress());
 				if(nickName.equals(dateinfo.getNickName()))
 					vh.bookBtn.setVisibility(View.INVISIBLE);
+				vh.dateAddr.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent=new Intent(act, QMapSelectActivity.class);
+						String lat=dateinfo.getDatingLat();
+						String lng=dateinfo.getDatingLng();
+						if(lat.length()>0&&lng.length()>0) {
+							intent.putExtra("lat", lat);
+							intent.putExtra("lng", lng);
+						}
+						intent.putExtra("isChat", true);
+						act.startActivity(intent);
+					}
+				});
 			}
 			vh.bookBtn.setOnClickListener(new OnClickListener() {
 				@Override

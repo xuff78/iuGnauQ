@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/dateTime"
-                android:layout_marginTop="5dip"
+                android:paddingTop="5dip"
                 android:text="活动地址：朝阳门" />
 
             <Button
