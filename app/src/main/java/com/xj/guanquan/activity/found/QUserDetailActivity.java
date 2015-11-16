@@ -406,7 +406,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 99 && data != null) {
+        if (requestCode == 99 && resultCode == RESULT_OK) {
             boolean isUpdate = data.getBooleanExtra("isUpdate", false);
             if (isUpdate) {
                 request = requestDetail;

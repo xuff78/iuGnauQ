@@ -331,6 +331,10 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
             params.put("nickName", nickname.getText().toString());
         if (!StringUtils.isEmpty(selfsign.getText().toString()))
             params.put("signature", selfsign.getText().toString());
+        if (!StringUtils.isEmpty(selfsign.getText().toString()))
+            params.put("signature", selfsign.getText().toString());
+        if (!StringUtils.isEmpty(hobby.getText().toString()))
+            params.put("hobby", hobby.getText().toString());
         List<String> fileNames = new ArrayList<String>();
         if (!StringUtils.isEmpty(userDetailInfo.getFile_avatar())) {
             fileNames.add("file_avatar");

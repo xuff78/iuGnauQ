@@ -1079,8 +1079,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void onClick(View v) {
             Intent intent;
             intent = new Intent(context, QMapSelectActivity.class);
-            intent.putExtra("lat", location.latitude);
-            intent.putExtra("lng", location.longitude);
+            intent.putExtra("lat", String.valueOf(location.latitude));
+            intent.putExtra("lng", String.valueOf(location.longitude));
             intent.putExtra("isChat", true);
             context.startActivity(intent);
         }

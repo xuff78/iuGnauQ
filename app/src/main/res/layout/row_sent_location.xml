@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity" >
+        android:layout_marginTop="@dimen/margin_chat_activity">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_userhead"
@@ -28,6 +28,7 @@
             app:placeholderImageScaleType="fitCenter"
             app:roundedCornerRadius="5dp"
             fresco:placeholderImage="@color/light_gray" />
+
         <TextView
             android:id="@+id/tv_userid"
             style="@style/chat_text_name_style"
@@ -36,13 +37,14 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/iv_userhead"
             android:text="暂无" />
+
         <LinearLayout
             android:id="@+id/ll_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg" >
+            android:background="@drawable/chatto_bg">
 
             <TextView
                 android:id="@+id/tv_location"
@@ -51,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:background="@mipmap/location_msg"
                 android:gravity="center"
+                android:maxEms="10"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
@@ -63,18 +66,17 @@
             android:clickable="true"
             android:src="@drawable/msg_state_failed_resend"
             android:visibility="gone" />
-        
+
         <TextView
             android:id="@+id/tv_ack"
             style="@style/chat_text_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/ll_location"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
-            android:layout_toLeftOf="@id/ll_location"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tv_delivered"
@@ -86,7 +88,7 @@
             android:text="@string/text_delivered_msg"
             android:textSize="12sp"
             android:visibility="invisible" />
-        
+
         <ProgressBar
             android:id="@+id/pb_sending"
             android:layout_width="25dp"
