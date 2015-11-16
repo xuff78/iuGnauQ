@@ -470,6 +470,8 @@ public class QPublishAct extends QBaseActivity {
                             }
                             uploadRequest(requestURL, params, files, "file_pic");
                         } else {
+                            params.put("content", String.valueOf(editText.getText().toString()));
+                            params.put("avatar", Avatar);
                             startRequest(ApiList.SECRET_Publish, params);
                         }
 
