@@ -777,9 +777,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         LatLng loc = new LatLng(locBody.getLatitude(), locBody.getLongitude());
         holder.tv_location.setOnClickListener(new MapClickListener(loc, locBody.getAddress()));
 
-        if (message.direct == EMMessage.Direct.RECEIVE) {
-            return;
-        }
+//        if (message.direct == EMMessage.Direct.RECEIVE) {
+//            return;
+//        }
         // deal with send message
         switch (message.status) {
             case SUCCESS:
