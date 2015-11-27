@@ -3,9 +3,7 @@ package com.xj.guanquan.views;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -31,8 +29,8 @@ public class TouchGrayImageView extends SimpleDraweeView {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Drawable drawable=getDrawable();
-                if(drawable!=null) {
+                Drawable drawable = getDrawable();
+                if (drawable != null) {
                     drawable.mutate().setColorFilter(Color.GRAY,
                             PorterDuff.Mode.MULTIPLY);
                 }
@@ -41,8 +39,8 @@ public class TouchGrayImageView extends SimpleDraweeView {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                Drawable drawableUp=getDrawable();
-                if(drawableUp!=null) {
+                Drawable drawableUp = getDrawable();
+                if (drawableUp != null) {
                     drawableUp.mutate().clearColorFilter();
                 }
                 break;

@@ -57,7 +57,7 @@ public class HeadsRecyclerAdapter extends RecyclerView.Adapter {
         if (viewHolder instanceof HeaderViewHolder) {
             HeaderViewHolder hv = (HeaderViewHolder) viewHolder;
             hv.headImg.setImageURI(Uri.parse(dataList[position]));
-        } else if (viewHolder instanceof ItemViewHolder) {
+        } else {
             ItemViewHolder iv = (ItemViewHolder) viewHolder;
             iv.picture.setImageURI(Uri.parse(dataList[position]));
         }
@@ -122,7 +122,7 @@ public class HeadsRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 给GridView中的条目用的ViewHolder，里面只有一个TextView
+     * 给GridView中的条目用的ViewHolder
      */
     private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private SimpleDraweeView picture;

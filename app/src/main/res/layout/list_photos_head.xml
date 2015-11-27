@@ -6,7 +6,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
-    <com.xj.guanquan.views.TouchGrayImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/picture"
         android:layout_width="160dp"
         android:layout_height="match_parent"
@@ -14,5 +14,5 @@
         fresco:placeholderImage="@mipmap/default_head_img"
         fresco:placeholderImageScaleType="fitCenter">
 
-    </com.xj.guanquan.views.TouchGrayImageView>
+    </com.facebook.drawee.view.SimpleDraweeView>
 </LinearLayout>

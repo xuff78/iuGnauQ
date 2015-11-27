@@ -43,7 +43,6 @@ import com.xj.guanquan.views.WrapScrollListView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView;
 import com.xj.guanquan.views.pullscrollview.PullScrollView.OnTurnListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -513,14 +512,6 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                     roastTime.setText(tucao.getString("time"));
                     roastDistance.setText(tucao.getString("tuCaoDistance"));
                     roastNum.setText(tucao.getString("commentNum"));
-                }
-                if (!StringUtils.isEmpty(content.getString("picture"))) {
-                    String[] pictures = content.getString("picture").split(",");
-                    pictureInfoList = new ArrayList<PictureInfo>();
-                    for (int i = 0; i < pictures.length; i++) {
-                        pictureInfoList.add(new PictureInfo(pictures[i]));
-                    }
-                    mAdapter.notifyDataSetChanged();
                 }
                 noteinfo = new NoteInfo();
                 noteinfo.setNickName(content.getString("nickName"));
