@@ -16,6 +16,7 @@ package com.xj.guanquan.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
@@ -118,5 +119,14 @@ public class ImageUtils {
         return BitmapFactory.decodeFile(filePath, options);
     }
 
+    public static int getBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {    //API 19
+            return bitmap.getAllocationByteCount();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
+            return bitmap.getByteCount();
+        }
+        return bitmap.getRowBytes() * bitmap.getHeight();                //earlier version
+    }
 
 }

@@ -72,8 +72,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/userPhotos"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="36dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="26dp"
                 android:orientation="horizontal"
                 android:scrollbars="horizontal">
 
@@ -222,10 +222,10 @@
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:clickable="false"
-                        android:focusable="false"
                         android:layout_alignBottom="@+id/avatar"
-                        android:layout_toRightOf="@+id/avatar">
+                        android:layout_toRightOf="@+id/avatar"
+                        android:clickable="false"
+                        android:focusable="false">
 
                         <TextView
                             android:id="@+id/roastDistance"

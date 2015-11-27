@@ -48,6 +48,9 @@ public class UserInfo extends EBaseModel {
     }
 
     public String getAvatar() {
+        if (!StringUtils.isEmpty(avatar)) {
+            return avatar.split(",")[0];
+        }
         return avatar;
     }
 

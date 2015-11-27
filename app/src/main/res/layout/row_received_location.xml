@@ -48,8 +48,7 @@
             android:layout_toRightOf="@id/iv_userhead"
             android:background="@mipmap/location_msg"
             android:gravity="center"
-            android:maxLength="10"
-            android:maxEms="5"
+            android:maxEms="10"
             android:textColor="@android:color/white" />
 
         <ImageView

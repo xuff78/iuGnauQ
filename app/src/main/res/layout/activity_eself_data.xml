@@ -1,8 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_title"
+    android:background="@color/black_modify"
     android:scrollbars="none">
 
     <LinearLayout
@@ -10,116 +9,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/photoLayout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
             android:gravity="center_vertical"
-            android:paddingLeft="33dp"
-            android:paddingRight="20dp"
-            android:visibility="gone">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
 
-            <TextView
-                style="@style/text_14_white"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:text="姓名" />
-
-            <TextView
-                android:id="@+id/username"
-                style="@style/text_14_white"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/usernameBtn"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:hint="必填" />
-
-            <ImageView
-                android:id="@+id/usernameBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="15dp"
-                android:src="@mipmap/arrow_right" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="33dp"
-            android:paddingRight="20dp"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/text_14_white"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:text="身份证号" />
-
-            <TextView
-                android:id="@+id/orderid"
-                style="@style/text_14_white"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/orderidBtn"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:hint="必填" />
-
-            <ImageView
-                android:id="@+id/orderidBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="15dp"
-                android:src="@mipmap/arrow_right" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/headImageArea"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:onClick="onClick"
-            android:paddingLeft="33dp"
-            android:paddingRight="20dp">
-
-            <TextView
-                style="@style/text_14_white"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:text="头像" />
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/headimage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_toLeftOf="@+id/headimageBtn"
-                android:scaleType="fitXY"
-                fresco:placeholderImage="@mipmap/default_head_img"
-                fresco:placeholderImageScaleType="fitXY">
-
-            </com.facebook.drawee.view.SimpleDraweeView>
-
-            <ImageView
-                android:id="@+id/headimageBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="15dp"
-                android:src="@mipmap/arrow_right" />
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/nickNameArea"

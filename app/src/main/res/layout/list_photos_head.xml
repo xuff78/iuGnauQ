@@ -8,8 +8,8 @@
 
     <com.xj.guanquan.views.TouchGrayImageView
         android:id="@+id/picture"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="160dp"
+        android:layout_height="match_parent"
         android:scaleType="fitCenter"
         fresco:placeholderImage="@mipmap/default_head_img"
         fresco:placeholderImageScaleType="fitCenter">

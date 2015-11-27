@@ -22,6 +22,7 @@ public class ApiList {
     public static String GET_ALL = BASE_API + "1/dict/getAll";
     public static String UPDATEPWD = BASE_API + "1/user/updatePassword";
     public static String UPDATEUSERDETAIL = BASE_API + "1/user/updateDetail";
+    public static String UPDATEAVATAR = BASE_API + "1/user/uploadAvatar";
 
 
     //发现

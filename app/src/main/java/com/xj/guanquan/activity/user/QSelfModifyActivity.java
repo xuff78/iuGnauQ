@@ -3,7 +3,6 @@ package com.xj.guanquan.activity.user;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,8 +10,10 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,10 +23,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.xj.guanquan.R;
 import com.xj.guanquan.Utils.ImageUtils;
 import com.xj.guanquan.activity.roast.SelectPicActivity;
+import com.xj.guanquan.activity.roast.ViewPagerExampleActivity;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.MultipartRequest;
 import com.xj.guanquan.common.QBaseActivity;
@@ -33,16 +36,19 @@ import com.xj.guanquan.common.ResponseResult;
 import com.xj.guanquan.model.KeyValue;
 import com.xj.guanquan.model.UserDetailInfo;
 import com.xj.guanquan.model.UserInfo;
+import com.xj.guanquan.views.Photo4Layout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
+import common.eric.com.ebaselibrary.util.ScreenUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QSelfModifyActivity extends QBaseActivity implements View.OnClickListener {
@@ -54,13 +60,6 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
     private StringRequest requestDetail;
     private MultipartRequest requestSave;
     private UserInfo userInfo;
-    private TextView username;
-    private ImageView usernameBtn;
-    private TextView orderid;
-    private ImageView orderidBtn;
-    private SimpleDraweeView headimage;
-    private ImageView headimageBtn;
-    private RelativeLayout headImageArea;
     private EditText nickname;
     private ImageView nicknameBtn;
     private RelativeLayout nickNameArea;
@@ -94,6 +93,15 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
     private KeyValue starValue;
     private UserDetailInfo userDetailInfo;
     private JSONObject content;
+    private String headImgs;
+    private String[] urls;
+    private MultipartRequest uploadRequest;
+    private String requestURL;
+    private LinearLayout photoLayout;
+    private NiftyDialogBuilder dialog;
+    private int width = 0;
+    private int screenHeight = 0;
+    private String avatarArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +112,9 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
 
     @Override
     protected void initView() {
+        WindowManager wm = this.getWindowManager();
+        width = wm.getDefaultDisplay().getWidth();
+        screenHeight = wm.getDefaultDisplay().getHeight();
         userInfo = (UserInfo) getIntent().getExtras().getSerializable("userInfo");
         _setHeaderTitle("修改个人信息");
         _setRightHomeGone();
@@ -113,6 +124,7 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
                 svaeDetail();
             }
         });
+
     }
 
     @Override
@@ -143,10 +155,7 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v == headImageArea) {
-            Intent intent = new Intent(this, SelectPicActivity.class);
-            startActivityForResult(intent, TO_SELECT_PHOTO);
-        } else if (v == jobArea) {
+        if (v == jobArea) {
             initSelectPicker("job", jobText);
             selectPicker.setValue(getIndexByValue("job", content.getString("job")));
             initAlertDialog("请选择工作", selectPicker, jobText);
@@ -174,13 +183,6 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
     }
 
     private void initialize() {
-        username = (TextView) findViewById(R.id.username);
-        usernameBtn = (ImageView) findViewById(R.id.usernameBtn);
-        orderid = (TextView) findViewById(R.id.orderid);
-        orderidBtn = (ImageView) findViewById(R.id.orderidBtn);
-        headimage = (SimpleDraweeView) findViewById(R.id.headimage);
-        headimageBtn = (ImageView) findViewById(R.id.headimageBtn);
-        headImageArea = (RelativeLayout) findViewById(R.id.headImageArea);
         nickname = (EditText) findViewById(R.id.nickname);
         nicknameBtn = (ImageView) findViewById(R.id.nicknameBtn);
         nickNameArea = (RelativeLayout) findViewById(R.id.nickNameArea);
@@ -207,6 +209,7 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
         signArea = (RelativeLayout) findViewById(R.id.signArea);
         jobText = (TextView) findViewById(R.id.jobText);
         jobArea = (RelativeLayout) findViewById(R.id.jobArea);
+        photoLayout = (LinearLayout) findViewById(R.id.photoLayout);
         userDetailInfo = new UserDetailInfo();
     }
 
@@ -214,8 +217,14 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TO_SELECT_PHOTO) {
             final String picPath = data.getStringExtra(SelectPicActivity.KEY_PHOTO_PATH);
-            final Bitmap bitmap = ImageUtils.getSmallBitmap(picPath, headimage.getWidth(), headimage.getHeight());
-            userDetailInfo.setFile_avatar(picPath);
+            final Map<String, String> params = new HashMap<>();
+            params.put("lng", PreferencesUtils.getString(this, "lng"));
+            params.put("lat", PreferencesUtils.getString(this, "lat"));
+            final List<File> files = new ArrayList<File>();
+            final File file = new File(picPath);
+            files.add(file);
+            requestURL = ApiList.UPDATEAVATAR;
+            final Bitmap bitmap = ImageUtils.getSmallBitmap(picPath, width, screenHeight);
             new Thread() {
                 @Override
                 public void run() {
@@ -224,15 +233,21 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
                     if (bitmapSize > 300000) {
                         try {
 //                            float scale=300000f/bitmapSize;
-                            FileOutputStream out = new FileOutputStream(new File(userDetailInfo.getFile_avatar()));
+                            FileOutputStream out = new FileOutputStream(new File(picPath));
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    uploadRequest(requestURL, params, files, "file_avatar");
+                                }
+                            });
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                     }
                 }
             }.start();
-            headimage.setImageBitmap(bitmap);
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -265,6 +280,21 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.dialog_animations);
         selectDialog.show();
+    }
+
+    private void uploadRequest(String method, final Map<String, String> params, List<File> files, String key) {
+        uploadRequest = new MultipartRequest(method, this, this, key, files, params) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = super.getHeaders();
+                JSONObject loginData = JSONObject.parseObject(PreferencesUtils.getString(QSelfModifyActivity.this, "loginData"));
+                map.put("authToken", loginData.getJSONObject("data").getString("authToken"));
+                return map;
+            }
+
+        };
+        request = uploadRequest;
+        addUploadToRequestQueue(request, method, true);
     }
 
     private void initSelectPicker(String type, final TextView textView) {
@@ -336,14 +366,17 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
         if (!StringUtils.isEmpty(hobby.getText().toString()))
             params.put("hobby", hobby.getText().toString());
         List<String> fileNames = new ArrayList<String>();
-        if (!StringUtils.isEmpty(userDetailInfo.getFile_avatar())) {
-            fileNames.add("file_avatar");
-        }
         List<File> files = new ArrayList<File>();
-        if (!StringUtils.isEmpty(userDetailInfo.getFile_avatar())) {
-            File file = new File(userDetailInfo.getFile_avatar());
-            files.add(file);
+        avatarArray = "";
+        for (int i = 0; i < urls.length; i++) {
+            if (i == (urls.length - 1)) {
+                avatarArray += urls[i];
+            } else {
+                avatarArray += urls[i] + ",";
+            }
         }
+        params.put("avatarArray", avatarArray);
+
         requestSave = new MultipartRequest(ApiList.UPDATEUSERDETAIL, this, this, fileNames, files, params) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -357,13 +390,93 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
         addToRequestQueue(request, ApiList.UPDATEUSERDETAIL, true);
     }
 
+    private void initHeadImgs() {
+        photoLayout.removeAllViews();
+        Photo4Layout photo4Layout = new Photo4Layout(this, (int) (width - ScreenUtils.dpToPxInt(this, 20)), urls);
+        photoLayout.addView(photo4Layout);
+        photo4Layout.setAddViewClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (urls.length >= 13) {
+                    showToastShort("亲，头像不能超过13张哦！");
+                } else {
+                    Intent intent = new Intent(QSelfModifyActivity.this, SelectPicActivity.class);
+                    startActivityForResult(intent, TO_SELECT_PHOTO);
+                }
+            }
+        });
+        photo4Layout.setImgCallback(new Photo4Layout.ClickListener() {
+
+            @Override
+            public void onClick(View v, final int position) {
+                final View view = getLayoutInflater().inflate(R.layout.user_photo_list_dialog_view, null);
+                dialog = NiftyDialogBuilder.getInstance(QSelfModifyActivity.this);
+                dialog
+                        .withTitle("温馨提示")
+                        .withMessage("请选择下列操作:")
+                        .withDialogColor(getResources().getColor(R.color.view_color))
+                        .withIcon(R.mipmap.logo)
+                        .withDuration(500)
+                        .withEffect(Effectstype.SlideBottom)
+                        .setCustomView(view, QSelfModifyActivity.this);
+                dialog.show();
+                view.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        alertConfirmDialog("确定要删除吗？", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                urls = arrContrast(urls, position);
+                                initHeadImgs();
+                            }
+                        }, null);
+                    }
+                });
+                view.findViewById(R.id.toLook).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(QSelfModifyActivity.this, ViewPagerExampleActivity.class);
+                        intent.putExtra("Images", urls);
+                        intent.putExtra("pos", position);
+                        QSelfModifyActivity.this.startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+                view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    //删除数组中position位置的元素
+    private static String[] arrContrast(String[] arr, int position) {
+        List<String> list = new LinkedList<String>();
+        for (int i = 0; i < arr.length; i++) {
+            if (i != position) {
+                list.add(arr[i]);
+            }
+        }
+        String[] result = {}; //创建空数组
+        return list.toArray(result); //List to Array
+    }
+
     @Override
     protected void doResponse(Object response) {
         final ResponseResult result = JSONObject.parseObject(response.toString(), ResponseResult.class);
         if (StringUtils.isEquals(request.getTag().toString(), ApiList.USER_DETAIL)) {
             content = result.getData().getJSONObject("content");
-            Uri uri = Uri.parse(content.getString("avatar"));
-            headimage.setImageURI(uri);
+            headImgs = content.getString("avatarArray");
+            if (headImgs.length() > 0) {
+                urls = headImgs.split(",");
+            }
+            initHeadImgs();
+//            Uri uri = Uri.parse(content.getString("avatar"));
+//            headimage.setImageURI(uri);
             nickname.setText(content.getString("nickName"));
             selfsign.setText(content.getString("signature"));
             marriage.setText(content.getString("feelingStatus"));
@@ -384,7 +497,14 @@ public class QSelfModifyActivity extends QBaseActivity implements View.OnClickLi
                     QSelfModifyActivity.this.finish();
                 }
             });
+        } else if (StringUtils.isEquals(requestMethod, ApiList.UPDATEAVATAR)) {
+            String[] newUrls = new String[urls.length + 1];
+            for (int i = 0; i < urls.length; i++) {
+                newUrls[i] = urls[i];
+            }
+            newUrls[urls.length] = result.getData().getJSONObject("content").getString("url");
+            urls = newUrls;
+            initHeadImgs();
         }
     }
-
 }

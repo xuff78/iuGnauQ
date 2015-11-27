@@ -28,7 +28,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.xj.guanquan.R;
 import com.xj.guanquan.activity.message.QMsgDetailActivity;
 import com.xj.guanquan.activity.roast.TucaoDetailAct;
+import com.xj.guanquan.activity.roast.ViewPagerExampleActivity;
 import com.xj.guanquan.activity.user.QSelfModifyActivity;
+import com.xj.guanquan.adapter.HeadsRecyclerAdapter;
 import com.xj.guanquan.common.ApiList;
 import com.xj.guanquan.common.QBaseActivity;
 import com.xj.guanquan.common.ResponseResult;
@@ -47,14 +49,13 @@ import java.util.List;
 import java.util.Map;
 
 import common.eric.com.ebaselibrary.adapter.EBaseAdapter;
-import common.eric.com.ebaselibrary.adapter.RecyclerViewAdapter;
 import common.eric.com.ebaselibrary.util.PreferencesUtils;
 import common.eric.com.ebaselibrary.util.StringUtils;
 
 public class QUserDetailActivity extends QBaseActivity implements View.OnClickListener, OnTurnListener {
     private UserInfo userInfo;
     private GridLayoutManager mGridLayoutManager;
-    private RecyclerViewAdapter mAdapter;
+    private HeadsRecyclerAdapter mAdapter;
     private List<PictureInfo> pictureInfoList;
     private Button good;
     private TextView distance;
@@ -105,6 +106,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
     private NoteInfo noteinfo;
 
     private PopupWindow popup;
+    private String[] urls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,29 +166,19 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
         mGridLayoutManager = new GridLayoutManager(this, 2);
         mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
         userPhotos.setLayoutManager(mGridLayoutManager);
+        //调用以下方法让RecyclerView的第一个条目仅为1列
         userPhotos.setItemAnimator(new DefaultItemAnimator());
-        pictureInfoList = new ArrayList<PictureInfo>();
-        mAdapter = new RecyclerViewAdapter(new String[]{"picture"}, R.layout.list_photos_item, pictureInfoList);
-        mAdapter.setIsShowFooter(false);
-        mAdapter.setViewBinder(new RecyclerViewAdapter.ViewBinder() {
+        mAdapter = new HeadsRecyclerAdapter(new String[]{}, this);
+        mGridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            public boolean setViewValue(View view, Object o, String s) {
-                if (view instanceof SimpleDraweeView) {
-                    SimpleDraweeView iv = (SimpleDraweeView) view;
-                    Uri uri = Uri.parse((String) o);
-                    iv.setImageURI(uri);
-                    return true;
-                }
-                return false;
-            }
-        });
-        mAdapter.setViewHolderHelper(new RecyclerViewAdapter.ViewHolderHelper() {
-            @Override
-            public RecyclerView.ViewHolder bindItemViewHolder(View view) {
-                return new ItemViewHolder(view);
+            public int getSpanSize(int position) {
+                //如果位置是0，那么这个条目将占用SpanCount()这么多的列数，再此也就是3
+                //而如果不是0，则说明不是Header，就占用1列即可
+                return mAdapter.isHeader(position) ? mGridLayoutManager.getSpanCount() : 1;
             }
         });
         userPhotos.setAdapter(mAdapter);
+
         groupList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -196,6 +188,8 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
             }
         });
         circleNum.setText(String.valueOf(userInfo.getUserId()));
+
+
     }
 
     @Override
@@ -375,6 +369,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private SimpleDraweeView picture;
+        private Intent intent = new Intent(QUserDetailActivity.this, ViewPagerExampleActivity.class);
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -394,7 +389,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
 
         @Override
         public void onClick(View v) {
-
+            intent.putExtra("Images", urls);
+            intent.putExtra("pos", getAdapterPosition());
+            QUserDetailActivity.this.startActivity(intent);
         }
 
         @Override
@@ -519,6 +516,7 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 }
                 if (!StringUtils.isEmpty(content.getString("picture"))) {
                     String[] pictures = content.getString("picture").split(",");
+                    pictureInfoList = new ArrayList<PictureInfo>();
                     for (int i = 0; i < pictures.length; i++) {
                         pictureInfoList.add(new PictureInfo(pictures[i]));
                     }
@@ -532,11 +530,9 @@ public class QUserDetailActivity extends QBaseActivity implements View.OnClickLi
                 noteinfo.setTime(tucao.getString("time"));
                 noteinfo.setId(tucao.getInteger("id"));
                 noteinfo.setPicture(tucao.getString("picture"));
-                String[] photos = content.getString("avatar").split(",");
-                for (int i = 0; i < photos.length; i++) {
-                    pictureInfoList.add(new PictureInfo(photos[i]));
-                }
-                mAdapter.setData(pictureInfoList);
+                String[] photos = content.getString("avatarArray").split(",");
+                urls = photos;
+                mAdapter.setDataList(urls);
                 mAdapter.notifyDataSetChanged();
 
             } else if (StringUtils.isEquals(request.getTag().toString(), ApiList.ADD_FOLLOW)) {
